@@ -315,6 +315,14 @@
       border-color: var(--green);
     }
 
+    .tariff-more {
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 6px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
     .tariff-radio::after {
       content: '';
       width: 10px;
@@ -603,20 +611,35 @@
         <div class="tariff-icon">🚪</div>
         <div class="tariff-info">
           <div class="tariff-name">Лайт</div>
-          <div class="tariff-desc">Заберём у двери</div>
+          <div class="tariff-desc">Оставьте пакет за дверью — курьер заберёт сам</div>
+          <div class="tariff-more" onclick="event.stopPropagation(); showInfo('lite')">Подробнее →</div>
         </div>
-        <div class="tariff-price">990 ₽</div>
-        <div class="tariff-radio"></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <div class="tariff-price">990 ₽</div>
+          <div class="tariff-radio"></div>
+        </div>
       </div>
 
       <div class="tariff-card" onclick="selectTariff(this, 'care')">
-        <div class="tariff-icon">🏠</div>
+        <div class="tariff-icon">♻️</div>
         <div class="tariff-info">
           <div class="tariff-name">Забота</div>
-          <div class="tariff-desc">Зайдём, заменим пакет</div>
+          <div class="tariff-desc">Курьер заберёт мусор прямо из ведра и оставит новый пакет</div>
+          <div class="tariff-more" onclick="event.stopPropagation(); showInfo('care')">Подробнее →</div>
         </div>
-        <div class="tariff-price">1490 ₽</div>
-        <div class="tariff-radio"></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <div class="tariff-price">1490 ₽</div>
+          <div class="tariff-radio"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info modal -->
+    <div id="info-modal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;" onclick="hideInfo()">
+      <div style="background:#1e2228;border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;" onclick="event.stopPropagation()">
+        <div id="info-title" style="font-size:20px;font-weight:700;margin-bottom:16px;color:#f0f4f8;"></div>
+        <div id="info-body" style="font-size:15px;line-height:1.7;color:#8a9ab0;"></div>
+        <button onclick="hideInfo()" style="margin-top:24px;width:100%;background:#4ade80;color:#0a1a0f;border:none;border-radius:10px;font-size:16px;font-weight:700;padding:14px;cursor:pointer;">Понятно</button>
       </div>
     </div>
 
@@ -720,6 +743,30 @@
       c.classList.remove('selected');
     });
     card.classList.add('selected');
+  }
+
+  // ── Tariff info modal ─────────────────────────────────
+  var tariffInfo = {
+    lite: {
+      title: '🚪 Тариф Лайт — 990 ₽/мес',
+      body: 'Как это работает:\n\n1. Накануне вечером вы получите напоминание в боте\n2. Утром завяжите пакет с мусором и оставьте его за дверью квартиры\n3. Курьер приедет в назначенное время, заберёт пакет и унесёт его на мусоросборник\n\nВам не нужно никуда выходить — просто оставьте пакет за дверью.'
+    },
+    care: {
+      title: '♻️ Тариф Забота — 1490 ₽/мес',
+      body: 'Как это работает:\n\n1. Курьер приедет в назначенное время\n2. Позвонит в дверь — вы открываете\n3. Он заберёт мусор прямо из вашего ведра в коридоре\n4. Сразу установит новый чистый пакет, который принесёт с собой\n\nВам не нужно ничего готовить заранее — курьер сделает всё сам прямо у порога. В квартиру не заходит.'
+    }
+  };
+
+  function showInfo(id) {
+    var info = tariffInfo[id];
+    document.getElementById('info-title').textContent = info.title;
+    document.getElementById('info-body').textContent = info.body;
+    var modal = document.getElementById('info-modal');
+    modal.style.display = 'flex';
+  }
+
+  function hideInfo() {
+    document.getElementById('info-modal').style.display = 'none';
   }
 </script>
 </body>
