@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Walle</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:        #0e1012;
+      --surface:   #181b1f;
+      --surface2:  #21252b;
+      --green:     #4ade80;
+      --green-dim: #22c55e;
+      --green-glow:rgba(74, 222, 128, 0.15);
+      --text:      #f0f4f8;
+      --muted:     #8a9ab0;
+      --radius:    16px;
+      --radius-sm: 10px;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+    }
+
+    /* ── App shell ── */
+    #app {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient glow background */
+    #app::before {
+      content: '';
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(74, 222, 128, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Screen ── */
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 48px 24px 36px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Logo / brand ── */
+    .logo {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .brand span {
+      color: var(--green);
+    }
+
+    /* ── Hero card (welcome) ── */
+    .hero {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface);
+      border: 1px solid rgba(74, 222, 128, 0.12);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-top: 32px;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--green-glow);
+      color: var(--green);
+      border: 1px solid rgba(74, 222, 128, 0.25);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 14px;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-price {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .hero-price sup {
+      font-size: 18px;
+      font-weight: 600;
+      vertical-align: top;
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .promo-badge {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.18), rgba(34, 197, 94, 0.08));
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .promo-badge .promo-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .promo-badge .promo-text {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── Section title ── */
+    .screen-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .screen-sub {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    /* ── Form ── */
+    .form-group {
+      width: 100%;
+      max-width: 380px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    .form-input:focus {
+      border-color: var(--green-dim);
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+    }
+
+    /* ── Tariff cards ── */
+    .tariff-grid {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .tariff-card {
+      background: var(--surface);
+      border: 1.5px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tariff-card:active {
+      transform: scale(0.98);
+    }
+
+    .tariff-card.selected {
+      border-color: var(--green);
+      background: rgba(74, 222, 128, 0.05);
+    }
+
+    .tariff-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface2);
+      border-radius: 12px;
+    }
+
+    .tariff-info {
+      flex: 1;
+    }
+
+    .tariff-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .tariff-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .tariff-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── Radio dot ── */
+    .tariff-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+
+    .tariff-card.selected .tariff-radio {
+      border-color: var(--green);
+    }
+
+    .tariff-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .tariff-card.selected .tariff-radio::after {
+      opacity: 1;
+    }
+
+    /* ── Done screen ── */
+    .done-circle {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.05));
+      border: 2px solid rgba(74, 222, 128, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      margin-bottom: 28px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.3); }
+      50%       { box-shadow: 0 0 0 16px rgba(74, 222, 128, 0); }
+    }
+
+    .done-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.4px;
+      margin-bottom: 8px;
+    }
+
+    .done-sub {
+      font-size: 15px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .done-info {
+      margin-top: 28px;
+      background: var(--surface);
+      border: 1px solid rgba(74, 222, 128, 0.15);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .done-info-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .done-info-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    /* ── Buttons ── */
+    .spacer { flex: 1; }
+
+    .btn-group {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--green);
+      color: #0a1a0f;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-primary:hover {
+      background: #6ee7a0;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text);
+    }
+
+    /* ── Progress dots ── */
+    .progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: background 0.25s, width 0.25s;
+    }
+
+    .progress-dot.active {
+      background: var(--green);
+      width: 20px;
+      border-radius: 3px;
+    }
+
+    /* ── Welcome screen extras ── */
+    #screen-welcome {
+      justify-content: center;
+      text-align: center;
+      padding-top: 32px;
+    }
+
+    /* ── Done screen layout ── */
+    #screen-done {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════
+       SCREEN 1: Welcome
+  ══════════════════════════════ -->
+  <div id="screen-welcome" class="screen active">
+    <div class="logo">🗑️</div>
+    <div class="brand">Wall<span>e</span></div>
+
+    <div class="hero">
+      <div class="hero-tag">Сервис выноса мусора</div>
+      <div class="hero-price"><sup>от </sup>990 <sup>руб/мес</sup></div>
+      <div class="hero-sub">Ежедневный вынос мусора — без очередей и запаха в коридоре</div>
+      <div class="promo-badge">
+        <div class="promo-label">🎁 Акция</div>
+        <div class="promo-text">Первая неделя — всего 1 ₽</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="goTo('register')">Попробовать за 1 ₽</button>
+      <button class="btn-secondary" onclick="goTo('register')">Узнать подробнее</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 2: Register
+  ══════════════════════════════ -->
+  <div id="screen-register" class="screen">
+    <div class="progress">
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+
+    <div class="screen-title">Регистрация</div>
+    <div class="screen-sub">Расскажите немного о себе</div>
+
+    <div class="form-group">
+      <label class="form-label">Имя</label>
+      <input class="form-input" type="text" placeholder="Ваше имя" id="input-name" autocomplete="given-name">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Телефон</label>
+      <input class="form-input" type="tel" placeholder="+7 (___) ___-__-__" id="input-phone" autocomplete="tel">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" placeholder="your@email.com" id="input-email" autocomplete="email">
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="goTo('address')">Далее</button>
+      <button class="btn-secondary" onclick="goTo('welcome')">Назад</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 3: Address
+  ══════════════════════════════ -->
+  <div id="screen-address" class="screen">
+    <div class="progress">
+      <div class="progress-dot"></div>
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+    </div>
+
+    <div class="screen-title">Адрес</div>
+    <div class="screen-sub">Куда приедет Walle?</div>
+
+    <div class="form-group">
+      <label class="form-label">Улица и дом</label>
+      <input class="form-input" type="text" placeholder="ул. Ленина, д. 1" id="input-street" autocomplete="street-address">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Квартира</label>
+      <input class="form-input" type="text" placeholder="Номер квартиры" id="input-apt" autocomplete="address-line2">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Код домофона</label>
+      <input class="form-input" type="text" placeholder="Необязательно" id="input-intercom">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Время выноса</label>
+      <input class="form-input" type="time" id="input-time" value="08:00">
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="goTo('tariff')">Далее</button>
+      <button class="btn-secondary" onclick="goTo('register')">Назад</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 4: Tariff
+  ══════════════════════════════ -->
+  <div id="screen-tariff" class="screen">
+    <div class="progress">
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot active"></div>
+    </div>
+
+    <div class="screen-title">Тариф</div>
+    <div class="screen-sub">Выберите удобный вариант</div>
+
+    <div class="tariff-grid">
+      <div class="tariff-card selected" onclick="selectTariff(this, 'lite')">
+        <div class="tariff-icon">🚪</div>
+        <div class="tariff-info">
+          <div class="tariff-name">Лайт</div>
+          <div class="tariff-desc">Заберём у двери</div>
+        </div>
+        <div class="tariff-price">990 ₽</div>
+        <div class="tariff-radio"></div>
+      </div>
+
+      <div class="tariff-card" onclick="selectTariff(this, 'care')">
+        <div class="tariff-icon">🏠</div>
+        <div class="tariff-info">
+          <div class="tariff-name">Забота</div>
+          <div class="tariff-desc">Зайдём, заменим пакет</div>
+        </div>
+        <div class="tariff-price">1490 ₽</div>
+        <div class="tariff-radio"></div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="goTo('done')">Оформить подписку</button>
+      <button class="btn-secondary" onclick="goTo('address')">Назад</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 5: Done
+  ══════════════════════════════ -->
+  <div id="screen-done" class="screen">
+    <div class="done-circle">✅</div>
+    <div class="done-title">Готово!</div>
+    <div class="done-sub">Подписка оформлена. Walle уже скоро появится у вашей двери</div>
+
+    <div class="done-info">
+      <div class="done-info-label">К оплате сейчас</div>
+      <div class="done-info-value">1 ₽</div>
+    </div>
+
+    <div class="spacer" style="max-height:40px"></div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="goTo('welcome')">На главную</button>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<script>
+  // ── Telegram WebApp init ──────────────────────────────
+  (function initTelegram() {
+    try {
+      var tg = window.Telegram && window.Telegram.WebApp;
+      if (tg) {
+        tg.ready();
+        tg.expand();
+        // Match app color to Telegram theme if available
+        if (tg.colorScheme === 'light') {
+          // Keep dark anyway — brand design
+        }
+        // Hide Telegram back button; we manage nav ourselves
+        tg.BackButton && tg.BackButton.hide();
+      }
+    } catch (e) {
+      console.warn('Telegram WebApp init error:', e);
+    }
+  })();
+
+  // ── Navigation ────────────────────────────────────────
+  var history = ['welcome'];
+
+  function goTo(screenId) {
+    var current = document.querySelector('.screen.active');
+    if (current) current.classList.remove('active');
+
+    var next = document.getElementById('screen-' + screenId);
+    if (next) {
+      next.classList.add('active');
+      // Re-trigger animation
+      next.style.animation = 'none';
+      next.offsetHeight; // reflow
+      next.style.animation = '';
+    }
+
+    history.push(screenId);
+
+    // Telegram Back Button: show when not on first screen
+    try {
+      var tg = window.Telegram && window.Telegram.WebApp;
+      if (tg && tg.BackButton) {
+        if (screenId === 'welcome') {
+          tg.BackButton.hide();
+        } else {
+          tg.BackButton.show();
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Handle Telegram hardware back button
+  try {
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
+      window.Telegram.WebApp.BackButton.onClick(function() {
+        if (history.length > 1) {
+          history.pop();
+          goTo(history[history.length - 1]);
+          history.pop(); // goTo pushes again
+        }
+      });
+    }
+  } catch (e) {}
+
+  // ── Tariff selection ──────────────────────────────────
+  function selectTariff(card, id) {
+    document.querySelectorAll('.tariff-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    card.classList.add('selected');
+  }
+</script>
+</body>
+</html>
