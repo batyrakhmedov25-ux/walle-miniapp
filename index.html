@@ -480,6 +480,60 @@
       padding-top: 32px;
     }
 
+    .form-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .required {
+      color: #f87171;
+    }
+
+    .time-slots {
+      width: 100%;
+    }
+
+    .time-group-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .time-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .time-slot {
+      background: var(--surface);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .time-slot.selected {
+      border-color: var(--green);
+      background: rgba(74, 222, 128, 0.08);
+      color: var(--green);
+    }
+
+    .input-error {
+      border-color: #f87171 !important;
+      box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1) !important;
+    }
+
     /* ── Done screen layout ── */
     #screen-done {
       justify-content: center;
@@ -499,9 +553,9 @@
     <div class="brand">Wall<span>e</span></div>
 
     <div class="hero">
-      <div class="hero-tag">Сервис выноса мусора</div>
+      <div class="hero-tag">Утро без мусорного ведра</div>
       <div class="hero-price"><sup>от </sup>990 <sup>руб/мес</sup></div>
-      <div class="hero-sub">Ежедневный вынос мусора — без очередей и запаха в коридоре</div>
+      <div class="hero-sub">Вы занимаетесь жизнью — мусором займёмся мы</div>
       <div class="promo-badge">
         <div class="promo-label">🎁 Акция</div>
         <div class="promo-text">Первая неделя — всего 1 ₽</div>
@@ -542,6 +596,7 @@
     <div class="form-group">
       <label class="form-label">Email</label>
       <input class="form-input" type="email" placeholder="your@email.com" id="input-email" autocomplete="email">
+      <div class="form-hint">📧 На почту отправим чек об оплате</div>
     </div>
 
     <div class="spacer"></div>
@@ -566,29 +621,40 @@
     <div class="screen-sub">Куда приедет Walle?</div>
 
     <div class="form-group">
-      <label class="form-label">Улица и дом</label>
+      <label class="form-label">Улица и дом <span class="required">*</span></label>
       <input class="form-input" type="text" placeholder="ул. Ленина, д. 1" id="input-street" autocomplete="street-address">
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Квартира</label>
-      <input class="form-input" type="text" placeholder="Номер квартиры" id="input-apt" autocomplete="address-line2">
+    <div style="display:flex;gap:10px;width:100%;max-width:380px;">
+      <div class="form-group" style="flex:1;margin-bottom:14px">
+        <label class="form-label">Подъезд <span class="required">*</span></label>
+        <input class="form-input" type="number" placeholder="№" id="input-entrance" min="1">
+      </div>
+      <div class="form-group" style="flex:1;margin-bottom:14px">
+        <label class="form-label">Этаж <span class="required">*</span></label>
+        <input class="form-input" type="number" placeholder="№" id="input-floor" min="1">
+      </div>
+      <div class="form-group" style="flex:1;margin-bottom:14px">
+        <label class="form-label">Квартира <span class="required">*</span></label>
+        <input class="form-input" type="text" placeholder="№" id="input-apt" autocomplete="address-line2">
+      </div>
     </div>
 
     <div class="form-group">
-      <label class="form-label">Код домофона</label>
-      <input class="form-input" type="text" placeholder="Необязательно" id="input-intercom">
+      <label class="form-label">Код домофона <span class="required">*</span></label>
+      <input class="form-input" type="text" placeholder="Например: 123#45" id="input-intercom">
     </div>
 
     <div class="form-group">
-      <label class="form-label">Время выноса</label>
-      <input class="form-input" type="time" id="input-time" value="08:00">
+      <label class="form-label">Время забора <span class="required">*</span></label>
+      <input class="form-input" type="time" id="input-time" value="07:00" min="07:00" max="23:00">
+      <div class="form-hint">⏰ Утро: 07:00–11:00 · Вечер: 19:00–23:00</div>
     </div>
 
     <div class="spacer"></div>
 
     <div class="btn-group">
-      <button class="btn-primary" onclick="goTo('tariff')">Далее</button>
+      <button class="btn-primary" onclick="validateAddress()">Далее</button>
       <button class="btn-secondary" onclick="goTo('register')">Назад</button>
     </div>
   </div>
@@ -736,6 +802,53 @@
       });
     }
   } catch (e) {}
+
+  // ── Time slot selection ───────────────────────────────
+  function selectTime(el, value) {
+    document.querySelectorAll('.time-slot').forEach(function(s) {
+      s.classList.remove('selected');
+    });
+    el.classList.add('selected');
+    document.getElementById('input-time').value = value;
+  }
+
+  // ── Address validation ────────────────────────────────
+  function validateAddress() {
+    var street   = document.getElementById('input-street');
+    var entrance = document.getElementById('input-entrance');
+    var floor    = document.getElementById('input-floor');
+    var apt      = document.getElementById('input-apt');
+    var intercom = document.getElementById('input-intercom');
+    var time     = document.getElementById('input-time');
+    var valid = true;
+
+    [street, entrance, floor, apt, intercom].forEach(function(el) {
+      el.classList.remove('input-error');
+      if (!el.value.trim()) {
+        el.classList.add('input-error');
+        valid = false;
+      }
+    });
+
+    // Validate time range
+    if (time.value) {
+      var h = parseInt(time.value.split(':')[0]);
+      var inMorning = h >= 7 && h <= 11;
+      var inEvening = h >= 19 && h <= 23;
+      if (!inMorning && !inEvening) {
+        time.classList.add('input-error');
+        valid = false;
+      } else {
+        time.classList.remove('input-error');
+      }
+    }
+
+    if (!valid) {
+      street.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    goTo('tariff');
+  }
 
   // ── Tariff selection ──────────────────────────────────
   function selectTariff(card, id) {
