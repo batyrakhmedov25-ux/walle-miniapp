@@ -685,7 +685,7 @@
 
     <div class="spacer"></div>
     <div class="btn-wrap">
-      <button class="btn-main" onclick="goTo('address')">Далее</button>
+      <button class="btn-main" id="btn-register" onclick="submitRegister()">Далее</button>
       <button class="btn-ghost" onclick="goTo('welcome')">Назад</button>
     </div>
   </div>
@@ -734,7 +734,7 @@
 
     <div class="spacer"></div>
     <div class="btn-wrap">
-      <button class="btn-main" onclick="validateAddr()">Далее</button>
+      <button class="btn-main" id="btn-address" onclick="validateAddr()">Далее</button>
       <button class="btn-ghost" onclick="goTo('register')">Назад</button>
     </div>
   </div>
@@ -777,7 +777,7 @@
 
     <div class="spacer"></div>
     <div class="btn-wrap">
-      <button class="btn-main" onclick="goTo('done')">Оформить подписку</button>
+      <button class="btn-main" id="btn-tariff" onclick="submitSubscription()">Оформить подписку</button>
       <button class="btn-ghost" onclick="goTo('address')">Назад</button>
     </div>
   </div>
@@ -961,15 +961,88 @@
 
 
 <script>
-  // Telegram init
+  // ── Config ───────────────────────────────────────────
+  var API = 'https://walle-backend-1.onrender.com';
+  var tgUser = null;
+  var authToken = null;
+
+  // ── Telegram init ────────────────────────────────────
   (function() {
     try {
       var tg = window.Telegram && window.Telegram.WebApp;
-      if (tg) { tg.ready(); tg.expand(); tg.BackButton && tg.BackButton.hide(); }
+      if (tg) {
+        tg.ready(); tg.expand(); tg.BackButton && tg.BackButton.hide();
+        tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
+      }
     } catch(e) {}
   })();
 
-  // Navigation
+  // ── API helpers ──────────────────────────────────────
+  function apiPost(path, data) {
+    var headers = {'Content-Type': 'application/json'};
+    if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+    return fetch(API + path, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(data)
+    }).then(function(r) { return r.json(); });
+  }
+
+  // ── Show loading on button ───────────────────────────
+  function setLoading(btn, loading) {
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.7' : '1';
+    btn.textContent = loading ? 'Загрузка...' : btn._origText;
+  }
+
+  // ── Register → API ────────────────────────────────────
+  function submitRegister() {
+    var name  = document.getElementById('inp-name').value.trim();
+    var phone = document.getElementById('inp-phone').value.trim();
+    var email = document.getElementById('inp-email').value.trim();
+    var btn   = document.getElementById('btn-register');
+    btn._origText = btn.textContent;
+    setLoading(btn, true);
+
+    var payload = {
+      name: name || (tgUser && tgUser.first_name) || 'Пользователь',
+      phone: phone,
+      email: email,
+      telegram_id: tgUser ? String(tgUser.id) : '0'
+    };
+
+    apiPost('/api/users/register', payload)
+      .then(function(data) {
+        if (data.id || data.telegram_id) {
+          authToken = data.token || null;
+          goTo('address');
+        } else {
+          alert(data.detail || 'Ошибка регистрации');
+        }
+      })
+      .catch(function() { goTo('address'); }) // fallback
+      .finally(function() { setLoading(btn, false); });
+  }
+
+  // ── Subscription → API ────────────────────────────────
+  function submitSubscription() {
+    var btn = document.getElementById('btn-tariff');
+    btn._origText = btn.textContent;
+    setLoading(btn, true);
+
+    var selectedCard = document.querySelector('.tariff.sel');
+    var tariff = selectedCard && selectedCard.querySelector('.t-name').textContent === 'Лайт' ? 'lite' : 'care';
+    var price  = tariff === 'lite' ? 990 : 1490;
+
+    apiPost('/api/subscriptions/create', {
+      tariff: tariff,
+      price: price,
+      telegram_id: tgUser ? String(tgUser.id) : '0'
+    })
+      .then(function() { goTo('done'); })
+      .catch(function() { goTo('done'); })
+      .finally(function() { setLoading(btn, false); });
+  }
   var nav = ['welcome'];
   function goTo(id) {
     var cur = document.querySelector('.screen.active');
@@ -1001,7 +1074,7 @@
     el.classList.add('sel');
   }
 
-  // Address validation
+  // Address validation + API
   function validateAddr(){
     var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
     var ok=true;
@@ -1017,7 +1090,24 @@
       else t.classList.remove('err');
     }
     if(!ok){document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'});return;}
-    goTo('tariff');
+
+    var btn=document.getElementById('btn-address');
+    btn._origText=btn.textContent;
+    setLoading(btn,true);
+
+    apiPost('/api/addresses/create',{
+      street: document.getElementById('inp-street').value,
+      entrance: document.getElementById('inp-entrance').value,
+      floor: document.getElementById('inp-floor').value,
+      apartment: document.getElementById('inp-apt').value,
+      intercom: document.getElementById('inp-intercom').value,
+      pickup_time: document.getElementById('inp-time').value,
+      pickup_date: document.getElementById('inp-date').value,
+      telegram_id: tgUser ? String(tgUser.id) : '0'
+    })
+    .then(function(){goTo('tariff');})
+    .catch(function(){goTo('tariff');})
+    .finally(function(){setLoading(btn,false);});
   }
 
   // Set today as min date
