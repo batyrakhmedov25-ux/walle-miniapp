@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Walle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,14 +19,10 @@
       --navy-5:     #243050;
       --green:      #34d399;
       --green-2:    #10b981;
-      --green-3:    #059669;
       --green-glow: rgba(52, 211, 153, 0.18);
-      --green-soft: rgba(52, 211, 153, 0.08);
       --text:       #f0f6ff;
       --text-2:     #a8bdd8;
       --text-3:     #5a7a9a;
-      --glass:      rgba(255,255,255,0.04);
-      --glass-b:    rgba(255,255,255,0.08);
       --radius-xl:  28px;
       --radius-lg:  22px;
       --radius-md:  16px;
@@ -44,7 +40,6 @@
       overscroll-behavior: none;
     }
 
-    /* Animated background mesh */
     #bg {
       position: fixed; inset: 0; z-index: 0;
       background:
@@ -57,381 +52,191 @@
     #app {
       min-height: 100vh; min-height: 100dvh;
       display: flex; flex-direction: column;
-      position: relative; z-index: 1;
-      overflow: hidden;
+      position: relative; z-index: 1; overflow: hidden;
     }
 
-    /* ── Screens ── */
     .screen {
       display: none; flex-direction: column;
-      align-items: center;
+      align-items: center; justify-content: flex-start;
       min-height: 100vh; min-height: 100dvh;
-      padding: 40px 20px 36px;
-      position: relative;
-      overflow-y: auto;
+      padding: 36px 20px 36px;
+      position: relative; overflow-y: auto;
+      animation: screenIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
     }
-    .screen.active { display: flex; animation: screenIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .screen.active { display: flex; }
 
     @keyframes screenIn {
-      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* ── Glass card ── */
-    .glass {
-      background: var(--glass);
-      border: 1px solid var(--glass-b);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    /* ── WALL-E Robot SVG Animation ── */
+    /* ── WALL-E Robot ── */
     .walle-wrap {
-      width: 120px; height: 108px;
-      position: relative; margin-bottom: 4px;
-      animation: walleFloat 3s ease-in-out infinite;
+      width: 130px; height: 140px;
+      margin-bottom: 6px;
+      animation: walleDrive 4s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
-    @keyframes walleFloat {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-8px); }
+    @keyframes walleDrive {
+      0%   { transform: translateX(-18px) translateY(0px); }
+      25%  { transform: translateX(0px)   translateY(-5px); }
+      50%  { transform: translateX(18px)  translateY(0px); }
+      75%  { transform: translateX(0px)   translateY(-5px); }
+      100% { transform: translateX(-18px) translateY(0px); }
     }
 
-    .walle-robot {
-      width: 100%; height: 100%;
-    }
-
-    /* Robot tracks rolling */
-    @keyframes trackRoll {
-      from { stroke-dashoffset: 0; }
-      to   { stroke-dashoffset: -40; }
-    }
-
-    /* Eyes blinking */
-    @keyframes eyeBlink {
-      0%,90%,100% { transform: scaleY(1); }
-      95%          { transform: scaleY(0.1); }
-    }
-
-    .eye-l { animation: eyeBlink 4s ease-in-out infinite; transform-origin: center; }
-    .eye-r { animation: eyeBlink 4s ease-in-out 0.15s infinite; transform-origin: center; }
-
-    /* Arm wave */
-    @keyframes armWave {
-      0%,100% { transform: rotate(0deg); }
-      30%      { transform: rotate(-20deg); }
-      60%      { transform: rotate(10deg); }
-    }
-    .arm { animation: armWave 3s ease-in-out infinite; transform-origin: 50% 10%; }
-
-    /* Track animation */
     @keyframes wheelSpin {
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-    .wheel { animation: wheelSpin 1.2s linear infinite; }
+
+    .wheel-spin {
+      animation: wheelSpin 1s linear infinite;
+    }
+
+    @keyframes armWave {
+      0%,100% { transform: rotate(0deg); }
+      25%      { transform: rotate(-25deg); }
+      75%      { transform: rotate(8deg); }
+    }
+
+    @keyframes eyeBlink {
+      0%,88%,100% { transform: scaleY(1); }
+      92%          { transform: scaleY(0.08); }
+    }
+
+    .eye-l { animation: eyeBlink 4s ease-in-out infinite; transform-origin: 42px 32px; }
+    .eye-r { animation: eyeBlink 4s ease-in-out 0.2s infinite; transform-origin: 88px 32px; }
 
     /* ── Brand ── */
     .brand-name {
-      font-size: 28px; font-weight: 900;
-      letter-spacing: -1px;
+      font-size: 30px; font-weight: 900; letter-spacing: -1px;
       background: linear-gradient(135deg, #f0f6ff 0%, var(--green) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 2px;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 2px;
     }
-
-    .brand-sub {
-      font-size: 13px; font-weight: 500;
-      color: var(--text-2); letter-spacing: 0.3px;
-      margin-bottom: 16px;
-    }
+    .brand-sub { font-size: 13px; font-weight: 500; color: var(--text-2); margin-bottom: 14px; }
 
     /* ── Hero card ── */
     .hero-card {
       width: 100%; max-width: 360px;
       border-radius: var(--radius-xl);
-      padding: 20px 20px;
+      padding: 20px;
       margin-bottom: 14px;
       background: linear-gradient(145deg, var(--navy-3) 0%, var(--navy-4) 100%);
       border: 1px solid rgba(52,211,153,0.15);
       box-shadow: var(--shadow), var(--shadow-green);
     }
-
     .promo-pill {
       display: inline-flex; align-items: center; gap: 6px;
       background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(16,185,129,0.1));
-      border: 1px solid rgba(52,211,153,0.3);
-      border-radius: 100px;
-      padding: 5px 14px;
-      font-size: 12px; font-weight: 700;
-      color: var(--green);
-      letter-spacing: 0.3px;
-      margin-bottom: 20px;
+      border: 1px solid rgba(52,211,153,0.3); border-radius: 100px;
+      padding: 4px 12px; font-size: 12px; font-weight: 700;
+      color: var(--green); margin-bottom: 14px;
     }
-
-    .hero-tag-text {
-      font-size: 22px; font-weight: 800;
-      color: var(--text); line-height: 1.25;
-      letter-spacing: -0.5px; margin-bottom: 6px;
-    }
-
-    .hero-desc {
-      font-size: 14px; color: var(--text-2);
-      line-height: 1.6; margin-bottom: 20px;
-    }
-
-    .price-row {
-      display: flex; align-items: baseline; gap: 4px;
-      margin-bottom: 4px;
-    }
+    .hero-tag-text { font-size: 20px; font-weight: 800; color: var(--text); line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .hero-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 14px; }
+    .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
     .price-from { font-size: 13px; color: var(--text-3); font-weight: 600; margin-right: 2px; }
-    .price-num { font-size: 40px; font-weight: 900; color: var(--text); letter-spacing: -2px; }
+    .price-num { font-size: 38px; font-weight: 900; color: var(--text); letter-spacing: -2px; }
     .price-unit { font-size: 14px; color: var(--text-2); font-weight: 600; }
-
-    .promo-note {
-      font-size: 12px; color: var(--green);
-      font-weight: 700; letter-spacing: 0.2px;
-    }
+    .promo-note { font-size: 12px; color: var(--green); font-weight: 700; }
 
     /* ── Progress ── */
-    .progress-wrap {
-      display: flex; gap: 6px; margin-bottom: 28px;
-    }
-    .pd {
-      height: 4px; border-radius: 2px;
-      background: rgba(255,255,255,0.1);
-      transition: all 0.3s ease; width: 20px;
-    }
+    .progress-wrap { display: flex; gap: 6px; margin-bottom: 24px; }
+    .pd { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); transition: all 0.3s; width: 20px; }
     .pd.active { background: var(--green); width: 36px; }
 
     /* ── Screen titles ── */
-    .s-title {
-      font-size: 26px; font-weight: 800;
-      letter-spacing: -0.6px; margin-bottom: 6px;
-      text-align: center; color: var(--text);
-    }
-    .s-sub {
-      font-size: 14px; color: var(--text-2);
-      text-align: center; margin-bottom: 28px;
-      font-weight: 500;
-    }
+    .s-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; text-align: center; }
+    .s-sub { font-size: 14px; color: var(--text-2); text-align: center; margin-bottom: 24px; font-weight: 500; }
 
     /* ── Form ── */
     .field { width: 100%; max-width: 360px; margin-bottom: 12px; }
-    .field-label {
-      font-size: 11px; font-weight: 700;
-      color: var(--text-3); text-transform: uppercase;
-      letter-spacing: 0.8px; margin-bottom: 8px;
-      display: flex; align-items: center; gap: 4px;
-    }
+    .field-label { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: block; }
     .req { color: #f87171; }
-
     .field-input {
-      width: 100%;
-      background: var(--navy-3);
+      width: 100%; background: var(--navy-3);
       border: 1.5px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius-md);
-      color: var(--text);
-      font-size: 16px; font-weight: 500;
-      font-family: 'Nunito', sans-serif;
-      padding: 15px 18px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      border-radius: var(--radius-md); color: var(--text);
+      font-size: 16px; font-weight: 500; font-family: 'Nunito', sans-serif;
+      padding: 14px 16px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none; appearance: none;
     }
     .field-input::placeholder { color: var(--text-3); }
-    .field-input:focus {
-      border-color: var(--green-2);
-      background: var(--navy-4);
-      box-shadow: 0 0 0 4px rgba(52,211,153,0.08);
-    }
-    .field-input.err {
-      border-color: #f87171;
-      box-shadow: 0 0 0 4px rgba(248,113,113,0.08);
-    }
+    .field-input:focus { border-color: var(--green-2); background: var(--navy-4); box-shadow: 0 0 0 3px rgba(52,211,153,0.08); }
+    .field-input.err { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.08); }
+    .field-hint { font-size: 12px; color: var(--text-3); margin-top: 6px; font-weight: 500; }
 
-    .field-hint {
-      font-size: 12px; color: var(--text-3);
-      margin-top: 6px; font-weight: 500;
-    }
-
-    /* Row layout for small inputs */
-    .row-fields {
-      display: flex; gap: 10px;
-      width: 100%; max-width: 360px; margin-bottom: 12px;
-    }
+    .row-fields { display: flex; gap: 10px; width: 100%; max-width: 360px; margin-bottom: 12px; }
     .row-fields .field { margin-bottom: 0; }
 
     /* ── Tariff cards ── */
-    .tariff-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-
+    .tariff-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .tariff {
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      cursor: pointer;
+      border-radius: var(--radius-lg); padding: 18px; cursor: pointer;
       transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      border: 1.5px solid rgba(255,255,255,0.06);
-      background: var(--navy-3);
-      -webkit-tap-highlight-color: transparent;
-      display: flex; gap: 14px; align-items: flex-start;
+      border: 1.5px solid rgba(255,255,255,0.06); background: var(--navy-3);
+      -webkit-tap-highlight-color: transparent; display: flex; gap: 14px; align-items: flex-start;
     }
     .tariff:active { transform: scale(0.97); }
-    .tariff.sel {
-      border-color: var(--green);
-      background: linear-gradient(145deg, rgba(52,211,153,0.08), rgba(16,185,129,0.04));
-      box-shadow: 0 0 0 1px rgba(52,211,153,0.2), var(--shadow-green);
-    }
-
-    .t-icon {
-      width: 52px; height: 52px; flex-shrink: 0;
-      border-radius: var(--radius-sm);
-      background: var(--navy-5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-    }
+    .tariff.sel { border-color: var(--green); background: rgba(52,211,153,0.05); box-shadow: 0 0 0 1px rgba(52,211,153,0.2); }
+    .t-icon { width: 48px; height: 48px; flex-shrink: 0; border-radius: var(--radius-sm); background: var(--navy-5); display: flex; align-items: center; justify-content: center; font-size: 24px; }
     .tariff.sel .t-icon { background: rgba(52,211,153,0.12); }
-
     .t-body { flex: 1; }
-    .t-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 3px; letter-spacing: -0.3px; }
+    .t-name { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
     .t-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
     .t-more { font-size: 12px; color: var(--green); font-weight: 700; margin-top: 6px; display: inline-block; }
-
-    .t-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
-    .t-price { font-size: 19px; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
-
-    .t-radio {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
+    .t-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .t-price { font-size: 18px; font-weight: 900; color: var(--green); }
+    .t-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .tariff.sel .t-radio { border-color: var(--green); background: var(--green); }
-    .t-radio::after {
-      content: ''; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--navy); opacity: 0; transition: opacity 0.2s;
-    }
+    .t-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--navy); opacity: 0; transition: opacity 0.2s; }
     .tariff.sel .t-radio::after { opacity: 1; }
 
-    /* ── Done screen ── */
-    .done-glow {
-      width: 110px; height: 110px; border-radius: 50%;
-      background: linear-gradient(135deg, rgba(52,211,153,0.25), rgba(16,185,129,0.1));
-      border: 2px solid rgba(52,211,153,0.4);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 50px; margin-bottom: 24px;
-      box-shadow: 0 0 60px rgba(52,211,153,0.2);
-      animation: donePulse 2.5s ease-in-out infinite;
-    }
-    @keyframes donePulse {
-      0%,100% { box-shadow: 0 0 40px rgba(52,211,153,0.2); }
-      50%      { box-shadow: 0 0 80px rgba(52,211,153,0.35); }
-    }
-
-    .done-title { font-size: 30px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 10px; }
+    /* ── Done ── */
+    .done-glow { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, rgba(52,211,153,0.22), rgba(16,185,129,0.08)); border: 2px solid rgba(52,211,153,0.35); display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 22px; animation: donePulse 2.5s ease-in-out infinite; }
+    @keyframes donePulse { 0%,100%{box-shadow:0 0 40px rgba(52,211,153,0.2)} 50%{box-shadow:0 0 80px rgba(52,211,153,0.35)} }
+    .done-title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 10px; }
     .done-sub { font-size: 15px; color: var(--text-2); text-align: center; line-height: 1.6; max-width: 260px; }
-
-    .done-receipt {
-      width: 100%; max-width: 320px;
-      border-radius: var(--radius-lg);
-      background: var(--navy-3);
-      border: 1px solid rgba(52,211,153,0.2);
-      padding: 20px 24px; margin-top: 28px; text-align: center;
-    }
-    .done-receipt-label { font-size: 12px; color: var(--text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-    .done-receipt-amount { font-size: 44px; font-weight: 900; color: var(--green); letter-spacing: -2px; }
+    .done-receipt { width: 100%; max-width: 300px; border-radius: var(--radius-lg); background: var(--navy-3); border: 1px solid rgba(52,211,153,0.2); padding: 18px 22px; margin-top: 24px; text-align: center; }
+    .done-receipt-label { font-size: 11px; color: var(--text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .done-receipt-amount { font-size: 42px; font-weight: 900; color: var(--green); letter-spacing: -2px; }
     .done-receipt-note { font-size: 12px; color: var(--text-3); margin-top: 6px; }
 
     /* ── Buttons ── */
-    .spacer { flex: 1; min-height: 24px; }
+    .spacer { flex: 1; min-height: 16px; }
     .btn-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
-
-    .btn-main {
-      width: 100%;
-      background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%);
-      color: #052e1c;
-      border: none; border-radius: var(--radius-lg);
-      font-family: 'Nunito', sans-serif;
-      font-size: 17px; font-weight: 800;
-      padding: 17px; cursor: pointer;
-      letter-spacing: -0.2px;
-      box-shadow: 0 4px 20px rgba(52,211,153,0.3);
-      transition: transform 0.15s, box-shadow 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-main:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(52,211,153,0.2); }
-
-    .btn-ghost {
-      width: 100%;
-      background: transparent;
-      color: var(--text-2);
-      border: 1.5px solid rgba(255,255,255,0.09);
-      border-radius: var(--radius-lg);
-      font-family: 'Nunito', sans-serif;
-      font-size: 16px; font-weight: 700;
-      padding: 15px; cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-ghost:active { border-color: rgba(255,255,255,0.2); color: var(--text); }
-
-    .btn-text {
-      font-size: 13px; color: var(--text-3);
-      font-weight: 600; text-align: center;
-      cursor: pointer; padding: 8px;
-      -webkit-tap-highlight-color: transparent;
-    }
+    .btn-main { width: 100%; background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%); color: #052e1c; border: none; border-radius: var(--radius-lg); font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; padding: 16px; cursor: pointer; box-shadow: 0 4px 20px rgba(52,211,153,0.3); transition: transform 0.15s; -webkit-tap-highlight-color: transparent; }
+    .btn-main:active { transform: scale(0.97); }
+    .btn-ghost { width: 100%; background: transparent; color: var(--text-2); border: 1.5px solid rgba(255,255,255,0.09); border-radius: var(--radius-lg); font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 700; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .btn-text { font-size: 12px; color: var(--text-3); font-weight: 600; text-align: center; cursor: pointer; padding: 6px; }
 
     /* ── Modals ── */
-    .modal-ov {
-      display: none; position: fixed; inset: 0; z-index: 300;
-      background: rgba(5,10,25,0.8);
-      backdrop-filter: blur(4px);
-      align-items: flex-end; justify-content: center;
-    }
+    .modal-ov { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(5,10,25,0.8); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; }
     .modal-ov.open { display: flex; animation: ovIn 0.2s ease both; }
     @keyframes ovIn { from{opacity:0} to{opacity:1} }
-
-    .modal-box {
-      background: var(--navy-2);
-      border-radius: 28px 28px 0 0;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      width: 100%; max-width: 480px;
-      max-height: 88vh;
-      display: flex; flex-direction: column;
-      animation: boxIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
-    }
+    .modal-box { background: var(--navy-2); border-radius: 28px 28px 0 0; border-top: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 480px; max-height: 88vh; display: flex; flex-direction: column; animation: boxIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
     @keyframes boxIn { from{transform:translateY(100%)} to{transform:translateY(0)} }
-
     .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.12); border-radius: 2px; margin: 14px auto 4px; flex-shrink: 0; }
     .modal-scroll { overflow-y: auto; padding: 16px 24px 48px; flex: 1; -webkit-overflow-scrolling: touch; }
-    .modal-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 20px; }
-
-    .modal-section { margin-bottom: 22px; }
+    .modal-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 18px; }
+    .modal-section { margin-bottom: 20px; }
     .modal-s-title { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
     .modal-text { font-size: 14px; color: var(--text-2); line-height: 1.75; }
     .modal-text p { margin-bottom: 10px; }
-    .modal-text p:last-child { margin-bottom: 0; }
-
-    .how-step { display: flex; gap: 14px; margin-bottom: 18px; }
-    .how-n {
-      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(16,185,129,0.1));
-      border: 1px solid rgba(52,211,153,0.25);
-      color: var(--green); font-size: 13px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center; margin-top: 2px;
-    }
-    .how-t { font-size: 14px; color: var(--text-2); line-height: 1.6; padding-top: 5px; }
+    .how-step { display: flex; gap: 14px; margin-bottom: 16px; }
+    .how-n { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; background: var(--green-glow); border: 1px solid rgba(52,211,153,0.25); color: var(--green); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 3px; }
+    .how-t { font-size: 14px; color: var(--text-2); line-height: 1.6; padding-top: 4px; }
     .how-t strong { color: var(--text); }
-
     .faq-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .faq-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .faq-q { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
 
-    /* Welcome special */
-    #screen-welcome { justify-content: flex-start; align-items: center; text-align: center; padding-top: 20px; }
+    #screen-welcome { justify-content: flex-start; align-items: center; text-align: center; padding-top: 24px; }
     #screen-done { justify-content: center; align-items: center; text-align: center; }
   </style>
 </head>
@@ -442,219 +247,145 @@
   <!-- ════════ SCREEN 1: Welcome ════════ -->
   <div id="screen-welcome" class="screen active">
 
-    <!-- Animated WALL-E robot -->
+    <!-- Pixar WALL-E style robot -->
     <div class="walle-wrap">
-      <svg class="walle-robot" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#4db8d4"/>
-            <stop offset="100%" stop-color="#1a7a96"/>
-          </radialGradient>
-          <radialGradient id="headGrad" cx="35%" cy="25%" r="70%">
-            <stop offset="0%" stop-color="#5bc8e0"/>
-            <stop offset="100%" stop-color="#1a8aaa"/>
-          </radialGradient>
-          <radialGradient id="eyeOuter" cx="40%" cy="35%" r="65%">
-            <stop offset="0%" stop-color="#4a4a4a"/>
-            <stop offset="100%" stop-color="#1a1a1a"/>
-          </radialGradient>
-          <radialGradient id="eyeInner" cx="38%" cy="32%" r="60%">
-            <stop offset="0%" stop-color="#c07020"/>
-            <stop offset="60%" stop-color="#8a4a10"/>
-            <stop offset="100%" stop-color="#1a0a00"/>
-          </radialGradient>
-          <radialGradient id="eyeInner2" cx="38%" cy="32%" r="60%">
-            <stop offset="0%" stop-color="#c07020"/>
-            <stop offset="60%" stop-color="#8a4a10"/>
-            <stop offset="100%" stop-color="#1a0a00"/>
-          </radialGradient>
-          <radialGradient id="trackGrad" cx="50%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#3a3a3a"/>
-            <stop offset="100%" stop-color="#1a1a1a"/>
-          </radialGradient>
-          <clipPath id="track-l-clip"><rect x="18" y="130" width="68" height="34" rx="17"/></clipPath>
-          <clipPath id="track-r-clip"><rect x="114" y="130" width="68" height="34" rx="17"/></clipPath>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
+      <svg viewBox="0 0 130 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
 
         <!-- Shadow -->
-        <ellipse cx="100" cy="172" rx="55" ry="7" fill="rgba(0,0,0,0.3)"/>
+        <ellipse cx="65" cy="136" rx="35" ry="5" fill="rgba(0,0,0,0.2)"/>
 
-        <!-- ── LEFT TRACK ── -->
-        <rect x="18" y="130" width="68" height="34" rx="17" fill="url(#trackGrad)" stroke="#111" stroke-width="1.5"/>
-        <!-- tread lines -->
-        <g clip-path="url(#track-l-clip)" opacity="0.5">
-          <line x1="30" y1="130" x2="24" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="42" y1="130" x2="36" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="54" y1="130" x2="48" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="66" y1="130" x2="60" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="78" y1="130" x2="72" y2="164" stroke="#555" stroke-width="3"/>
-          <animateTransform attributeName="transform" type="translate" from="0 0" to="-12 0" dur="0.6s" repeatCount="indefinite"/>
+        <!-- ── TRACKS ── -->
+        <rect x="4" y="96" width="44" height="24" rx="12" fill="#2d3748"/>
+        <rect x="6" y="98" width="40" height="20" rx="10" fill="#374151"/>
+        <!-- animated tread -->
+        <g style="clip-path:inset(0 0 0 0 round 10px)">
+          <line x1="4" y1="108" x2="48" y2="108" stroke="#1f2937" stroke-width="2" stroke-dasharray="6 5">
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="-11 0" dur="0.4s" repeatCount="indefinite"/>
+          </line>
         </g>
-        <!-- wheels on track -->
-        <circle cx="35" cy="147" r="13" fill="#222" stroke="#333" stroke-width="1.5"/>
-        <circle cx="35" cy="147" r="6" fill="#2a2a2a" stroke="#444" stroke-width="1"/>
-        <circle cx="69" cy="147" r="13" fill="#222" stroke="#333" stroke-width="1.5"/>
-        <circle cx="69" cy="147" r="6" fill="#2a2a2a" stroke="#444" stroke-width="1"/>
+        <circle cx="16" cy="108" r="9" fill="#1f2937"/>
+        <circle class="wheel-spin" cx="16" cy="108" r="5" fill="#374151" style="transform-origin:16px 108px;"/>
+        <circle cx="16" cy="108" r="2.5" fill="#4b5563"/>
+        <circle cx="36" cy="108" r="9" fill="#1f2937"/>
+        <circle class="wheel-spin" cx="36" cy="108" r="5" fill="#374151" style="transform-origin:36px 108px;"/>
+        <circle cx="36" cy="108" r="2.5" fill="#4b5563"/>
 
-        <!-- ── RIGHT TRACK ── -->
-        <rect x="114" y="130" width="68" height="34" rx="17" fill="url(#trackGrad)" stroke="#111" stroke-width="1.5"/>
-        <g clip-path="url(#track-r-clip)" opacity="0.5">
-          <line x1="126" y1="130" x2="120" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="138" y1="130" x2="132" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="150" y1="130" x2="144" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="162" y1="130" x2="156" y2="164" stroke="#555" stroke-width="3"/>
-          <line x1="174" y1="130" x2="168" y2="164" stroke="#555" stroke-width="3"/>
-          <animateTransform attributeName="transform" type="translate" from="0 0" to="-12 0" dur="0.6s" repeatCount="indefinite"/>
-        </g>
-        <circle cx="131" cy="147" r="13" fill="#222" stroke="#333" stroke-width="1.5"/>
-        <circle cx="131" cy="147" r="6" fill="#2a2a2a" stroke="#444" stroke-width="1"/>
-        <circle cx="165" cy="147" r="13" fill="#222" stroke="#333" stroke-width="1.5"/>
-        <circle cx="165" cy="147" r="6" fill="#2a2a2a" stroke="#444" stroke-width="1"/>
+        <rect x="82" y="96" width="44" height="24" rx="12" fill="#2d3748"/>
+        <rect x="84" y="98" width="40" height="20" rx="10" fill="#374151"/>
+        <line x1="82" y1="108" x2="126" y2="108" stroke="#1f2937" stroke-width="2" stroke-dasharray="6 5">
+          <animateTransform attributeName="transform" type="translate" from="0 0" to="-11 0" dur="0.4s" repeatCount="indefinite"/>
+        </line>
+        <circle cx="94" cy="108" r="9" fill="#1f2937"/>
+        <circle class="wheel-spin" cx="94" cy="108" r="5" fill="#374151" style="transform-origin:94px 108px;"/>
+        <circle cx="94" cy="108" r="2.5" fill="#4b5563"/>
+        <circle cx="114" cy="108" r="9" fill="#1f2937"/>
+        <circle class="wheel-spin" cx="114" cy="108" r="5" fill="#374151" style="transform-origin:114px 108px;"/>
+        <circle cx="114" cy="108" r="2.5" fill="#4b5563"/>
 
         <!-- ── BODY ── -->
-        <rect x="40" y="88" width="120" height="50" rx="10" fill="#1a1a2e" stroke="#111" stroke-width="1"/>
-        <rect x="42" y="90" width="116" height="46" rx="9" fill="url(#bodyGrad)"/>
-        <!-- body shine -->
-        <rect x="48" y="92" width="60" height="10" rx="5" fill="rgba(255,255,255,0.15)"/>
-        <!-- body bottom dark panel -->
-        <rect x="42" y="118" width="116" height="18" rx="0" fill="rgba(0,0,0,0.25)"/>
-
-        <!-- Chest panel -->
-        <rect x="56" y="96" width="60" height="28" rx="5" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-        <!-- Yellow buttons -->
-        <rect x="62" y="102" width="10" height="7" rx="2" fill="#f5c842"/>
-        <rect x="76" y="102" width="10" height="7" rx="2" fill="#f5c842"/>
-        <!-- Blue button -->
-        <rect x="62" y="113" width="10" height="7" rx="2" fill="#4488ff"/>
-        <!-- Orange button -->
-        <rect x="76" y="113" width="10" height="7" rx="2" fill="#ff6622"/>
-        <!-- Small panel right -->
-        <rect x="94" y="102" width="16" height="18" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-        <line x1="97" y1="108" x2="107" y2="108" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-        <line x1="97" y1="112" x2="107" y2="112" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <rect x="25" y="62" width="80" height="40" rx="12" fill="#1a3a5c"/>
+        <rect x="27" y="64" width="76" height="36" rx="10" fill="#1d6aa8"/>
+        <rect x="31" y="67" width="38" height="7" rx="3.5" fill="rgba(255,255,255,0.14)"/>
+        <!-- Panel -->
+        <rect x="33" y="76" width="52" height="18" rx="6" fill="#0f2a45"/>
+        <rect x="38" y="80" width="8" height="7" rx="2" fill="#fbbf24"/>
+        <rect x="49" y="80" width="8" height="7" rx="2" fill="#fbbf24"/>
+        <rect x="60" y="80" width="8" height="7" rx="2" fill="#34d399"/>
+        <rect x="71" y="80" width="8" height="7" rx="2" fill="#f87171"/>
+        <!-- Indicator lights -->
+        <circle cx="42" cy="91" r="2.5" fill="#34d399"><animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="53" cy="91" r="2.5" fill="#60a5fa"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/></circle>
+        <circle cx="64" cy="91" r="2.5" fill="#fbbf24"><animate attributeName="opacity" values="0.6;0.1;0.6" dur="1.9s" repeatCount="indefinite"/></circle>
 
         <!-- ── LEFT ARM (waving) ── -->
-        <g class="arm" style="transform-origin: 44px 98px">
-          <!-- shoulder -->
-          <circle cx="36" cy="98" r="8" fill="#1a6a80" stroke="#0d4a5c" stroke-width="1.5"/>
-          <!-- upper arm -->
-          <rect x="14" y="92" width="24" height="12" rx="6" fill="#1a7a96" stroke="#0d5a70" stroke-width="1"/>
-          <!-- forearm with silver band -->
-          <rect x="6" y="86" width="14" height="22" rx="7" fill="#1a7a96"/>
-          <rect x="6" y="96" width="14" height="5" rx="0" fill="#b0c8d0" opacity="0.8"/>
-          <!-- hand/claw -->
-          <rect x="2" y="78" width="18" height="14" rx="5" fill="#2a2a3a"/>
-          <!-- fingers -->
-          <rect x="2" y="72" width="4" height="10" rx="2" fill="#1a1a2a"/>
-          <rect x="7" y="70" width="4" height="12" rx="2" fill="#1a1a2a"/>
-          <rect x="12" y="72" width="4" height="10" rx="2" fill="#1a1a2a"/>
-          <rect x="17" y="74" width="3" height="8" rx="1.5" fill="#1a1a2a"/>
-          <!-- knuckle dots -->
-          <circle cx="4" cy="78" r="1.5" fill="#333"/>
-          <circle cx="9" cy="76" r="1.5" fill="#333"/>
-          <circle cx="14" cy="78" r="1.5" fill="#333"/>
+        <g style="transform-origin:26px 72px; animation:armWave 3s ease-in-out infinite;">
+          <rect x="8" y="67" width="20" height="10" rx="5" fill="#1d6aa8"/>
+          <rect x="6" y="75" width="13" height="18" rx="6.5" fill="#1a3a5c"/>
+          <rect x="7" y="85" width="11" height="3.5" rx="1.5" fill="#93c5fd" opacity="0.35"/>
         </g>
 
-        <!-- ── RIGHT ARM (down, relaxed) ── -->
-        <circle cx="164" cy="98" r="8" fill="#1a6a80" stroke="#0d4a5c" stroke-width="1.5"/>
-        <rect x="162" y="98" width="24" height="12" rx="6" fill="#1a7a96" stroke="#0d5a70" stroke-width="1"/>
-        <rect x="170" y="108" width="14" height="20" rx="7" fill="#1a7a96"/>
-        <rect x="170" y="118" width="14" height="5" rx="0" fill="#b0c8d0" opacity="0.8"/>
+        <!-- ── RIGHT ARM ── -->
+        <rect x="102" y="67" width="20" height="10" rx="5" fill="#1d6aa8"/>
+        <rect x="111" y="75" width="13" height="18" rx="6.5" fill="#1a3a5c"/>
 
         <!-- ── NECK ── -->
-        <rect x="84" y="72" width="32" height="20" rx="8" fill="#1a5a70" stroke="#0d3a4a" stroke-width="1.5"/>
-        <rect x="88" y="75" width="24" height="14" rx="6" fill="#1a6a82"/>
+        <rect x="55" y="48" width="20" height="16" rx="6" fill="#0f2a45"/>
+        <rect x="57" y="50" width="16" height="12" rx="5" fill="#1a3a5c"/>
 
         <!-- ── HEAD ── -->
-        <!-- Head base / goggles frame -->
-        <rect x="38" y="18" width="124" height="58" rx="20" fill="#1a1a2e" stroke="#111" stroke-width="1.5"/>
-        <rect x="40" y="20" width="120" height="54" rx="18" fill="url(#headGrad)"/>
-        <!-- Head shine -->
-        <rect x="48" y="23" width="55" height="12" rx="6" fill="rgba(255,255,255,0.18)"/>
+        <rect x="22" y="14" width="86" height="38" rx="14" fill="#1a3a5c"/>
+        <rect x="24" y="16" width="82" height="34" rx="12" fill="#1d6aa8"/>
+        <rect x="28" y="19" width="38" height="7" rx="3.5" fill="rgba(255,255,255,0.14)"/>
 
-        <!-- Goggle frame (big binoculars) -->
-        <rect x="42" y="22" width="116" height="46" rx="16" fill="rgba(0,0,0,0.0)"/>
-        <!-- Left goggle outer ring -->
-        <circle cx="76" cy="45" r="24" fill="#2a2a3a" stroke="#1a1a2a" stroke-width="2"/>
-        <circle cx="76" cy="45" r="21" fill="#222230"/>
-        <!-- Left eye -->
+        <!-- ── EYE HOUSINGS (binoculars, sitting ON head) ── -->
+        <!-- Left eye housing -->
+        <rect x="27" y="17" width="32" height="30" rx="10" fill="#2d3748"/>
+        <rect x="29" y="19" width="28" height="26" rx="8" fill="#1a1a2a"/>
+        <!-- Left eye - warm amber Pixar style -->
         <g class="eye-l">
-          <circle cx="76" cy="45" r="18" fill="url(#eyeOuter)"/>
-          <circle cx="76" cy="45" r="13" fill="url(#eyeInner)"/>
-          <circle cx="76" cy="45" r="8" fill="#0d0500"/>
-          <!-- Reflections -->
-          <circle cx="70" cy="38" r="4" fill="rgba(255,255,255,0.35)"/>
-          <circle cx="80" cy="41" r="2" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="43" cy="32" r="10" fill="#78350f"/>
+          <circle cx="43" cy="32" r="7.5" fill="#b45309"/>
+          <circle cx="43" cy="32" r="5" fill="#d97706"/>
+          <circle cx="43" cy="32" r="2" fill="#1c0a00"/>
+          <circle cx="39" cy="28" r="2.5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="46" cy="31" r="1.2" fill="rgba(255,255,255,0.25)"/>
         </g>
 
-        <!-- Right goggle outer ring -->
-        <circle cx="124" cy="45" r="24" fill="#2a2a3a" stroke="#1a1a2a" stroke-width="2"/>
-        <circle cx="124" cy="45" r="21" fill="#222230"/>
+        <!-- Right eye housing -->
+        <rect x="71" y="17" width="32" height="30" rx="10" fill="#2d3748"/>
+        <rect x="73" y="19" width="28" height="26" rx="8" fill="#1a1a2a"/>
         <!-- Right eye -->
         <g class="eye-r">
-          <circle cx="124" cy="45" r="18" fill="url(#eyeOuter)"/>
-          <circle cx="124" cy="45" r="13" fill="url(#eyeInner2)"/>
-          <circle cx="124" cy="45" r="8" fill="#0d0500"/>
-          <!-- Reflections -->
-          <circle cx="118" cy="38" r="4" fill="rgba(255,255,255,0.35)"/>
-          <circle cx="128" cy="41" r="2" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="87" cy="32" r="10" fill="#78350f"/>
+          <circle cx="87" cy="32" r="7.5" fill="#b45309"/>
+          <circle cx="87" cy="32" r="5" fill="#d97706"/>
+          <circle cx="87" cy="32" r="2" fill="#1c0a00"/>
+          <circle cx="83" cy="28" r="2.5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="90" cy="31" r="1.2" fill="rgba(255,255,255,0.25)"/>
         </g>
 
-        <!-- Bridge between goggles -->
-        <rect x="98" y="36" width="4" height="18" rx="2" fill="#1a1a2a"/>
+        <!-- Eyelids for blinking -->
+        <rect class="eye-l" x="29" y="19" width="28" height="4" rx="2" fill="#2d3748"/>
+        <rect class="eye-r" x="73" y="19" width="28" height="4" rx="2" fill="#2d3748"/>
 
-        <!-- Side details on head -->
-        <rect x="40" y="35" width="8" height="20" rx="3" fill="#1a5a70" stroke="#0d3a4a" stroke-width="1"/>
-        <rect x="152" y="35" width="8" height="20" rx="3" fill="#1a5a70" stroke="#0d3a4a" stroke-width="1"/>
+        <!-- Smile — gentle curve -->
+        <path d="M 48 46 Q 65 53 82 46" stroke="#93c5fd" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 
-        <!-- Smile -->
-        <path d="M 82 63 Q 100 73 118 63" stroke="#0d3a4a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <path d="M 83 63 Q 100 71 117 63" stroke="rgba(255,100,80,0.7)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-        <!-- Cheek dots -->
-        <circle cx="64" cy="62" r="3" fill="rgba(255,150,120,0.4)"/>
-        <circle cx="136" cy="62" r="3" fill="rgba(255,150,120,0.4)"/>
+        <!-- Cheeks — subtle blush -->
+        <circle cx="34" cy="46" r="5" fill="rgba(255,160,100,0.2)"/>
+        <circle cx="96" cy="46" r="5" fill="rgba(255,160,100,0.2)"/>
 
         <!-- ── ANTENNA ── -->
-        <!-- Stem -->
-        <line x1="100" y1="18" x2="100" y2="4" stroke="#7ab8cc" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Curl -->
-        <path d="M 100 4 Q 110 2 112 8" stroke="#7ab8cc" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- Ball -->
-        <circle cx="113" cy="9" r="5" fill="#5ab0cc" stroke="#3a90aa" stroke-width="1">
-          <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+        <line x1="65" y1="14" x2="65" y2="5" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="65" cy="4" r="4" fill="#34d399" stroke="#1a3a5c" stroke-width="1">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
         </circle>
-        <circle cx="111" cy="7" r="2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="63" cy="2" r="1.5" fill="rgba(255,255,255,0.5)"/>
+
       </svg>
     </div>
 
     <div class="brand-name">Walle</div>
     <div class="brand-sub">Сервис умного выноса мусора</div>
 
-    <!-- Hero card -->
     <div class="hero-card">
       <div class="promo-pill">🎁 &nbsp;Акция · Первая неделя за 1 ₽</div>
-      <div class="hero-tag-text">Утро без<br>мусорного ведра</div>
+      <div class="hero-tag-text">Утро без мусорного ведра</div>
       <div class="hero-desc">Вы занимаетесь жизнью — мусором займёмся мы. Ежедневно, в любую погоду.</div>
       <div class="price-row">
-        <span class="price-from">от</span>
+        <span class="price-from">от&nbsp;&nbsp;</span>
         <span class="price-num">990</span>
         <span class="price-unit">₽/мес</span>
       </div>
       <div class="promo-note">✦ &nbsp;Первая неделя всего 1 ₽</div>
     </div>
 
-    <div class="spacer" style="max-height: 20px"></div>
+    <div class="spacer" style="max-height:16px"></div>
     <div class="btn-wrap">
       <button class="btn-main" onclick="goTo('register')">Попробовать за 1 ₽</button>
       <button class="btn-ghost" onclick="openModal('modal-howto')">Как это работает?</button>
     </div>
-
-    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:20px;padding-bottom:8px;">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px;padding-bottom:8px;">
       <span class="btn-text" onclick="openModal('modal-privacy')">Политика конфиденциальности</span>
       <span class="btn-text" onclick="openModal('modal-offer')">Публичная оферта</span>
       <span class="btn-text" onclick="openModal('modal-about')">О компании</span>
@@ -668,21 +399,19 @@
     </div>
     <div class="s-title">Регистрация</div>
     <div class="s-sub">Расскажите немного о себе</div>
-
     <div class="field">
-      <div class="field-label">Имя</div>
+      <label class="field-label">Имя</label>
       <input class="field-input" type="text" placeholder="Ваше имя" id="inp-name" autocomplete="given-name">
     </div>
     <div class="field">
-      <div class="field-label">Телефон</div>
+      <label class="field-label">Телефон</label>
       <input class="field-input" type="tel" placeholder="+7 (___) ___-__-__" id="inp-phone" autocomplete="tel">
     </div>
     <div class="field">
-      <div class="field-label">Email</div>
+      <label class="field-label">Email</label>
       <input class="field-input" type="email" placeholder="your@email.com" id="inp-email" autocomplete="email">
       <div class="field-hint">📧 Пришлём чек об оплате</div>
     </div>
-
     <div class="spacer"></div>
     <div class="btn-wrap">
       <button class="btn-main" id="btn-register" onclick="submitRegister()">Далее</button>
@@ -697,41 +426,36 @@
     </div>
     <div class="s-title">Адрес</div>
     <div class="s-sub">Куда приедет Walle?</div>
-
     <div class="field">
-      <div class="field-label">Улица и дом <span class="req">*</span></div>
+      <label class="field-label">Улица и дом <span class="req">*</span></label>
       <input class="field-input" type="text" placeholder="ул. Ленина, д. 1" id="inp-street" autocomplete="street-address">
     </div>
-
     <div class="row-fields">
       <div class="field" style="flex:1">
-        <div class="field-label">Подъезд <span class="req">*</span></div>
+        <label class="field-label">Подъезд <span class="req">*</span></label>
         <input class="field-input" type="number" placeholder="№" id="inp-entrance" min="1">
       </div>
       <div class="field" style="flex:1">
-        <div class="field-label">Этаж <span class="req">*</span></div>
+        <label class="field-label">Этаж <span class="req">*</span></label>
         <input class="field-input" type="number" placeholder="№" id="inp-floor" min="1">
       </div>
       <div class="field" style="flex:1">
-        <div class="field-label">Квартира <span class="req">*</span></div>
+        <label class="field-label">Квартира <span class="req">*</span></label>
         <input class="field-input" type="text" placeholder="№" id="inp-apt">
       </div>
     </div>
-
     <div class="field">
-      <div class="field-label">Код домофона <span class="req">*</span></div>
+      <label class="field-label">Код домофона <span class="req">*</span></label>
       <input class="field-input" type="text" placeholder="Например: 123#45" id="inp-intercom">
     </div>
-
     <div class="field">
-      <div class="field-label">Дата и время первого забора <span class="req">*</span></div>
+      <label class="field-label">Дата и время первого забора <span class="req">*</span></label>
       <div style="display:flex;gap:10px;">
         <input class="field-input" type="date" id="inp-date" style="flex:1.4">
         <input class="field-input" type="time" id="inp-time" value="07:00" style="flex:1">
       </div>
       <div class="field-hint">⏰ Утро: 07:00–11:00 · Вечер: 19:00–23:00</div>
     </div>
-
     <div class="spacer"></div>
     <div class="btn-wrap">
       <button class="btn-main" id="btn-address" onclick="validateAddr()">Далее</button>
@@ -746,7 +470,6 @@
     </div>
     <div class="s-title">Тариф</div>
     <div class="s-sub">Выберите удобный вариант</div>
-
     <div class="tariff-wrap">
       <div class="tariff sel" onclick="pickTariff(this)">
         <div class="t-icon">🚪</div>
@@ -760,7 +483,6 @@
           <div class="t-radio"></div>
         </div>
       </div>
-
       <div class="tariff" onclick="pickTariff(this)">
         <div class="t-icon">♻️</div>
         <div class="t-body">
@@ -774,7 +496,6 @@
         </div>
       </div>
     </div>
-
     <div class="spacer"></div>
     <div class="btn-wrap">
       <button class="btn-main" id="btn-tariff" onclick="submitSubscription()">Оформить подписку</button>
@@ -798,12 +519,10 @@
     </div>
   </div>
 
-</div><!-- /#app -->
+</div>
 
+<!-- ════════ MODALS ════════ -->
 
-<!-- ════════════════ MODALS ════════════════ -->
-
-<!-- Как это работает -->
 <div id="modal-howto" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -818,29 +537,16 @@
       </div>
       <div class="modal-section">
         <div class="modal-s-title">Частые вопросы</div>
-        <div class="faq-item">
-          <div class="faq-q">Как часто приезжает курьер?</div>
-          <div class="faq-a">Ежедневно — каждый день в выбранное время, без выходных.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Что если я забуду оставить пакет?</div>
-          <div class="faq-a">Ничего страшного — курьер приедет на следующий день. Бот заранее напомнит.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Можно ли изменить время?</div>
-          <div class="faq-a">Да, через поддержку в любой момент.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Как отменить подписку?</div>
-          <div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня. Остаток вернём.</div>
-        </div>
+        <div class="faq-item"><div class="faq-q">Как часто приезжает курьер?</div><div class="faq-a">Ежедневно — каждый день в выбранное время, без выходных.</div></div>
+        <div class="faq-item"><div class="faq-q">Что если я забуду оставить пакет?</div><div class="faq-a">Ничего страшного — курьер приедет на следующий день. Бот заранее напомнит.</div></div>
+        <div class="faq-item"><div class="faq-q">Можно ли изменить время?</div><div class="faq-a">Да, через поддержку в любой момент.</div></div>
+        <div class="faq-item"><div class="faq-q">Как отменить подписку?</div><div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня. Остаток вернём.</div></div>
       </div>
       <button class="btn-main" onclick="closeModalById('modal-howto');goTo('register')">Попробовать за 1 ₽</button>
     </div>
   </div>
 </div>
 
-<!-- Тариф Лайт -->
 <div id="modal-t-lite" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -854,7 +560,6 @@
   </div>
 </div>
 
-<!-- Тариф Забота -->
 <div id="modal-t-care" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -868,182 +573,72 @@
   </div>
 </div>
 
-<!-- Политика конфиденциальности -->
 <div id="modal-privacy" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">Политика конфиденциальности</div>
-      <div class="modal-section">
-        <div class="modal-s-title">Какие данные мы собираем</div>
-        <div class="modal-text"><p>Имя, телефон, email, адрес доставки — только то, что нужно для оказания услуги.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">Как мы используем данные</div>
-        <div class="modal-text"><p>Исключительно для организации сервиса: передачи адреса курьеру, отправки уведомлений и чеков. Не продаём и не передаём третьим лицам.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">Хранение и удаление</div>
-        <div class="modal-text"><p>Данные хранятся на защищённых серверах. По запросу удаляем в течение 30 дней.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">Контакты</div>
-        <div class="modal-text"><p>[email для связи по вопросам персональных данных]</p></div>
-      </div>
+      <div class="modal-section"><div class="modal-s-title">Какие данные мы собираем</div><div class="modal-text"><p>Имя, телефон, email, адрес — только то, что нужно для оказания услуги.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Как мы используем данные</div><div class="modal-text"><p>Исключительно для организации сервиса. Не продаём и не передаём третьим лицам.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Контакты</div><div class="modal-text"><p>[email для связи по вопросам персональных данных]</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-privacy')">Закрыть</button>
     </div>
   </div>
 </div>
 
-<!-- Публичная оферта -->
 <div id="modal-offer" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">Публичная оферта</div>
-      <div class="modal-section">
-        <div class="modal-s-title">1. Общие положения</div>
-        <div class="modal-text"><p>Настоящий документ является публичной офертой ИП [ФИО], ОГРНИП [номер], ИНН [номер] на оказание услуг по выносу бытовых отходов.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">2. Предмет договора</div>
-        <div class="modal-text"><p>Ежедневный вынос бытовых отходов в соответствии с выбранным тарифом.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">3. Стоимость и оплата</div>
-        <div class="modal-text"><p>Тариф «Лайт» — 990 ₽/мес. Тариф «Забота» — 1490 ₽/мес. Первая неделя — 1 ₽ (акция). Оплата ежемесячно.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">4. Обязанности сторон</div>
-        <div class="modal-text"><p>Заказчик предоставляет актуальный адрес и код домофона. Исполнитель оказывает услугу ежедневно в согласованное время.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">5. Отказ от услуг</div>
-        <div class="modal-text"><p>В любое время через поддержку. Возврат за неиспользованный период — в течение 10 рабочих дней.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">6. Реквизиты</div>
-        <div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div>
-      </div>
+      <div class="modal-section"><div class="modal-s-title">1. Общие положения</div><div class="modal-text"><p>ИП [ФИО], ОГРНИП [номер], ИНН [номер] — услуги по выносу бытовых отходов.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">2. Стоимость</div><div class="modal-text"><p>Тариф «Лайт» — 990 ₽/мес. Тариф «Забота» — 1490 ₽/мес. Первая неделя — 1 ₽.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">3. Отказ от услуг</div><div class="modal-text"><p>В любое время через поддержку. Возврат за неиспользованный период — в течение 10 рабочих дней.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">4. Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-offer')">Закрыть</button>
     </div>
   </div>
 </div>
 
-<!-- О компании -->
 <div id="modal-about" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">О компании</div>
-      <div class="modal-section">
-        <div class="modal-s-title">Walle — сервис выноса мусора</div>
-        <div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины ежедневного выноса мусора. Курьеры работают каждый день — утром и вечером, в любую погоду.</p></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">Реквизиты</div>
-        <div class="modal-text">
-          <p>ИП [ФИО]</p>
-          <p>ОГРНИП: [номер]</p>
-          <p>ИНН: [номер]</p>
-          <p>Email: [email]</p>
-          <p>Сайт: [ссылка]</p>
-        </div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-s-title">Поддержка</div>
-        <div class="modal-text"><p>[контакт поддержки]</p></div>
-      </div>
+      <div class="modal-section"><div class="modal-s-title">Walle — сервис выноса мусора</div><div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины ежедневного выноса мусора. Работаем каждый день, в любую погоду.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]<br>Сайт: [ссылка]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Поддержка</div><div class="modal-text"><p>[контакт поддержки]</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-about')">Закрыть</button>
     </div>
   </div>
 </div>
 
-
 <script>
-  // ── Config ───────────────────────────────────────────
   var API = 'https://walle-backend-1.onrender.com';
   var tgUser = null;
   var authToken = null;
 
-  // ── Telegram init ────────────────────────────────────
   (function() {
     try {
       var tg = window.Telegram && window.Telegram.WebApp;
-      if (tg) {
-        tg.ready(); tg.expand(); tg.BackButton && tg.BackButton.hide();
-        tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
-      }
+      if (tg) { tg.ready(); tg.expand(); tg.BackButton && tg.BackButton.hide(); tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user; }
     } catch(e) {}
   })();
 
-  // ── API helpers ──────────────────────────────────────
   function apiPost(path, data) {
     var headers = {'Content-Type': 'application/json'};
     if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
-    return fetch(API + path, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data)
-    }).then(function(r) { return r.json(); });
+    return fetch(API + path, { method: 'POST', headers: headers, body: JSON.stringify(data) }).then(function(r){ return r.json(); });
   }
 
-  // ── Show loading on button ───────────────────────────
   function setLoading(btn, loading) {
     btn.disabled = loading;
     btn.style.opacity = loading ? '0.7' : '1';
     btn.textContent = loading ? 'Загрузка...' : btn._origText;
   }
 
-  // ── Register → API ────────────────────────────────────
-  function submitRegister() {
-    var name  = document.getElementById('inp-name').value.trim();
-    var phone = document.getElementById('inp-phone').value.trim();
-    var email = document.getElementById('inp-email').value.trim();
-    var btn   = document.getElementById('btn-register');
-    btn._origText = btn.textContent;
-    setLoading(btn, true);
-
-    var payload = {
-      name: name || (tgUser && tgUser.first_name) || 'Пользователь',
-      phone: phone,
-      email: email,
-      telegram_id: tgUser ? String(tgUser.id) : '0'
-    };
-
-    apiPost('/api/users/register', payload)
-      .then(function(data) {
-        if (data.id || data.telegram_id) {
-          authToken = data.token || null;
-          goTo('address');
-        } else {
-          alert(data.detail || 'Ошибка регистрации');
-        }
-      })
-      .catch(function() { goTo('address'); }) // fallback
-      .finally(function() { setLoading(btn, false); });
-  }
-
-  // ── Subscription → API ────────────────────────────────
-  function submitSubscription() {
-    var btn = document.getElementById('btn-tariff');
-    btn._origText = btn.textContent;
-    setLoading(btn, true);
-
-    var selectedCard = document.querySelector('.tariff.sel');
-    var tariff = selectedCard && selectedCard.querySelector('.t-name').textContent === 'Лайт' ? 'lite' : 'care';
-    var price  = tariff === 'lite' ? 990 : 1490;
-
-    apiPost('/api/subscriptions/create', {
-      tariff: tariff,
-      price: price,
-      telegram_id: tgUser ? String(tgUser.id) : '0'
-    })
-      .then(function() { goTo('done'); })
-      .catch(function() { goTo('done'); })
-      .finally(function() { setLoading(btn, false); });
-  }
   var nav = ['welcome'];
+
   function goTo(id) {
     var cur = document.querySelector('.screen.active');
     if (cur) cur.classList.remove('active');
@@ -1055,67 +650,70 @@
       if (tg && tg.BackButton) { id==='welcome'?tg.BackButton.hide():tg.BackButton.show(); }
     } catch(e) {}
   }
+
   try {
     if (window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.BackButton) {
-      window.Telegram.WebApp.BackButton.onClick(function(){
-        if(nav.length>1){nav.pop();goTo(nav[nav.length-1]);nav.pop();}
-      });
+      window.Telegram.WebApp.BackButton.onClick(function(){ if(nav.length>1){nav.pop();goTo(nav[nav.length-1]);nav.pop();} });
     }
   } catch(e) {}
 
-  // Modals
   function openModal(id){var m=document.getElementById(id);if(m)m.classList.add('open');}
   function closeModal(ov){ov.classList.remove('open');}
   function closeModalById(id){var m=document.getElementById(id);if(m)m.classList.remove('open');}
 
-  // Tariff
   function pickTariff(el){
     document.querySelectorAll('.tariff').forEach(function(t){t.classList.remove('sel');});
     el.classList.add('sel');
   }
 
-  // Address validation + API
-  function validateAddr(){
-    var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
-    var ok=true;
-    ids.forEach(function(id){
-      var el=document.getElementById(id);
-      el.classList.remove('err');
-      if(!el.value.trim()){el.classList.add('err');ok=false;}
-    });
-    var t=document.getElementById('inp-time');
-    if(t.value){
-      var h=parseInt(t.value.split(':')[0]);
-      if(!((h>=7&&h<=11)||(h>=19&&h<=23))){t.classList.add('err');ok=false;}
-      else t.classList.remove('err');
-    }
-    if(!ok){document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'});return;}
-
-    var btn=document.getElementById('btn-address');
-    btn._origText=btn.textContent;
-    setLoading(btn,true);
-
-    apiPost('/api/addresses/create',{
-      street: document.getElementById('inp-street').value,
-      entrance: document.getElementById('inp-entrance').value,
-      floor: document.getElementById('inp-floor').value,
-      apartment: document.getElementById('inp-apt').value,
-      intercom: document.getElementById('inp-intercom').value,
-      pickup_time: document.getElementById('inp-time').value,
-      pickup_date: document.getElementById('inp-date').value,
+  function submitRegister() {
+    var btn = document.getElementById('btn-register');
+    btn._origText = btn.textContent;
+    setLoading(btn, true);
+    apiPost('/api/users/register', {
+      name: document.getElementById('inp-name').value.trim() || (tgUser&&tgUser.first_name) || 'Пользователь',
+      phone: document.getElementById('inp-phone').value.trim(),
+      email: document.getElementById('inp-email').value.trim(),
       telegram_id: tgUser ? String(tgUser.id) : '0'
-    })
-    .then(function(){goTo('tariff');})
-    .catch(function(){goTo('tariff');})
-    .finally(function(){setLoading(btn,false);});
+    }).then(function(data){ authToken = data.token||null; goTo('address'); })
+      .catch(function(){ goTo('address'); })
+      .finally(function(){ setLoading(btn, false); });
   }
 
-  // Set today as min date
+  function validateAddr() {
+    var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
+    var ok=true;
+    ids.forEach(function(id){ var el=document.getElementById(id); el.classList.remove('err'); if(!el.value.trim()){el.classList.add('err');ok=false;} });
+    var t=document.getElementById('inp-time');
+    if(t.value){ var h=parseInt(t.value.split(':')[0]); if(!((h>=7&&h<=11)||(h>=19&&h<=23))){t.classList.add('err');ok=false;} else t.classList.remove('err'); }
+    if(!ok){ document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'}); return; }
+    var btn=document.getElementById('btn-address');
+    btn._origText=btn.textContent; setLoading(btn,true);
+    apiPost('/api/addresses/create',{
+      street:document.getElementById('inp-street').value,
+      entrance:document.getElementById('inp-entrance').value,
+      floor:document.getElementById('inp-floor').value,
+      apartment:document.getElementById('inp-apt').value,
+      intercom:document.getElementById('inp-intercom').value,
+      pickup_time:document.getElementById('inp-time').value,
+      pickup_date:document.getElementById('inp-date').value,
+      telegram_id:tgUser?String(tgUser.id):'0'
+    }).then(function(){goTo('tariff');}).catch(function(){goTo('tariff');}).finally(function(){setLoading(btn,false);});
+  }
+
+  function submitSubscription() {
+    var btn=document.getElementById('btn-tariff');
+    btn._origText=btn.textContent; setLoading(btn,true);
+    var sel=document.querySelector('.tariff.sel');
+    var tariff=sel&&sel.querySelector('.t-name').textContent==='Лайт'?'lite':'care';
+    apiPost('/api/subscriptions/create',{tariff:tariff,price:tariff==='lite'?990:1490,telegram_id:tgUser?String(tgUser.id):'0'})
+      .then(function(){goTo('done');}).catch(function(){goTo('done');}).finally(function(){setLoading(btn,false);});
+  }
+
   (function(){
     var d=new Date(),pad=function(n){return n<10?'0'+n:n;};
     var today=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-    var el=document.getElementById('inp-date');
-    el.min=today; el.value=today;
+    var el=document.getElementById('inp-date'); el.min=today; el.value=today;
   })();
 </script>
 </body>
