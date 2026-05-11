@@ -74,16 +74,13 @@
     .walle-wrap {
       width: 130px; height: 140px;
       margin-bottom: 6px;
-      animation: walleDrive 4s ease-in-out infinite;
+      animation: walleDrive 3s linear infinite alternate;
       flex-shrink: 0;
     }
 
     @keyframes walleDrive {
-      0%   { transform: translateX(-18px) translateY(0px); }
-      25%  { transform: translateX(0px)   translateY(-5px); }
-      50%  { transform: translateX(18px)  translateY(0px); }
-      75%  { transform: translateX(0px)   translateY(-5px); }
-      100% { transform: translateX(-18px) translateY(0px); }
+      0%   { transform: translateX(-30px); }
+      100% { transform: translateX(30px); }
     }
 
     @keyframes wheelSpin {
