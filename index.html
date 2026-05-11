@@ -7,12 +7,7 @@
   <title>Walle</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    /* ── Reset & base ── */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg:        #0e1012;
@@ -28,8 +23,7 @@
     }
 
     html, body {
-      height: 100%;
-      width: 100%;
+      height: 100%; width: 100%;
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
@@ -37,661 +31,260 @@
       overscroll-behavior: none;
     }
 
-    /* ── App shell ── */
     #app {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
     }
 
-    /* Ambient glow background */
     #app::before {
       content: '';
-      position: fixed;
-      top: -40%;
-      left: 50%;
+      position: fixed; top: -40%; left: 50%;
       transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(74, 222, 128, 0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
 
-    /* ── Screen ── */
     .screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      min-height: 100dvh;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      min-height: 100vh; min-height: 100dvh;
       padding: 48px 24px 36px;
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       animation: fadeUp 0.35s ease both;
     }
-
-    .screen.active {
-      display: flex;
-    }
+    .screen.active { display: flex; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Logo / brand ── */
-    .logo {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+    .logo { font-size: 42px; margin-bottom: 8px; }
+    .brand { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); margin-bottom: 4px; }
+    .brand span { color: var(--green); }
 
-    .brand {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .brand span {
-      color: var(--green);
-    }
-
-    /* ── Hero card (welcome) ── */
     .hero {
-      width: 100%;
-      max-width: 380px;
+      width: 100%; max-width: 380px;
       background: var(--surface);
-      border: 1px solid rgba(74, 222, 128, 0.12);
+      border: 1px solid rgba(74,222,128,0.12);
       border-radius: var(--radius);
-      padding: 28px 24px;
-      margin-top: 32px;
-      text-align: center;
+      padding: 28px 24px; margin-top: 32px; text-align: center;
     }
+    .hero-tag { display: inline-block; background: var(--green-glow); color: var(--green); border: 1px solid rgba(74,222,128,0.25); border-radius: 100px; font-size: 13px; font-weight: 600; padding: 4px 14px; margin-bottom: 16px; }
+    .hero-price { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+    .hero-price sup { font-size: 18px; font-weight: 600; vertical-align: top; margin-top: 6px; display: inline-block; }
+    .hero-sub { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+    .promo-badge { background: linear-gradient(135deg, rgba(74,222,128,0.18), rgba(34,197,94,0.08)); border: 1px solid rgba(74,222,128,0.3); border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 16px; text-align: left; }
+    .promo-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+    .promo-text { font-size: 14px; color: var(--text); font-weight: 500; }
 
-    .hero-tag {
-      display: inline-block;
-      background: var(--green-glow);
-      color: var(--green);
-      border: 1px solid rgba(74, 222, 128, 0.25);
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 14px;
-      margin-bottom: 16px;
-      letter-spacing: 0.3px;
-    }
+    .footer-links { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; padding-bottom: 8px; }
+    .footer-link { font-size: 11px; color: var(--muted); text-decoration: underline; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
-    .hero-price {
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -1px;
-      line-height: 1;
-    }
+    .progress { display: flex; gap: 6px; margin-bottom: 36px; }
+    .progress-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: background 0.25s, width 0.25s; }
+    .progress-dot.active { background: var(--green); width: 20px; border-radius: 3px; }
 
-    .hero-price sup {
-      font-size: 18px;
-      font-weight: 600;
-      vertical-align: top;
-      margin-top: 6px;
-      display: inline-block;
-    }
+    .screen-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; text-align: center; }
+    .screen-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 28px; }
 
-    .hero-sub {
-      font-size: 14px;
-      color: var(--muted);
-      margin-top: 8px;
-      line-height: 1.5;
-    }
+    .form-group { width: 100%; max-width: 380px; margin-bottom: 14px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+    .form-input { width: 100%; background: var(--surface); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); color: var(--text); font-size: 16px; padding: 14px 16px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; appearance: none; }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus { border-color: var(--green-dim); box-shadow: 0 0 0 3px rgba(74,222,128,0.1); }
+    .form-hint { font-size: 12px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+    .required { color: #f87171; }
+    .input-error { border-color: #f87171 !important; box-shadow: 0 0 0 3px rgba(248,113,113,0.1) !important; }
 
-    .promo-badge {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.18), rgba(34, 197, 94, 0.08));
-      border: 1px solid rgba(74, 222, 128, 0.3);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      margin-top: 16px;
-      text-align: left;
-    }
+    .tariff-grid { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .tariff-card { background: var(--surface); border: 1.5px solid rgba(255,255,255,0.07); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; display: flex; align-items: center; gap: 16px; -webkit-tap-highlight-color: transparent; }
+    .tariff-card:active { transform: scale(0.98); }
+    .tariff-card.selected { border-color: var(--green); background: rgba(74,222,128,0.05); }
+    .tariff-icon { font-size: 28px; flex-shrink: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--surface2); border-radius: 12px; }
+    .tariff-info { flex: 1; }
+    .tariff-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .tariff-desc { font-size: 13px; color: var(--muted); }
+    .tariff-more { font-size: 12px; color: var(--green); margin-top: 6px; font-weight: 600; display: inline-block; }
+    .tariff-price { font-size: 18px; font-weight: 800; color: var(--green); flex-shrink: 0; }
+    .tariff-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
+    .tariff-card.selected .tariff-radio { border-color: var(--green); }
+    .tariff-radio::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--green); opacity: 0; transition: opacity 0.2s; }
+    .tariff-card.selected .tariff-radio::after { opacity: 1; }
 
-    .promo-badge .promo-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--green);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+    .done-circle { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, rgba(74,222,128,0.2), rgba(34,197,94,0.05)); border: 2px solid rgba(74,222,128,0.35); display: flex; align-items: center; justify-content: center; font-size: 44px; margin-bottom: 28px; animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.3)} 50%{box-shadow:0 0 0 16px rgba(74,222,128,0)} }
+    .done-title { font-size: 26px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 8px; }
+    .done-sub { font-size: 15px; color: var(--muted); text-align: center; line-height: 1.6; max-width: 280px; }
+    .done-info { margin-top: 28px; background: var(--surface); border: 1px solid rgba(74,222,128,0.15); border-radius: var(--radius); padding: 16px 20px; width: 100%; max-width: 320px; text-align: center; }
+    .done-info-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .done-info-value { font-size: 22px; font-weight: 800; color: var(--green); }
 
-    .promo-badge .promo-text {
-      font-size: 14px;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* ── Section title ── */
-    .screen-title {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 6px;
-      text-align: center;
-      color: var(--text);
-    }
-
-    .screen-sub {
-      font-size: 14px;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    /* ── Form ── */
-    .form-group {
-      width: 100%;
-      max-width: 380px;
-      margin-bottom: 14px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      width: 100%;
-      background: var(--surface);
-      border: 1.5px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-size: 16px;
-      padding: 14px 16px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .form-input::placeholder {
-      color: var(--muted);
-    }
-
-    .form-input:focus {
-      border-color: var(--green-dim);
-      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
-    }
-
-    /* ── Tariff cards ── */
-    .tariff-grid {
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .tariff-card {
-      background: var(--surface);
-      border: 1.5px solid rgba(255, 255, 255, 0.07);
-      border-radius: var(--radius);
-      padding: 20px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .tariff-card:active {
-      transform: scale(0.98);
-    }
-
-    .tariff-card.selected {
-      border-color: var(--green);
-      background: rgba(74, 222, 128, 0.05);
-    }
-
-    .tariff-icon {
-      font-size: 28px;
-      flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--surface2);
-      border-radius: 12px;
-    }
-
-    .tariff-info {
-      flex: 1;
-    }
-
-    .tariff-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-
-    .tariff-desc {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .tariff-price {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--green);
-      flex-shrink: 0;
-    }
-
-    /* ── Radio dot ── */
-    .tariff-radio {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.2s;
-    }
-
-    .tariff-card.selected .tariff-radio {
-      border-color: var(--green);
-    }
-
-    .tariff-more {
-      font-size: 12px;
-      color: var(--green);
-      margin-top: 6px;
-      font-weight: 600;
-      display: inline-block;
-    }
-
-    .tariff-radio::after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .tariff-card.selected .tariff-radio::after {
-      opacity: 1;
-    }
-
-    /* ── Done screen ── */
-    .done-circle {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.05));
-      border: 2px solid rgba(74, 222, 128, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 44px;
-      margin-bottom: 28px;
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.3); }
-      50%       { box-shadow: 0 0 0 16px rgba(74, 222, 128, 0); }
-    }
-
-    .done-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.4px;
-      margin-bottom: 8px;
-    }
-
-    .done-sub {
-      font-size: 15px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.6;
-      max-width: 280px;
-    }
-
-    .done-info {
-      margin-top: 28px;
-      background: var(--surface);
-      border: 1px solid rgba(74, 222, 128, 0.15);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      width: 100%;
-      max-width: 320px;
-      text-align: center;
-    }
-
-    .done-info-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-    }
-
-    .done-info-value {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--green);
-    }
-
-    /* ── Buttons ── */
     .spacer { flex: 1; }
+    .btn-group { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
+    .btn-primary { width: 100%; background: var(--green); color: #0a1a0f; border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; transition: transform 0.1s; -webkit-tap-highlight-color: transparent; }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-secondary { width: 100%; background: transparent; color: var(--muted); border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
-    .btn-group {
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    /* Modals */
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); align-items: flex-end; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: #1a1e24; border-radius: 20px 20px 0 0; padding: 8px 0 0; width: 100%; max-width: 480px; max-height: 88vh; display: flex; flex-direction: column; }
+    .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 0 auto 20px; flex-shrink: 0; }
+    .modal-scroll { overflow-y: auto; padding: 0 24px 40px; flex: 1; }
+    .modal-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-section-title { font-size: 12px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .modal-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .modal-text p { margin-bottom: 8px; }
 
-    .btn-primary {
-      width: 100%;
-      background: var(--green);
-      color: #0a1a0f;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 16px;
-      font-weight: 700;
-      padding: 16px;
-      cursor: pointer;
-      letter-spacing: 0.2px;
-      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
+    .how-step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+    .how-num { width: 28px; height: 28px; border-radius: 50%; background: var(--green-glow); border: 1px solid rgba(74,222,128,0.3); color: var(--green); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .how-text { font-size: 14px; color: var(--muted); line-height: 1.6; padding-top: 4px; }
+    .how-text strong { color: var(--text); }
 
-    .btn-primary:hover {
-      background: #6ee7a0;
-    }
+    .faq-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .faq-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .faq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .faq-a { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-    .btn-primary:active {
-      transform: scale(0.97);
-    }
-
-    .btn-secondary {
-      width: 100%;
-      background: transparent;
-      color: var(--muted);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .btn-secondary:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-      color: var(--text);
-    }
-
-    /* ── Progress dots ── */
-    .progress {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 36px;
-    }
-
-    .progress-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      transition: background 0.25s, width 0.25s;
-    }
-
-    .progress-dot.active {
-      background: var(--green);
-      width: 20px;
-      border-radius: 3px;
-    }
-
-    /* ── Welcome screen extras ── */
-    #screen-welcome {
-      justify-content: center;
-      text-align: center;
-      padding-top: 32px;
-    }
-
-    .form-hint {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 7px;
-      line-height: 1.5;
-    }
-
-    .required {
-      color: #f87171;
-    }
-
-    .time-slots {
-      width: 100%;
-    }
-
-    .time-group-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .time-grid {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .time-slot {
-      background: var(--surface);
-      border: 1.5px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 600;
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .time-slot.selected {
-      border-color: var(--green);
-      background: rgba(74, 222, 128, 0.08);
-      color: var(--green);
-    }
-
-    .input-error {
-      border-color: #f87171 !important;
-      box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1) !important;
-    }
-
-    /* ── Done screen layout ── */
-    #screen-done {
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+    #screen-welcome { justify-content: center; text-align: center; padding-top: 32px; }
+    #screen-done { justify-content: center; align-items: center; text-align: center; }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ══════════════════════════════
-       SCREEN 1: Welcome
-  ══════════════════════════════ -->
+  <!-- SCREEN 1: Welcome -->
   <div id="screen-welcome" class="screen active">
     <div class="logo">🗑️</div>
     <div class="brand">Wall<span>e</span></div>
-
     <div class="hero">
       <div class="hero-tag">Утро без мусорного ведра</div>
-      <div class="hero-price"><sup>от </sup>990 <sup>руб/мес</sup></div>
+      <div class="hero-price"><sup>от&nbsp;&nbsp;</sup>990 <sup>руб/мес</sup></div>
       <div class="hero-sub">Вы занимаетесь жизнью — мусором займёмся мы</div>
       <div class="promo-badge">
         <div class="promo-label">🎁 Акция</div>
         <div class="promo-text">Первая неделя — всего 1 ₽</div>
       </div>
     </div>
-
     <div class="spacer"></div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="goTo('register')">Попробовать за 1 ₽</button>
-      <button class="btn-secondary" onclick="goTo('register')">Узнать подробнее</button>
+      <button class="btn-secondary" onclick="openModal('modal-howto')">Как это работает?</button>
+    </div>
+    <div class="footer-links">
+      <span class="footer-link" onclick="openModal('modal-privacy')">Политика конфиденциальности</span>
+      <span class="footer-link" onclick="openModal('modal-offer')">Публичная оферта</span>
+      <span class="footer-link" onclick="openModal('modal-about')">О компании</span>
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       SCREEN 2: Register
-  ══════════════════════════════ -->
+  <!-- SCREEN 2: Register -->
   <div id="screen-register" class="screen">
     <div class="progress">
       <div class="progress-dot active"></div>
       <div class="progress-dot"></div>
       <div class="progress-dot"></div>
     </div>
-
     <div class="screen-title">Регистрация</div>
     <div class="screen-sub">Расскажите немного о себе</div>
-
     <div class="form-group">
       <label class="form-label">Имя</label>
       <input class="form-input" type="text" placeholder="Ваше имя" id="input-name" autocomplete="given-name">
     </div>
-
     <div class="form-group">
       <label class="form-label">Телефон</label>
       <input class="form-input" type="tel" placeholder="+7 (___) ___-__-__" id="input-phone" autocomplete="tel">
     </div>
-
     <div class="form-group">
       <label class="form-label">Email</label>
       <input class="form-input" type="email" placeholder="your@email.com" id="input-email" autocomplete="email">
       <div class="form-hint">📧 На почту отправим чек об оплате</div>
     </div>
-
     <div class="spacer"></div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="goTo('address')">Далее</button>
       <button class="btn-secondary" onclick="goTo('welcome')">Назад</button>
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       SCREEN 3: Address
-  ══════════════════════════════ -->
+  <!-- SCREEN 3: Address -->
   <div id="screen-address" class="screen">
     <div class="progress">
       <div class="progress-dot"></div>
       <div class="progress-dot active"></div>
       <div class="progress-dot"></div>
     </div>
-
     <div class="screen-title">Адрес</div>
     <div class="screen-sub">Куда приедет Walle?</div>
-
     <div class="form-group">
       <label class="form-label">Улица и дом <span class="required">*</span></label>
       <input class="form-input" type="text" placeholder="ул. Ленина, д. 1" id="input-street" autocomplete="street-address">
     </div>
-
-    <div style="display:flex;gap:10px;width:100%;max-width:380px;">
-      <div class="form-group" style="flex:1;margin-bottom:14px">
+    <div style="display:flex;gap:10px;width:100%;max-width:380px;margin-bottom:14px;">
+      <div style="flex:1">
         <label class="form-label">Подъезд <span class="required">*</span></label>
         <input class="form-input" type="number" placeholder="№" id="input-entrance" min="1">
       </div>
-      <div class="form-group" style="flex:1;margin-bottom:14px">
+      <div style="flex:1">
         <label class="form-label">Этаж <span class="required">*</span></label>
         <input class="form-input" type="number" placeholder="№" id="input-floor" min="1">
       </div>
-      <div class="form-group" style="flex:1;margin-bottom:14px">
+      <div style="flex:1">
         <label class="form-label">Квартира <span class="required">*</span></label>
-        <input class="form-input" type="text" placeholder="№" id="input-apt" autocomplete="address-line2">
+        <input class="form-input" type="text" placeholder="№" id="input-apt">
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Код домофона <span class="required">*</span></label>
       <input class="form-input" type="text" placeholder="Например: 123#45" id="input-intercom">
     </div>
-
     <div class="form-group">
-      <label class="form-label">Время забора <span class="required">*</span></label>
-      <input class="form-input" type="time" id="input-time" value="07:00" min="07:00" max="23:00">
+      <label class="form-label">Дата и время первого забора <span class="required">*</span></label>
+      <div style="display:flex;gap:10px;">
+        <input class="form-input" type="date" id="input-date" style="flex:1.4">
+        <input class="form-input" type="time" id="input-time" value="07:00" style="flex:1">
+      </div>
       <div class="form-hint">⏰ Утро: 07:00–11:00 · Вечер: 19:00–23:00</div>
     </div>
-
     <div class="spacer"></div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="validateAddress()">Далее</button>
       <button class="btn-secondary" onclick="goTo('register')">Назад</button>
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       SCREEN 4: Tariff
-  ══════════════════════════════ -->
+  <!-- SCREEN 4: Tariff -->
   <div id="screen-tariff" class="screen">
     <div class="progress">
       <div class="progress-dot"></div>
       <div class="progress-dot"></div>
       <div class="progress-dot active"></div>
     </div>
-
     <div class="screen-title">Тариф</div>
     <div class="screen-sub">Выберите удобный вариант</div>
-
     <div class="tariff-grid">
-      <div class="tariff-card selected" onclick="selectTariff(this, 'lite')">
+      <div class="tariff-card selected" onclick="selectTariff(this)">
         <div class="tariff-icon">🚪</div>
         <div class="tariff-info">
           <div class="tariff-name">Лайт</div>
           <div class="tariff-desc">Оставьте пакет за дверью — курьер заберёт сам</div>
-          <div class="tariff-more" onclick="event.stopPropagation(); showInfo('lite')">Подробнее →</div>
+          <div class="tariff-more" onclick="event.stopPropagation(); openModal('modal-tariff-lite')">Подробнее →</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
           <div class="tariff-price">990 ₽</div>
           <div class="tariff-radio"></div>
         </div>
       </div>
-
-      <div class="tariff-card" onclick="selectTariff(this, 'care')">
+      <div class="tariff-card" onclick="selectTariff(this)">
         <div class="tariff-icon">♻️</div>
         <div class="tariff-info">
           <div class="tariff-name">Забота</div>
-          <div class="tariff-desc">Курьер заберёт мусор прямо из ведра и оставит новый пакет</div>
-          <div class="tariff-more" onclick="event.stopPropagation(); showInfo('care')">Подробнее →</div>
+          <div class="tariff-desc">Курьер заберёт мусор из ведра и оставит новый пакет</div>
+          <div class="tariff-more" onclick="event.stopPropagation(); openModal('modal-tariff-care')">Подробнее →</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
           <div class="tariff-price">1490 ₽</div>
@@ -699,187 +292,249 @@
         </div>
       </div>
     </div>
-
-    <!-- Info modal -->
-    <div id="info-modal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;" onclick="hideInfo()">
-      <div style="background:#1e2228;border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;" onclick="event.stopPropagation()">
-        <div id="info-title" style="font-size:20px;font-weight:700;margin-bottom:16px;color:#f0f4f8;"></div>
-        <div id="info-body" style="font-size:15px;line-height:1.7;color:#8a9ab0;"></div>
-        <button onclick="hideInfo()" style="margin-top:24px;width:100%;background:#4ade80;color:#0a1a0f;border:none;border-radius:10px;font-size:16px;font-weight:700;padding:14px;cursor:pointer;">Понятно</button>
-      </div>
-    </div>
-
     <div class="spacer"></div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="goTo('done')">Оформить подписку</button>
       <button class="btn-secondary" onclick="goTo('address')">Назад</button>
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       SCREEN 5: Done
-  ══════════════════════════════ -->
+  <!-- SCREEN 5: Done -->
   <div id="screen-done" class="screen">
     <div class="done-circle">✅</div>
     <div class="done-title">Готово!</div>
     <div class="done-sub">Подписка оформлена. Walle уже скоро появится у вашей двери</div>
-
     <div class="done-info">
       <div class="done-info-label">К оплате сейчас</div>
       <div class="done-info-value">1 ₽</div>
     </div>
-
     <div class="spacer" style="max-height:40px"></div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="goTo('welcome')">На главную</button>
     </div>
   </div>
 
-</div><!-- /#app -->
+</div>
+
+<!-- MODAL: Как это работает -->
+<div id="modal-howto" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Как работает Walle</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Шаг за шагом</div>
+        <div class="how-step"><div class="how-num">1</div><div class="how-text"><strong>Оформляете подписку</strong> — выбираете тариф, адрес и удобное время</div></div>
+        <div class="how-step"><div class="how-num">2</div><div class="how-text"><strong>Накануне вечером</strong> бот напомнит, что завтра приедет курьер</div></div>
+        <div class="how-step"><div class="how-num">3</div><div class="how-text"><strong>Утром или вечером</strong> курьер приезжает в назначенное время и забирает мусор</div></div>
+        <div class="how-step"><div class="how-num">4</div><div class="how-text"><strong>Мусор исчезает</strong> — вы даже не заметите</div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Часто задаваемые вопросы</div>
+        <div class="faq-item">
+          <div class="faq-q">Как часто приезжает курьер?</div>
+          <div class="faq-a">Ежедневно — каждый день в выбранное время, без выходных.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Что если я забуду оставить пакет?</div>
+          <div class="faq-a">Ничего страшного — курьер приедет на следующий день. Бот заранее напомнит.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Можно ли изменить время?</div>
+          <div class="faq-a">Да, время можно изменить в любой момент через поддержку.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Как отменить подписку?</div>
+          <div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня. Остаток средств вернём.</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="closeModalById('modal-howto'); goTo('register')">Попробовать за 1 ₽</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Тариф Лайт -->
+<div id="modal-tariff-lite" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">🚪 Тариф Лайт — 990 ₽/мес</div>
+      <div class="how-step"><div class="how-num">1</div><div class="how-text">Накануне вечером получите напоминание в боте</div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-text">Завяжите пакет с мусором и оставьте за дверью квартиры</div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-text">Курьер приедет в назначенное время, заберёт пакет и унесёт на мусоросборник</div></div>
+      <div style="margin-top:20px"><button class="btn-primary" onclick="closeModalById('modal-tariff-lite')">Понятно</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Тариф Забота -->
+<div id="modal-tariff-care" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">♻️ Тариф Забота — 1490 ₽/мес</div>
+      <div class="how-step"><div class="how-num">1</div><div class="how-text">Курьер приедет в назначенное время и позвонит в дверь</div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-text">Вы открываете — курьер стоит в коридоре, в квартиру не заходит</div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-text">Забирает мусор прямо из ведра и сразу ставит новый чистый пакет, который принёс с собой</div></div>
+      <div style="margin-top:20px"><button class="btn-primary" onclick="closeModalById('modal-tariff-care')">Понятно</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Политика конфиденциальности -->
+<div id="modal-privacy" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Политика конфиденциальности</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Какие данные мы собираем</div>
+        <div class="modal-text"><p>Имя, номер телефона, адрес электронной почты, адрес доставки — только то, что необходимо для оказания услуги.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Как мы используем данные</div>
+        <div class="modal-text"><p>Данные используются исключительно для организации сервиса: передачи адреса курьеру, отправки уведомлений и чеков.</p><p>Мы не продаём и не передаём ваши данные третьим лицам, кроме случаев, предусмотренных законодательством РФ.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Хранение данных</div>
+        <div class="modal-text"><p>Данные хранятся на защищённых серверах. По запросу пользователя данные могут быть удалены в течение 30 дней.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Контакты</div>
+        <div class="modal-text"><p>[email для связи по вопросам персональных данных]</p></div>
+      </div>
+      <button class="btn-primary" onclick="closeModalById('modal-privacy')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Публичная оферта -->
+<div id="modal-offer" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Публичная оферта</div>
+      <div class="modal-section">
+        <div class="modal-section-title">1. Общие положения</div>
+        <div class="modal-text"><p>Настоящий документ является публичной офертой ИП [ФИО], ОГРНИП [номер], ИНН [номер] на оказание услуг по выносу бытовых отходов.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">2. Предмет договора</div>
+        <div class="modal-text"><p>Исполнитель оказывает услуги по ежедневному выносу бытовых отходов в соответствии с выбранным тарифом.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">3. Стоимость и оплата</div>
+        <div class="modal-text"><p>Тариф «Лайт» — 990 руб./мес. Тариф «Забота» — 1490 руб./мес.</p><p>Первая неделя — 1 рубль (акция). Оплата ежемесячно.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">4. Обязанности сторон</div>
+        <div class="modal-text"><p>Заказчик предоставляет актуальный адрес и код домофона. Исполнитель оказывает услугу ежедневно в согласованное время.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">5. Отказ от услуг</div>
+        <div class="modal-text"><p>Заказчик вправе отказаться в любое время через поддержку. Возврат за неиспользованный период — в течение 10 рабочих дней.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">6. Реквизиты</div>
+        <div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div>
+      </div>
+      <button class="btn-primary" onclick="closeModalById('modal-offer')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: О компании -->
+<div id="modal-about" class="modal-overlay" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">О компании</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Walle — сервис выноса мусора</div>
+        <div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины ежедневного выноса мусора.</p><p>Наши курьеры работают каждый день — утром и вечером, в любую погоду.</p></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Реквизиты</div>
+        <div class="modal-text">
+          <p>ИП [ФИО]</p>
+          <p>ОГРНИП: [номер]</p>
+          <p>ИНН: [номер]</p>
+          <p>Email: [email]</p>
+          <p>Сайт: [ссылка]</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Поддержка</div>
+        <div class="modal-text"><p>[контакт поддержки]</p></div>
+      </div>
+      <button class="btn-primary" onclick="closeModalById('modal-about')">Закрыть</button>
+    </div>
+  </div>
+</div>
 
 <script>
-  // ── Telegram WebApp init ──────────────────────────────
-  (function initTelegram() {
+  (function() {
     try {
       var tg = window.Telegram && window.Telegram.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.expand();
-        // Match app color to Telegram theme if available
-        if (tg.colorScheme === 'light') {
-          // Keep dark anyway — brand design
-        }
-        // Hide Telegram back button; we manage nav ourselves
-        tg.BackButton && tg.BackButton.hide();
-      }
-    } catch (e) {
-      console.warn('Telegram WebApp init error:', e);
-    }
+      if (tg) { tg.ready(); tg.expand(); tg.BackButton && tg.BackButton.hide(); }
+    } catch(e) {}
   })();
 
-  // ── Navigation ────────────────────────────────────────
-  var history = ['welcome'];
+  var navHistory = ['welcome'];
 
-  function goTo(screenId) {
-    var current = document.querySelector('.screen.active');
-    if (current) current.classList.remove('active');
-
-    var next = document.getElementById('screen-' + screenId);
-    if (next) {
-      next.classList.add('active');
-      // Re-trigger animation
-      next.style.animation = 'none';
-      next.offsetHeight; // reflow
-      next.style.animation = '';
-    }
-
-    history.push(screenId);
-
-    // Telegram Back Button: show when not on first screen
+  function goTo(id) {
+    var cur = document.querySelector('.screen.active');
+    if (cur) cur.classList.remove('active');
+    var next = document.getElementById('screen-' + id);
+    if (next) { next.classList.add('active'); next.style.animation='none'; next.offsetHeight; next.style.animation=''; }
+    navHistory.push(id);
     try {
       var tg = window.Telegram && window.Telegram.WebApp;
-      if (tg && tg.BackButton) {
-        if (screenId === 'welcome') {
-          tg.BackButton.hide();
-        } else {
-          tg.BackButton.show();
-        }
-      }
-    } catch (e) {}
+      if (tg && tg.BackButton) { id==='welcome' ? tg.BackButton.hide() : tg.BackButton.show(); }
+    } catch(e) {}
   }
 
-  // Handle Telegram hardware back button
   try {
     if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
       window.Telegram.WebApp.BackButton.onClick(function() {
-        if (history.length > 1) {
-          history.pop();
-          goTo(history[history.length - 1]);
-          history.pop(); // goTo pushes again
-        }
+        if (navHistory.length > 1) { navHistory.pop(); goTo(navHistory[navHistory.length-1]); navHistory.pop(); }
       });
     }
-  } catch (e) {}
+  } catch(e) {}
 
-  // ── Time slot selection ───────────────────────────────
-  function selectTime(el, value) {
-    document.querySelectorAll('.time-slot').forEach(function(s) {
-      s.classList.remove('selected');
-    });
-    el.classList.add('selected');
-    document.getElementById('input-time').value = value;
-  }
+  function openModal(id) { var m=document.getElementById(id); if(m) m.classList.add('open'); }
+  function closeModal(overlay) { overlay.classList.remove('open'); }
+  function closeModalById(id) { var m=document.getElementById(id); if(m) m.classList.remove('open'); }
 
-  // ── Address validation ────────────────────────────────
   function validateAddress() {
-    var street   = document.getElementById('input-street');
-    var entrance = document.getElementById('input-entrance');
-    var floor    = document.getElementById('input-floor');
-    var apt      = document.getElementById('input-apt');
-    var intercom = document.getElementById('input-intercom');
-    var time     = document.getElementById('input-time');
+    var ids = ['input-street','input-entrance','input-floor','input-apt','input-intercom','input-date'];
     var valid = true;
-
-    [street, entrance, floor, apt, intercom].forEach(function(el) {
+    ids.forEach(function(id) {
+      var el = document.getElementById(id);
       el.classList.remove('input-error');
-      if (!el.value.trim()) {
-        el.classList.add('input-error');
-        valid = false;
-      }
+      if (!el.value.trim()) { el.classList.add('input-error'); valid = false; }
     });
-
-    // Validate time range
+    var time = document.getElementById('input-time');
     if (time.value) {
       var h = parseInt(time.value.split(':')[0]);
-      var inMorning = h >= 7 && h <= 11;
-      var inEvening = h >= 19 && h <= 23;
-      if (!inMorning && !inEvening) {
-        time.classList.add('input-error');
-        valid = false;
-      } else {
-        time.classList.remove('input-error');
-      }
+      if (!((h>=7&&h<=11)||(h>=19&&h<=23))) { time.classList.add('input-error'); valid=false; }
+      else { time.classList.remove('input-error'); }
     }
-
-    if (!valid) {
-      street.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
+    if (!valid) { document.getElementById('input-street').scrollIntoView({behavior:'smooth',block:'start'}); return; }
     goTo('tariff');
   }
 
-  // ── Tariff selection ──────────────────────────────────
-  function selectTariff(card, id) {
-    document.querySelectorAll('.tariff-card').forEach(function(c) {
-      c.classList.remove('selected');
-    });
+  (function() {
+    var d = new Date();
+    var pad = function(n){ return n<10?'0'+n:n; };
+    var today = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    var dateEl = document.getElementById('input-date');
+    dateEl.min = today; dateEl.value = today;
+  })();
+
+  function selectTariff(card) {
+    document.querySelectorAll('.tariff-card').forEach(function(c){ c.classList.remove('selected'); });
     card.classList.add('selected');
-  }
-
-  // ── Tariff info modal ─────────────────────────────────
-  var tariffInfo = {
-    lite: {
-      title: '🚪 Тариф Лайт — 990 ₽/мес',
-      body: 'Как это работает:\n\n1. Накануне вечером вы получите напоминание в боте\n2. Утром завяжите пакет с мусором и оставьте его за дверью квартиры\n3. Курьер приедет в назначенное время, заберёт пакет и унесёт его на мусоросборник\n\nВам не нужно никуда выходить — просто оставьте пакет за дверью.'
-    },
-    care: {
-      title: '♻️ Тариф Забота — 1490 ₽/мес',
-      body: 'Как это работает:\n\n1. Курьер приедет в назначенное время\n2. Позвонит в дверь — вы открываете\n3. Он заберёт мусор прямо из вашего ведра в коридоре\n4. Сразу установит новый чистый пакет, который принесёт с собой\n\nВам не нужно ничего готовить заранее — курьер сделает всё сам прямо у порога. В квартиру не заходит.'
-    }
-  };
-
-  function showInfo(id) {
-    var info = tariffInfo[id];
-    document.getElementById('info-title').textContent = info.title;
-    document.getElementById('info-body').textContent = info.body;
-    var modal = document.getElementById('info-modal');
-    modal.style.display = 'flex';
-  }
-
-  function hideInfo() {
-    document.getElementById('info-modal').style.display = 'none';
   }
 </script>
 </body>
