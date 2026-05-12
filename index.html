@@ -49,7 +49,7 @@
     }
     #earth-canvas {
       border-radius: 50%;
-      filter: drop-shadow(0 0 22px rgba(60,140,255,0.6)) drop-shadow(0 0 55px rgba(30,80,200,0.22));
+      filter: drop-shadow(0 0 12px rgba(60,140,255,0.35)) drop-shadow(0 0 28px rgba(30,80,200,0.12));
     }
 
     /* Neon glow brand name - white text with green glow */
@@ -585,15 +585,18 @@
     });
 
     function spawnMeteor() {
+      var dir = Math.random();
+      var vx, vy;
+      if (dir < 0.5) { vx=-(Math.random()*6+3.5); vy=Math.random()*3.5+1.5; }
+      else if (dir < 0.75) { vx=-(Math.random()*4+2); vy=Math.random()*5+3; }
+      else { vx=-(Math.random()*8+5); vy=Math.random()*2+0.5; }
       meteors.push({
-        x: Math.random()*W*0.75 + W*0.08,
-        y: Math.random()*H*0.3,
-        vx: -(Math.random()*5.5+3.5),
-        vy:  Math.random()*3.2+1.5,
-        life: 1,
-        tailLen: Math.random()*120+55,
-        decay: Math.random()*0.009+0.007,
-        color: Math.random()<0.7 ? '255,255,255' : (Math.random()<0.5 ? '180,220,255' : '255,240,200')
+        x: Math.random()*W*0.85+W*0.05,
+        y: Math.random()*H*0.4,
+        vx: vx, vy: vy, life: 1,
+        tailLen: Math.random()*130+60,
+        decay: Math.random()*0.008+0.007,
+        color: Math.random()<0.6 ? '255,255,255' : (Math.random()<0.5 ? '180,220,255' : '255,245,200')
       });
     }
 
@@ -620,7 +623,9 @@
       // Meteors
       if (Date.now() > nextMeteor) {
         spawnMeteor();
-        nextMeteor = Date.now() + Math.random()*10000+5000;
+        spawnMeteor();
+        if(Math.random()<0.35) spawnMeteor();
+        nextMeteor = Date.now() + Math.random()*1000+700;
       }
 
       meteors = meteors.filter(function(m) {
@@ -723,12 +728,12 @@
       ctx.fillStyle=shine; ctx.fillRect(0,0,W,H);
       ctx.restore();
 
-      // Atmosphere
-      var atm = ctx.createRadialGradient(W/2,H/2,R,W/2,H/2,R+11);
-      atm.addColorStop(0,'rgba(80,160,255,0.32)');
-      atm.addColorStop(0.5,'rgba(60,130,255,0.12)');
+      // Atmosphere - very subtle, just a thin haze
+      var atm = ctx.createRadialGradient(W/2,H/2,R-2,W/2,H/2,R+5);
+      atm.addColorStop(0,'rgba(80,160,255,0.12)');
+      atm.addColorStop(0.6,'rgba(60,130,255,0.05)');
       atm.addColorStop(1,'transparent');
-      ctx.beginPath(); ctx.arc(W/2,H/2,R+11,0,Math.PI*2);
+      ctx.beginPath(); ctx.arc(W/2,H/2,R+5,0,Math.PI*2);
       ctx.fillStyle=atm; ctx.fill();
 
       offset += 0.35;
