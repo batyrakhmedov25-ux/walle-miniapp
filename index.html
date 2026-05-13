@@ -39,38 +39,59 @@
       background: radial-gradient(circle at center, #0a1122 0%, #000000 100%);
     }
 
-    /* ── Star layers via CSS (box-shadow trick) ── */
-    #stars-1, #stars-2, #stars-3, #stars-4, #stars-5 {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    /* ── Stars container ── */
+    .stars-container {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+    }
+
+    /* 5 independent star layers */
+    .stars {
+      position: absolute; inset: -100px;
+      width: calc(100% + 200px); height: calc(100% + 200px);
       will-change: transform;
     }
 
-    /* Layer 1 — tiny far dust */
-    #stars-1 { animation: twinkle1 6s ease-in-out infinite alternate, parallax1 20s ease-in-out infinite alternate; }
-    /* Layer 2 — small far stars */
-    #stars-2 { animation: twinkle2 8s ease-in-out infinite alternate, parallax2 25s ease-in-out infinite alternate; }
-    /* Layer 3 — medium stars */
-    #stars-3 { animation: twinkle3 4.5s ease-in-out infinite alternate, parallax3 18s ease-in-out infinite alternate; }
-    /* Layer 4 — bright glowing stars */
-    #stars-4 { animation: twinkle4 5.5s ease-in-out infinite alternate, parallax4 22s ease-in-out infinite alternate; }
-    /* Layer 5 — closest bright stars */
-    #stars-5 { animation: twinkle5 3.5s ease-in-out infinite alternate, parallax5 15s ease-in-out infinite alternate; }
+    /* L1 — micro dust, barely moves */
+    .stars.l1 {
+      animation: tw1 15s ease-in-out infinite alternate,
+                 px1 40s ease-in-out infinite alternate;
+    }
+    /* L2 — small background stars */
+    .stars.l2 {
+      animation: tw2 10s ease-in-out 2s infinite alternate,
+                 px2 35s ease-in-out 5s infinite alternate;
+    }
+    /* L3 — medium twinkling */
+    .stars.l3 {
+      animation: tw3 4.5s ease-in-out 1s infinite alternate,
+                 px3 28s ease-in-out 3s infinite alternate;
+    }
+    /* L4 — bright colored stars */
+    .stars.l4 {
+      animation: tw4 5.5s ease-in-out 0.5s infinite alternate,
+                 px4 22s ease-in-out 8s infinite alternate;
+    }
+    /* L5 — closest, largest glow stars */
+    .stars.l5 {
+      animation: tw5 3.5s ease-in-out 1.5s infinite alternate,
+                 px5 18s ease-in-out 2s infinite alternate;
+    }
 
-    @keyframes twinkle1 { 0%{opacity:.3} 100%{opacity:.7} }
-    @keyframes twinkle2 { 0%{opacity:.4} 100%{opacity:.8} }
-    @keyframes twinkle3 { 0%{opacity:.5} 50%{opacity:.15} 100%{opacity:.9} }
-    @keyframes twinkle4 { 0%{opacity:.6} 40%{opacity:.2} 100%{opacity:1} }
-    @keyframes twinkle5 { 0%{opacity:.8} 30%{opacity:.3} 100%{opacity:1} }
+    @keyframes tw1 { 0%{opacity:.25} 100%{opacity:.6} }
+    @keyframes tw2 { 0%{opacity:.3}  100%{opacity:.75} }
+    @keyframes tw3 { 0%{opacity:.45} 50%{opacity:.1} 100%{opacity:.95} }
+    @keyframes tw4 { 0%{opacity:.5}  35%{opacity:.15} 100%{opacity:1} }
+    @keyframes tw5 { 0%{opacity:.7}  25%{opacity:.2}  100%{opacity:1} }
 
-    @keyframes parallax1 { 0%{transform:translate(0,0)} 100%{transform:translate(2px,3px)} }
-    @keyframes parallax2 { 0%{transform:translate(0,0)} 100%{transform:translate(4px,6px)} }
-    @keyframes parallax3 { 0%{transform:translate(0,0)} 100%{transform:translate(8px,10px)} }
-    @keyframes parallax4 { 0%{transform:translate(0,0)} 100%{transform:translate(14px,18px)} }
-    @keyframes parallax5 { 0%{transform:translate(0,0)} 100%{transform:translate(20px,25px)} }
+    @keyframes px1 { 0%{transform:translate(0,0)}   100%{transform:translate(3px,4px)} }
+    @keyframes px2 { 0%{transform:translate(0,0)}   100%{transform:translate(6px,8px)} }
+    @keyframes px3 { 0%{transform:translate(0,0)}   100%{transform:translate(12px,15px)} }
+    @keyframes px4 { 0%{transform:translate(0,0)}   100%{transform:translate(20px,24px)} }
+    @keyframes px5 { 0%{transform:translate(0,0)}   100%{transform:translate(28px,35px)} }
 
     /* Nebula haze */
     #nebula {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
       background:
         radial-gradient(ellipse 110% 22% at 58% 30%, rgba(80,120,255,0.04) 0%, transparent 70%),
         radial-gradient(ellipse 70% 18% at 22% 55%, rgba(52,211,153,0.022) 0%, transparent 70%),
@@ -79,7 +100,7 @@
 
     /* Canvas for comets */
     #comet-canvas {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
       width: 100%; height: 100%;
     }
 
@@ -441,13 +462,15 @@
 </head>
 <body>
 
-<!-- ═══ STAR LAYERS ═══ -->
+<!-- ═══ DEEP SPACE ═══ -->
 <div id="nebula"></div>
-<div id="stars-1"></div>
-<div id="stars-2"></div>
-<div id="stars-3"></div>
-<div id="stars-4"></div>
-<div id="stars-5"></div>
+<div class="stars-container">
+  <div class="stars l1"></div>
+  <div class="stars l2"></div>
+  <div class="stars l3"></div>
+  <div class="stars l4"></div>
+  <div class="stars l5"></div>
+</div>
 
 <!-- ═══ COMET CANVAS ═══ -->
 <canvas id="comet-canvas"></canvas>
@@ -713,63 +736,60 @@ function validateAddr() {
 })();
 
 /* ═══════════════════════════════════════════════════════
-   CSS STAR LAYERS (box-shadow technique)
+   CSS STAR LAYERS — 5 independent layers
 ═══════════════════════════════════════════════════════ */
 (function() {
   var W = window.innerWidth, H = window.innerHeight;
+  var spread = Math.max(W, H) * 2.5;
 
-  function makeShadows(n, minR, maxR, colors, opacity) {
-    var shadows = [];
-    for(var i=0;i<n;i++) {
-      var x = Math.floor(Math.random()*W*3-W);
-      var y = Math.floor(Math.random()*H*3-H);
-      var r = (Math.random()*(maxR-minR)+minR).toFixed(1);
-      var c = colors[Math.floor(Math.random()*colors.length)];
-      var op = (Math.random()*opacity+opacity*0.3).toFixed(2);
-      var glow = maxR > 1.5 ? ' 0 0 '+(r*3)+'px '+c : '';
-      shadows.push(x+'px '+y+'px 0 '+r+'px '+c+glow);
+  /* Generate box-shadow string for N stars */
+  function makeStars(n, minR, maxR, colorList, minOp, maxOp, withGlow) {
+    var out = [];
+    for(var i=0;i<n;i++){
+      var x  = (Math.random()*spread - spread/2).toFixed(0);
+      var y  = (Math.random()*spread - spread/2).toFixed(0);
+      var r  = (Math.random()*(maxR-minR)+minR).toFixed(2);
+      var c  = colorList[Math.floor(Math.random()*colorList.length)];
+      var op = (Math.random()*(maxOp-minOp)+minOp).toFixed(2);
+      var shadow = x+'px '+y+'px 0 '+r+'px '+c+op+')';
+      if(withGlow){
+        var gr = (parseFloat(r)*3).toFixed(1);
+        shadow += ', '+x+'px '+y+'px '+gr+'px '+r+'px '+c+(parseFloat(op)*0.4).toFixed(2)+')';
+      }
+      out.push(shadow);
     }
-    return shadows.join(',');
+    return out.join(', ');
   }
 
-  // Layer 1 - tiny dust
-  var l1 = document.createElement('div');
-  l1.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;will-change:transform;';
-  var dot1 = document.createElement('div');
-  dot1.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
-  dot1.style.boxShadow = makeShadows(400, 0.2, 0.6, ['rgba(255,255,255,'], 0.25);
-  l1.appendChild(dot1);
-  document.body.insertBefore(l1, document.body.firstChild);
+  var dot = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
 
-  // Layer 2 - small stars
-  var dot2 = document.createElement('div');
-  dot2.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;will-change:transform;';
-  dot2.style.boxShadow = makeShadows(250, 0.4, 0.9, ['rgba(255,255,255,'], 0.35);
-  l1.appendChild(dot2);
+  /* L1 — micro dust */
+  var d1=document.createElement('div'); d1.style.cssText=dot;
+  d1.style.boxShadow = makeStars(450, 0.15, 0.55, ['rgba(255,255,255,'], 0.1, 0.4, false);
+  document.querySelector('.stars.l1').appendChild(d1);
 
-  // Layer 3 - medium twinkling
-  var l3 = document.getElementById('stars-3');
-  var dot3 = document.createElement('div');
-  dot3.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
-  dot3.style.boxShadow = makeShadows(120, 0.7, 1.4,
-    ['rgba(255,255,255,','rgba(220,235,255,','rgba(255,245,220,'], 0.5);
-  l3.appendChild(dot3);
+  /* L2 — small background stars */
+  var d2=document.createElement('div'); d2.style.cssText=dot;
+  d2.style.boxShadow = makeStars(280, 0.35, 0.85, ['rgba(255,255,255,','rgba(220,235,255,'], 0.2, 0.55, false);
+  document.querySelector('.stars.l2').appendChild(d2);
 
-  // Layer 4 - bright colored stars with glow
-  var l4 = document.getElementById('stars-4');
-  var dot4 = document.createElement('div');
-  dot4.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
-  dot4.style.boxShadow = makeShadows(50, 1.2, 2.0,
-    ['rgba(255,255,255,','rgba(180,215,255,','rgba(255,240,180,','rgba(180,255,240,'], 0.7);
-  l4.appendChild(dot4);
+  /* L3 — medium twinkling */
+  var d3=document.createElement('div'); d3.style.cssText=dot;
+  d3.style.boxShadow = makeStars(130, 0.65, 1.3,
+    ['rgba(255,255,255,','rgba(210,230,255,','rgba(255,245,215,'], 0.35, 0.75, false);
+  document.querySelector('.stars.l3').appendChild(d3);
 
-  // Layer 5 - closest largest stars
-  var l5 = document.getElementById('stars-5');
-  var dot5 = document.createElement('div');
-  dot5.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
-  dot5.style.boxShadow = makeShadows(20, 1.8, 2.8,
-    ['rgba(255,255,255,','rgba(160,210,255,','rgba(255,230,150,'], 0.85);
-  l5.appendChild(dot5);
+  /* L4 — bright colored stars */
+  var d4=document.createElement('div'); d4.style.cssText=dot;
+  d4.style.boxShadow = makeStars(55, 1.1, 1.9,
+    ['rgba(255,255,255,','rgba(170,210,255,','rgba(255,238,170,','rgba(170,255,230,'], 0.55, 0.9, true);
+  document.querySelector('.stars.l4').appendChild(d4);
+
+  /* L5 — closest large glow stars */
+  var d5=document.createElement('div'); d5.style.cssText=dot;
+  d5.style.boxShadow = makeStars(22, 1.7, 2.8,
+    ['rgba(255,255,255,','rgba(155,205,255,','rgba(255,228,140,'], 0.75, 1.0, true);
+  document.querySelector('.stars.l5').appendChild(d5);
 })();
 
 /* ═══════════════════════════════════════════════════════
@@ -908,42 +928,41 @@ function validateAddr() {
       }
       ctx.restore();
 
-      // Evening terminator — only right crescent lit
+      // Evening terminator — night side merges fully with space
       ctx.save();
       ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
 
-      // Dark terminator (most of sphere in shadow - evening side)
-      var terminator = ctx.createRadialGradient(cx-R*0.35,cy,R*0.1,cx-R*0.2,cy,R*1.1);
+      var terminator = ctx.createRadialGradient(cx-R*0.32,cy,R*0.08,cx-R*0.18,cy,R*1.08);
       terminator.addColorStop(0,'transparent');
-      terminator.addColorStop(0.45,'rgba(0,3,18,0.2)');
-      terminator.addColorStop(0.72,'rgba(0,3,18,0.65)');
-      terminator.addColorStop(1,'rgba(0,3,18,0.88)');
+      terminator.addColorStop(0.42,'rgba(0,0,0,0.15)');
+      terminator.addColorStop(0.68,'rgba(0,0,0,0.72)');
+      terminator.addColorStop(1,'rgba(0,0,0,1)');
       ctx.fillStyle=terminator; ctx.fillRect(0,0,size,size);
 
-      // City lights on night side (subtle warm dots pattern)
+      // City lights — dark side only, very delicate
       if(R>50){
         ctx.globalCompositeOperation='screen';
-        var cityGlow = ctx.createRadialGradient(cx+R*0.25,cy,0,cx+R*0.25,cy,R*0.8);
-        cityGlow.addColorStop(0,'rgba(255,200,80,0.06)');
-        cityGlow.addColorStop(0.4,'rgba(255,160,50,0.04)');
-        cityGlow.addColorStop(1,'transparent');
-        ctx.fillStyle=cityGlow; ctx.fillRect(0,0,size,size);
+        var city = ctx.createRadialGradient(cx+R*0.28,cy,0,cx+R*0.28,cy,R*0.75);
+        city.addColorStop(0,'rgba(255,200,80,0.055)');
+        city.addColorStop(0.5,'rgba(255,160,50,0.028)');
+        city.addColorStop(1,'transparent');
+        ctx.fillStyle=city; ctx.fillRect(0,0,size,size);
         ctx.globalCompositeOperation='source-over';
       }
 
-      // Specular shine on lit side
-      var shine = ctx.createRadialGradient(cx-R*0.35,cy-R*0.35,0,cx-R*0.25,cy-R*0.25,R*0.6);
-      shine.addColorStop(0,'rgba(255,255,255,0.14)');
+      // Specular shine on lit crescent
+      var shine = ctx.createRadialGradient(cx-R*0.38,cy-R*0.38,0,cx-R*0.28,cy-R*0.28,R*0.55);
+      shine.addColorStop(0,'rgba(255,255,255,0.13)');
       shine.addColorStop(1,'transparent');
       ctx.fillStyle=shine; ctx.fillRect(0,0,size,size);
       ctx.restore();
 
-      // Thin atmosphere ring
-      var atm = ctx.createRadialGradient(cx,cy,R-1,cx,cy,R+3);
-      atm.addColorStop(0,'rgba(70,150,255,0.18)');
-      atm.addColorStop(0.6,'rgba(50,120,255,0.07)');
-      atm.addColorStop(1,'transparent');
-      ctx.beginPath(); ctx.arc(cx,cy,R+3,0,Math.PI*2);
+      /* Soft atmosphere — gradient from edge R outward, NO hard ring or arc stroke */
+      var atm = ctx.createRadialGradient(cx,cy,R-0.5,cx,cy,R+4);
+      atm.addColorStop(0,'rgba(100,150,255,0.4)');
+      atm.addColorStop(0.5,'rgba(70,120,255,0.15)');
+      atm.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(cx,cy,R+4,0,Math.PI*2);
       ctx.fillStyle=atm; ctx.fill();
 
       offset += 0.3; // rotation speed
