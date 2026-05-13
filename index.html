@@ -7,245 +7,875 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════════════════════
-       1. ГЛОБАЛЬНЫЙ КОСМОС
+       BASE
     ═══════════════════════════════════════════════════════ */
-    :root {
-      --green: #34d399;
-      --green-glow: rgba(52, 211, 153, 0.4);
-      --glass-bg: rgba(15, 23, 42, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --text: #f0f6ff;
-      --text-dim: #94a3b8;
-    }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body, html {
-      width: 100%; height: 100%;
-      background: radial-gradient(circle at center, #0a1122 0%, #000000 100%) no-repeat fixed;
-      color: var(--text); font-family: 'Inter', sans-serif;
-      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    :root {
+      --green:     #34d399;
+      --green-2:   #10b981;
+      --green-glow:rgba(52,211,153,0.45);
+      --text:      #f0f6ff;
+      --text-2:    #94a3b8;
+      --text-3:    #475569;
+      --glass-bg:  rgba(15,23,42,0.6);
+      --glass-border: rgba(255,255,255,0.1);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
     }
 
-    /* КОНТЕЙНЕР ДЛЯ 500 ЗВЕЗД */
-    .stars-viewport {
-      position: fixed; inset: 0; z-index: -10; pointer-events: none;
-      overflow: hidden; background: transparent;
+    html, body {
+      height: 100%; width: 100%;
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-
-    .star-l {
-      position: absolute; border-radius: 50%; will-change: opacity;
-    }
-
-    /* Анимации мерцания слоев */
-    .layer-0 { animation: blink 4s infinite; }
-    .layer-1 { animation: blink 7s infinite 1s; }
-    .layer-2 { animation: blink 5s infinite 2s; }
-    .layer-3 { animation: blink 3s infinite 0.5s; filter: blur(0.5px); }
-    .layer-4 { animation: blink 8s infinite; opacity: 0.4; }
-
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-
-    /* КОМЕТЫ */
-    .comet { position: fixed; width: 2px; height: 2px; background: linear-gradient(to right, #fff, transparent); box-shadow: 0 0 8px #fff; border-radius: 50%; z-index: -5; pointer-events: none; }
-    @keyframes cometStrike { 0% { transform: translate(0,0) rotate(-45deg) scale(0); opacity: 0; } 10% { opacity: 1; scale: 1; } 100% { transform: translate(-500px, 500px) rotate(-45deg) scale(0); opacity: 0; } }
 
     /* ═══════════════════════════════════════════════════════
-       2. ЗЕМЛЯ (УСКОРЕННОЕ ВРАЩЕНИЕ)
+       DEEP SPACE BACKGROUND
     ═══════════════════════════════════════════════════════ */
-    .earth-wrap {
-      position: relative; width: 100%; height: 35vh;
-      display: flex; justify-content: center; align-items: center;
-      z-index: 5; transition: opacity 0.6s ease, transform 0.6s ease;
+    body {
+      background: radial-gradient(circle at center, #0a1122 0%, #000000 100%);
     }
 
+    /* ── Stars container ── */
+    .stars-container {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+    }
+
+    /* 5 independent star layers */
+    .stars {
+      position: absolute; inset: -100px;
+      width: calc(100% + 200px); height: calc(100% + 200px);
+      will-change: transform;
+    }
+
+    /* L1 — micro dust, barely moves */
+    .stars.l1 {
+      animation: tw1 15s ease-in-out infinite alternate,
+                 px1 40s ease-in-out infinite alternate;
+    }
+    /* L2 — small background stars */
+    .stars.l2 {
+      animation: tw2 10s ease-in-out 2s infinite alternate,
+                 px2 35s ease-in-out 5s infinite alternate;
+    }
+    /* L3 — medium twinkling */
+    .stars.l3 {
+      animation: tw3 4.5s ease-in-out 1s infinite alternate,
+                 px3 28s ease-in-out 3s infinite alternate;
+    }
+    /* L4 — bright colored stars */
+    .stars.l4 {
+      animation: tw4 5.5s ease-in-out 0.5s infinite alternate,
+                 px4 22s ease-in-out 8s infinite alternate;
+    }
+    /* L5 — closest, largest glow stars */
+    .stars.l5 {
+      animation: tw5 3.5s ease-in-out 1.5s infinite alternate,
+                 px5 18s ease-in-out 2s infinite alternate;
+    }
+
+    @keyframes tw1 { 0%{opacity:.25} 100%{opacity:.6} }
+    @keyframes tw2 { 0%{opacity:.3}  100%{opacity:.75} }
+    @keyframes tw3 { 0%{opacity:.45} 50%{opacity:.1} 100%{opacity:.95} }
+    @keyframes tw4 { 0%{opacity:.5}  35%{opacity:.15} 100%{opacity:1} }
+    @keyframes tw5 { 0%{opacity:.7}  25%{opacity:.2}  100%{opacity:1} }
+
+    @keyframes px1 { 0%{transform:translate(0,0)}   100%{transform:translate(3px,4px)} }
+    @keyframes px2 { 0%{transform:translate(0,0)}   100%{transform:translate(6px,8px)} }
+    @keyframes px3 { 0%{transform:translate(0,0)}   100%{transform:translate(12px,15px)} }
+    @keyframes px4 { 0%{transform:translate(0,0)}   100%{transform:translate(20px,24px)} }
+    @keyframes px5 { 0%{transform:translate(0,0)}   100%{transform:translate(28px,35px)} }
+
+    /* Nebula haze */
+    #nebula {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 110% 22% at 58% 30%, rgba(80,120,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 18% at 22% 55%, rgba(52,211,153,0.022) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 28% at 85% 18%, rgba(140,80,255,0.028) 0%, transparent 65%);
+    }
+
+    /* Canvas for comets */
+    #comet-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      width: 100%; height: 100%;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       APP SHELL
+    ═══════════════════════════════════════════════════════ */
+    #app {
+      position: relative; z-index: 2;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh; min-height: 100dvh;
+      padding: 0 20px 36px;
+      position: relative;
+      overflow-y: auto;
+    }
+    .screen.active {
+      display: flex;
+      animation: screenIn 0.45s cubic-bezier(0.34,1.3,0.64,1) both;
+    }
+    @keyframes screenIn {
+      from { opacity:0; transform:translateY(22px) scale(0.97); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       EARTH
+    ═══════════════════════════════════════════════════════ */
+    .earth-container {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.6s cubic-bezier(0.34,1.2,0.64,1);
+    }
+
+    .earth-container.large { width:200px; height:200px; margin: 36px 0 12px; }
+    .earth-container.small { width:80px;  height:80px;  margin: 16px 0 8px; }
+
+    /* ── Earth sphere (Gemini CSS approach) ── */
     .earth-sphere {
-      position: relative; width: 200px; height: 200px;
-      border-radius: 50%; overflow: hidden; background: #000;
+      width: 100%; height: 100%;
+      border-radius: 50%; overflow: hidden;
+      position: relative;
       box-shadow: 0 0 50px rgba(0,0,0,0.9);
     }
 
     .earth-texture {
       width: 200%; height: 100%;
-      background: url('earth.jpg') repeat-x; background-size: 50% 100%;
-      position: absolute; 
-      /* УСКОРЕНО: было 120s, стало 30s */
-      animation: earthRotate 30s linear infinite; 
+      background: url('assets/images/earth.jpg') repeat-x;
+      background-size: 50% 100%;
+      position: absolute; top: 0; left: 0;
+      animation: earthRotate 40s linear infinite;
     }
 
-    /* Освещение и атмосфера */
+    @keyframes earthRotate {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* Night shadow terminator */
     .earth-sphere::before {
-      content: ''; position: absolute; inset: 0; z-index: 2;
-      background: radial-gradient(circle at 30% 50%, transparent 35%, rgba(0,0,0,0.85) 70%, #000 100%);
+      content: ''; position: absolute; inset: 0; z-index: 2; border-radius: 50%;
+      background: radial-gradient(circle at 30% 50%,
+        transparent 30%,
+        rgba(0,0,0,0.6) 60%,
+        rgba(0,0,0,1) 100%);
     }
+
+    /* Atmosphere glow — soft, no hard ring */
     .earth-sphere::after {
-      content: ''; position: absolute; inset: -1px; border-radius: 50%; z-index: 3;
-      box-shadow: inset 2px 0 10px rgba(100, 150, 255, 0.4);
-      border: 1px solid rgba(100, 150, 255, 0.15); pointer-events: none;
+      content: ''; position: absolute; inset: -2px; z-index: 3;
+      border-radius: 50%; pointer-events: none;
+      box-shadow:
+        inset 2px 0 12px rgba(100,150,255,0.35),
+        0 0 18px 4px rgba(60,120,255,0.12);
     }
-
-    @keyframes earthRotate { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-    /* Скрытие на других страницах */
-    body.not-main .earth-wrap { opacity: 0; transform: scale(0.8) translateY(-30px); pointer-events: none; }
 
     /* ═══════════════════════════════════════════════════════
-       3. ИНТЕРФЕЙС ПРИЛОЖЕНИЯ
+       WELCOME SCREEN
     ═══════════════════════════════════════════════════════ */
-    .app-main { position: relative; z-index: 20; padding: 0 24px 40px; max-width: 480px; margin: 0 auto; }
-    
-    .page { display: none; animation: fadeIn 0.4s ease-out; }
-    .page.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    #screen-welcome { justify-content: flex-start; align-items: center; text-align: center; padding-top: 0; }
 
-    .glass-card {
-      background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-      border: 1px solid var(--glass-border); border-radius: 24px;
-      padding: 32px 24px; text-align: center;
+    /* Neon brand */
+    .brand-name {
+      font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+      color: #fff;
+      text-shadow:
+        0 0 6px rgba(52,211,153,1),
+        0 0 14px rgba(52,211,153,0.85),
+        0 0 28px rgba(52,211,153,0.55),
+        0 0 55px rgba(52,211,153,0.25);
+      animation: neonPulse 2.8s ease-in-out infinite;
+      margin-bottom: 3px;
+    }
+    @keyframes neonPulse {
+      0%,100% { text-shadow: 0 0 6px rgba(52,211,153,1), 0 0 14px rgba(52,211,153,0.85), 0 0 28px rgba(52,211,153,0.55); }
+      50%      { text-shadow: 0 0 10px rgba(52,211,153,1), 0 0 22px rgba(52,211,153,1), 0 0 44px rgba(52,211,153,0.7), 0 0 80px rgba(52,211,153,0.3); }
     }
 
-    h1 { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 12px;
-         background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-sub { font-size: 13px; color: var(--text-2); font-weight: 400; margin-bottom: 18px; letter-spacing: 0.3px; }
 
-    .btn-action {
+    /* ── Hero card — glassmorphism ── */
+    .hero-card {
+      width: 100%; max-width: 360px;
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      margin-bottom: 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+
+    .promo-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.28);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 12px; font-weight: 600; color: var(--green);
+      margin-bottom: 14px;
+    }
+
+    .hero-tag-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .hero-desc { font-size: 13px; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; }
+
+    .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+    .price-from { font-size: 12px; color: var(--text-3); }
+    .price-num { font-size: 40px; font-weight: 800; letter-spacing: -2px; }
+    .price-unit { font-size: 13px; color: var(--text-2); }
+    .promo-note { font-size: 12px; color: var(--green); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════════════
+       FORM SCREENS
+    ═══════════════════════════════════════════════════════ */
+    .screen-inner {
+      width: 100%; max-width: 400px;
+      display: flex; flex-direction: column;
+      align-items: center; flex: 1;
+    }
+
+    .progress-wrap { display: flex; gap: 6px; margin-bottom: 28px; }
+    .pd { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); width: 20px; transition: all 0.3s; }
+    .pd.active { background: var(--green); width: 40px; box-shadow: 0 0 8px var(--green-glow); }
+
+    .s-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 5px; text-align: center; }
+    .s-sub   { font-size: 14px; color: var(--text-2); text-align: center; margin-bottom: 24px; font-weight: 400; }
+
+    /* Glass field */
+    .field { width: 100%; margin-bottom: 12px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      display: block; margin-bottom: 8px;
+    }
+    .req { color: #f87171; }
+
+    .field-input {
+      width: 100%;
+      background: rgba(15,23,42,0.55);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-lg);
+      color: var(--text);
+      font-size: 16px; font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      padding: 14px 16px;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .field-input::placeholder { color: var(--text-3); }
+    .field-input:focus {
+      border-color: rgba(52,211,153,0.5);
+      background: rgba(15,23,42,0.75);
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.1), 0 0 15px rgba(52,211,153,0.08);
+    }
+    .field-input.err { border-color: rgba(248,113,113,0.6); box-shadow: 0 0 0 3px rgba(248,113,113,0.08); }
+    .field-hint { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+    .row-fields { display: flex; gap: 10px; width: 100%; margin-bottom: 12px; }
+    .row-fields .field { margin-bottom: 0; }
+
+    /* Glass form card wrapper */
+    .form-card {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+      margin-bottom: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       TARIFF CARDS
+    ═══════════════════════════════════════════════════════ */
+    .tariff-wrap { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+    .tariff {
+      border-radius: var(--radius-xl); padding: 18px;
+      cursor: pointer;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; gap: 14px; align-items: flex-start;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.25s cubic-bezier(0.34,1.3,0.64,1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .tariff:active { transform: scale(0.97); }
+    .tariff.sel {
+      border-color: rgba(52,211,153,0.5);
+      background: rgba(52,211,153,0.07);
+      box-shadow: 0 0 0 1px rgba(52,211,153,0.2), 0 0 20px rgba(52,211,153,0.08);
+    }
+
+    .t-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .tariff.sel .t-icon { background: rgba(52,211,153,0.15); }
+    .t-body { flex: 1; }
+    .t-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .t-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+    .t-more { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 6px; display: inline-block; cursor: pointer; }
+    .t-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .t-price { font-size: 17px; font-weight: 700; color: var(--green); }
+    .t-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: all 0.2s; }
+    .tariff.sel .t-radio { border-color: var(--green); background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+
+    /* ═══════════════════════════════════════════════════════
+       DONE SCREEN
+    ═══════════════════════════════════════════════════════ */
+    #screen-done { justify-content: center; align-items: center; text-align: center; }
+
+    .done-glow {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: rgba(52,211,153,0.1);
+      border: 2px solid rgba(52,211,153,0.4);
       display: flex; align-items: center; justify-content: center;
-      width: 100%; height: 64px; border-radius: 20px; border: none;
-      background: var(--green); color: #062010; font-size: 17px; font-weight: 700;
-      margin-top: 16px; cursor: pointer; transition: 0.2s;
-      box-shadow: 0 0 20px var(--green-glow), inset 0 0 10px rgba(255,255,255,0.25);
+      font-size: 52px;
+      margin-bottom: 24px;
+      animation: donePulse 2.5s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.4),
+                  inset 0 0 30px rgba(52,211,153,0.1);
     }
-    .btn-secondary {
-      display: flex; align-items: center; justify-content: center;
-      width: 100%; height: 60px; border-radius: 20px; border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; font-weight: 600;
-      margin-top: 10px; cursor: pointer; text-decoration: none;
-    }
-    input {
-      width: 100%; padding: 18px; border-radius: 16px; border: 1px solid var(--glass-border);
-      background: rgba(0,0,0,0.3); color: #fff; font-size: 16px; margin-top: 12px; outline: none;
+    @keyframes donePulse {
+      0%  { box-shadow: 0 0 0 0 rgba(52,211,153,0.4), 0 0 30px rgba(52,211,153,0.15); }
+      50% { box-shadow: 0 0 0 20px rgba(52,211,153,0), 0 0 50px rgba(52,211,153,0.25); }
+      100%{ box-shadow: 0 0 0 0 rgba(52,211,153,0), 0 0 30px rgba(52,211,153,0.15); }
     }
 
-    .success-icon {
-      width: 80px; height: 80px; background: var(--green); border-radius: 50%;
-      margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 40px var(--green); animation: successPulse 2s infinite;
-    }
-    @keyframes successPulse { 0%, 100% { box-shadow: 0 0 20px var(--green); } 50% { box-shadow: 0 0 50px var(--green); } }
+    .done-title { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 10px; }
+    .done-sub   { font-size: 15px; color: var(--text-2); max-width: 270px; line-height: 1.6; }
 
+    .done-receipt {
+      width: 100%; max-width: 300px;
+      border-radius: var(--radius-xl);
+      background: var(--glass-bg);
+      border: 1px solid rgba(52,211,153,0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 20px; margin-top: 24px; text-align: center;
+    }
+    .done-receipt-label  { font-size: 11px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .done-receipt-amount { font-size: 46px; font-weight: 900; color: var(--green); letter-spacing: -2px;
+      text-shadow: 0 0 20px rgba(52,211,153,0.4); }
+    .done-receipt-note   { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+    /* ═══════════════════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════════════════ */
+    .spacer { flex: 1; min-height: 16px; }
+
+    .btn-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #022c1a;
+      border: none; border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 700;
+      padding: 17px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.4),
+                  0 4px 20px rgba(52,211,153,0.25),
+                  inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: -0.2px;
+    }
+    .btn-main:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 0 6px rgba(52,211,153,0.15), 0 2px 10px rgba(52,211,153,0.2);
+    }
+
+    .btn-ghost {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 500;
+      padding: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(10px);
+    }
+    .btn-ghost:active { transform: scale(0.97); }
+
+    .btn-text { font-size: 12px; color: var(--text-3); font-weight: 500; cursor: pointer; padding: 6px; }
+
+    /* ═══════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════ */
+    .modal-ov {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: rgba(0,3,12,0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-ov.open { display: flex; animation: ovIn 0.2s ease; }
+    @keyframes ovIn { from{opacity:0} to{opacity:1} }
+
+    .modal-box {
+      background: rgba(10,17,34,0.92);
+      border-radius: 28px 28px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      width: 100%; max-width: 480px; max-height: 88vh;
+      display: flex; flex-direction: column;
+      animation: boxIn 0.35s cubic-bezier(0.34,1.3,0.64,1);
+    }
+    @keyframes boxIn { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+    .modal-handle {
+      width: 36px; height: 4px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      margin: 14px auto 4px; flex-shrink: 0;
+    }
+    .modal-scroll { overflow-y: auto; padding: 16px 24px 52px; flex: 1; -webkit-overflow-scrolling: touch; }
+    .modal-title  { font-size: 20px; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.3px; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-s-title { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+    .modal-text { font-size: 14px; color: var(--text-2); line-height: 1.75; }
+    .modal-text p { margin-bottom: 8px; }
+
+    .how-step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+    .how-n {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.3);
+      color: var(--green); font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .how-t { font-size: 14px; color: var(--text-2); line-height: 1.6; padding-top: 4px; }
+    .how-t strong { color: var(--text); }
+    .faq-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
   </style>
 </head>
-<body id="app-body">
+<body>
 
-  <div class="stars-viewport"></div>
+<!-- ═══ DEEP SPACE ═══ -->
+<div id="nebula"></div>
+<div class="stars-container">
+  <div class="stars l1"></div>
+  <div class="stars l2"></div>
+  <div class="stars l3"></div>
+  <div class="stars l4"></div>
+  <div class="stars l5"></div>
+</div>
 
-  <div class="earth-wrap">
-    <div class="earth-sphere">
-      <div class="earth-texture"></div>
+<!-- ═══ COMET CANVAS ═══ -->
+<canvas id="comet-canvas"></canvas>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+
+  <!-- WELCOME -->
+  <div id="screen-welcome" class="screen active">
+    <div class="earth-container large">
+      <div class="earth-sphere"><div class="earth-texture"></div></div>
+    </div>
+
+    <div class="brand-name">Walle</div>
+    <div class="brand-sub">Сервис умного выноса мусора</div>
+
+    <div class="hero-card">
+      <div class="promo-pill">🎁 Акция · Первая неделя за 1 ₽</div>
+      <div class="hero-tag-text">Утро без мусорного ведра</div>
+      <div class="hero-desc">Вы занимаетесь жизнью — мусором займёмся мы. Ежедневно, в любую погоду.</div>
+      <div class="price-row">
+        <span class="price-from">от&nbsp;</span>
+        <span class="price-num">990</span>
+        <span class="price-unit">₽/мес</span>
+      </div>
+      <div class="promo-note">✦ Первая неделя всего 1 ₽</div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="btn-wrap">
+      <button class="btn-main" onclick="showScreen('register')">Попробовать за 1 ₽</button>
+      <button class="btn-ghost" onclick="openModal('modal-howto')">Как это работает?</button>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:16px;padding-bottom:16px;">
+      <span class="btn-text" onclick="openModal('modal-privacy')">Политика</span>
+      <span class="btn-text" onclick="openModal('modal-offer')">Оферта</span>
+      <span class="btn-text" onclick="openModal('modal-about')">О компании</span>
     </div>
   </div>
 
-  <div class="app-main">
-    <div id="page-main" class="page active">
-      <div class="glass-card">
-        <h1>walle</h1>
-        <p style="color: var(--text-dim); line-height: 1.5;">Ваш личный ассистент по чистоте.<br>Вынесем мусор за вас.</p>
+  <!-- REGISTER -->
+  <div id="screen-register" class="screen">
+    <div class="earth-container small"><div class="earth-sphere"><div class="earth-texture"></div></div></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd active"></div><div class="pd"></div><div class="pd"></div></div>
+      <div class="s-title">Регистрация</div>
+      <div class="s-sub">Расскажите немного о себе</div>
+      <div class="form-card" style="width:100%;">
+        <div class="field"><label class="field-label">Имя</label><input class="field-input" placeholder="Ваше имя" id="inp-name" autocomplete="given-name"></div>
+        <div class="field"><label class="field-label">Телефон</label><input class="field-input" type="tel" placeholder="+7 (___) ___-__-__" id="inp-phone" autocomplete="tel"></div>
+        <div class="field" style="margin-bottom:0"><label class="field-label">Email</label><input class="field-input" type="email" placeholder="your@email.com" id="inp-email" autocomplete="email"><div class="field-hint">📧 Пришлём чек об оплате</div></div>
       </div>
-      <button class="btn-action" onclick="showPage('page-address')">Попробовать за 1 ₽</button>
-      <a href="#" class="btn-secondary">Как это работает?</a>
-    </div>
-
-    <div id="page-address" class="page">
-      <div class="glass-card">
-        <h1>Ваш адрес</h1>
-        <input type="text" placeholder="Улица и дом">
-        <input type="text" placeholder="Квартира и подъезд">
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="showScreen('address')">Далее</button>
+        <button class="btn-ghost" onclick="showScreen('welcome')">Назад</button>
       </div>
-      <button class="btn-action" onclick="showPage('page-reg')">Далее</button>
-      <button class="btn-secondary" onclick="showPage('page-main')">Назад</button>
-    </div>
-
-    <div id="page-reg" class="page">
-      <div class="glass-card">
-        <h1>Регистрация</h1>
-        <input type="text" placeholder="Имя">
-        <input type="tel" placeholder="+7 (999) 000-00-00">
-      </div>
-      <button class="btn-action" onclick="showPage('page-tariffs')">Продолжить</button>
-      <button class="btn-secondary" onclick="showPage('page-address')">Назад</button>
-    </div>
-
-    <div id="page-tariffs" class="page">
-      <div class="glass-card">
-        <h1>Тарифы</h1>
-        <div style="margin: 20px 0; text-align: left; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 18px; border: 1px solid var(--green);">
-          <div style="font-weight: 800;">Пробный день</div>
-          <div style="font-size: 13px; color: var(--text-dim)">Разовый вынос мусора — 1 ₽</div>
-        </div>
-      </div>
-      <button class="btn-action" onclick="showPage('page-success')">Оплатить 1 ₽</button>
-      <button class="btn-secondary" onclick="showPage('page-reg')">Назад</button>
-    </div>
-
-    <div id="page-success" class="page">
-      <div class="glass-card">
-        <div class="success-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#062010" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        </div>
-        <h1>Готово!</h1>
-        <p style="color: var(--text-dim)">Walle уже в пути.</p>
-      </div>
-      <button class="btn-action" onclick="showPage('page-main')">На главную</button>
     </div>
   </div>
 
-  <script>
-    // 1. ГЕНЕРАТОР 500 ЗВЕЗД (JS)
-    function initGalaxy() {
-      const vp = document.querySelector('.stars-viewport');
-      const colors = ['#ffffff', '#80aaff', '#ffe0b3', '#ffffff', '#ffffff'];
-      const sizes = [1, 1.5, 2, 2.5, 1];
+  <!-- ADDRESS -->
+  <div id="screen-address" class="screen">
+    <div class="earth-container small"><div class="earth-sphere"><div class="earth-texture"></div></div></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd"></div><div class="pd active"></div><div class="pd"></div></div>
+      <div class="s-title">Адрес</div>
+      <div class="s-sub">Куда приедет Walle?</div>
+      <div class="form-card" style="width:100%;">
+        <div class="field"><label class="field-label">Улица и дом <span class="req">*</span></label><input class="field-input" placeholder="ул. Ленина, д. 1" id="inp-street" autocomplete="street-address"></div>
+        <div class="row-fields">
+          <div class="field"><label class="field-label">Подъезд <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-entrance" min="1"></div>
+          <div class="field"><label class="field-label">Этаж <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-floor" min="1"></div>
+          <div class="field"><label class="field-label">Квартира <span class="req">*</span></label><input class="field-input" placeholder="№" id="inp-apt"></div>
+        </div>
+        <div class="field"><label class="field-label">Код домофона <span class="req">*</span></label><input class="field-input" placeholder="Например: 123#45" id="inp-intercom"></div>
+        <div class="field" style="margin-bottom:0"><label class="field-label">Дата и время <span class="req">*</span></label>
+          <div style="display:flex;gap:10px;">
+            <input class="field-input" type="date" id="inp-date" style="flex:1.4">
+            <input class="field-input" type="time" id="inp-time" value="07:00" style="flex:1">
+          </div>
+          <div class="field-hint">⏰ 07:00–11:00 или 19:00–23:00</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="validateAddr()">Далее</button>
+        <button class="btn-ghost" onclick="showScreen('register')">Назад</button>
+      </div>
+    </div>
+  </div>
 
-      for (let i = 0; i < 500; i++) {
-        const star = document.createElement('div');
-        const layer = i % 5;
-        star.className = `star-l layer-${layer}`;
-        star.style.left = Math.random() * 100 + 'vw';
-        star.style.top = Math.random() * 100 + 'vh';
-        star.style.width = sizes[layer] + 'px';
-        star.style.height = sizes[layer] + 'px';
-        star.style.background = colors[layer];
-        star.style.animationDelay = Math.random() * 5 + 's';
-        vp.appendChild(star);
+  <!-- TARIFF -->
+  <div id="screen-tariff" class="screen">
+    <div class="earth-container small"><div class="earth-sphere"><div class="earth-texture"></div></div></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd"></div><div class="pd"></div><div class="pd active"></div></div>
+      <div class="s-title">Тариф</div>
+      <div class="s-sub">Выберите удобный вариант</div>
+      <div class="tariff-wrap">
+        <div class="tariff sel" onclick="selectTariff(this)">
+          <div class="t-icon">🚪</div>
+          <div class="t-body"><div class="t-name">Лайт</div><div class="t-desc">Оставьте пакет за дверью — курьер заберёт сам</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-lite')">Подробнее →</div></div>
+          <div class="t-right"><div class="t-price">990 ₽</div><div class="t-radio"></div></div>
+        </div>
+        <div class="tariff" onclick="selectTariff(this)">
+          <div class="t-icon">♻️</div>
+          <div class="t-body"><div class="t-name">Забота</div><div class="t-desc">Курьер заберёт мусор из ведра и оставит новый пакет</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-care')">Подробнее →</div></div>
+          <div class="t-right"><div class="t-price">1490 ₽</div><div class="t-radio"></div></div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="showScreen('done')">Оформить подписку</button>
+        <button class="btn-ghost" onclick="showScreen('address')">Назад</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONE -->
+  <div id="screen-done" class="screen">
+    <div class="done-glow">✅</div>
+    <div class="done-title">Готово!</div>
+    <div class="done-sub">Подписка оформлена. Walle уже скоро появится у вашей двери</div>
+    <div class="done-receipt">
+      <div class="done-receipt-label">К оплате сейчас</div>
+      <div class="done-receipt-amount">1 ₽</div>
+      <div class="done-receipt-note">Затем 990 ₽/мес · Отменить можно в любой момент</div>
+    </div>
+    <div class="spacer" style="max-height:32px;"></div>
+    <div class="btn-wrap"><button class="btn-main" onclick="showScreen('welcome')">На главную</button></div>
+  </div>
+
+</div>
+
+<!-- ═══ MODALS ═══ -->
+<div id="modal-howto" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Как работает Walle</div>
+      <div class="modal-section">
+        <div class="modal-s-title">Шаг за шагом</div>
+        <div class="how-step"><div class="how-n">1</div><div class="how-t"><strong>Оформляете подписку</strong> — выбираете тариф, адрес и удобное время</div></div>
+        <div class="how-step"><div class="how-n">2</div><div class="how-t"><strong>Накануне вечером</strong> бот напомнит, что завтра приедет курьер</div></div>
+        <div class="how-step"><div class="how-n">3</div><div class="how-t"><strong>В назначенное время</strong> курьер приезжает и забирает мусор</div></div>
+        <div class="how-step"><div class="how-n">4</div><div class="how-t"><strong>Мусор исчезает</strong> — вы даже не заметите</div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-s-title">Частые вопросы</div>
+        <div class="faq-item"><div class="faq-q">Как часто приезжает курьер?</div><div class="faq-a">Ежедневно — каждый день в выбранное время, без выходных.</div></div>
+        <div class="faq-item"><div class="faq-q">Что если я забуду оставить пакет?</div><div class="faq-a">Ничего страшного — курьер приедет на следующий день. Бот заранее напомнит.</div></div>
+        <div class="faq-item"><div class="faq-q">Можно ли изменить время?</div><div class="faq-a">Да, через поддержку в любой момент.</div></div>
+        <div class="faq-item"><div class="faq-q">Как отменить подписку?</div><div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня.</div></div>
+      </div>
+      <button class="btn-main" onclick="closeModalById('modal-howto');showScreen('register')">Попробовать за 1 ₽</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-t-lite" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">🚪 Тариф Лайт — 990 ₽/мес</div>
+      <div class="how-step"><div class="how-n">1</div><div class="how-t">Накануне вечером получите напоминание в боте</div></div>
+      <div class="how-step"><div class="how-n">2</div><div class="how-t">Завяжите пакет с мусором и оставьте за дверью квартиры</div></div>
+      <div class="how-step"><div class="how-n">3</div><div class="how-t">Курьер приедет в назначенное время, заберёт пакет и унесёт на мусоросборник</div></div>
+      <div style="margin-top:20px"><button class="btn-main" onclick="closeModalById('modal-t-lite')">Понятно</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-t-care" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">♻️ Тариф Забота — 1490 ₽/мес</div>
+      <div class="how-step"><div class="how-n">1</div><div class="how-t">Курьер приедет в назначенное время и позвонит в дверь</div></div>
+      <div class="how-step"><div class="how-n">2</div><div class="how-t">Вы открываете — курьер стоит в коридоре, в квартиру не заходит</div></div>
+      <div class="how-step"><div class="how-n">3</div><div class="how-t">Забирает мусор прямо из ведра и сразу ставит новый чистый пакет</div></div>
+      <div style="margin-top:20px"><button class="btn-main" onclick="closeModalById('modal-t-care')">Понятно</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-privacy" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Политика конфиденциальности</div>
+      <div class="modal-section"><div class="modal-s-title">Данные</div><div class="modal-text"><p>Имя, телефон, email, адрес — только для оказания услуги.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Использование</div><div class="modal-text"><p>Исключительно для организации сервиса. Не продаём и не передаём третьим лицам.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Хранение</div><div class="modal-text"><p>Данные хранятся на защищённых серверах. По запросу удаляем в течение 30 дней.</p></div></div>
+      <button class="btn-main" onclick="closeModalById('modal-privacy')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-offer" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Публичная оферта</div>
+      <div class="modal-section"><div class="modal-s-title">1. Стороны</div><div class="modal-text"><p>ИП [ФИО], ОГРНИП [номер], ИНН [номер]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">2. Стоимость</div><div class="modal-text"><p>Тариф «Лайт» — 990 ₽/мес. Тариф «Забота» — 1490 ₽/мес. Первая неделя — 1 ₽.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">3. Отмена</div><div class="modal-text"><p>В любое время через поддержку. Возврат за неиспользованный период в течение 10 рабочих дней.</p></div></div>
+      <button class="btn-main" onclick="closeModalById('modal-offer')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-about" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">О компании</div>
+      <div class="modal-section"><div class="modal-s-title">Walle</div><div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины выноса мусора. Работаем каждый день, в любую погоду.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div></div>
+      <button class="btn-main" onclick="closeModalById('modal-about')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   TELEGRAM
+═══════════════════════════════════════════════════════ */
+try { var tg = window.Telegram && window.Telegram.WebApp; if(tg){tg.ready();tg.expand();} } catch(e){}
+
+/* ═══════════════════════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════════════════════ */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var s = document.getElementById('screen-'+name);
+  if(s){ s.classList.add('active'); s.scrollTop=0; }
+}
+
+function selectTariff(el) {
+  document.querySelectorAll('.tariff').forEach(function(t){t.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function openModal(id)   { var m=document.getElementById(id); if(m)m.classList.add('open'); }
+function closeModal(ov)  { ov.classList.remove('open'); }
+function closeModalById(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }
+
+function validateAddr() {
+  var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
+  var ok=true;
+  ids.forEach(function(id){
+    var el=document.getElementById(id); el.classList.remove('err');
+    if(!el.value.trim()){el.classList.add('err');ok=false;}
+  });
+  var t=document.getElementById('inp-time');
+  if(t&&t.value){ var h=parseInt(t.value.split(':')[0]);
+    if(!((h>=7&&h<=11)||(h>=19&&h<=23))){t.classList.add('err');ok=false;} else t.classList.remove('err'); }
+  if(!ok){document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'});return;}
+  showScreen('tariff');
+}
+
+/* Date */
+(function(){
+  var d=new Date(); d.setDate(d.getDate()+1);
+  var pad=function(n){return n<10?'0'+n:n;};
+  var el=document.getElementById('inp-date');
+  if(el){var t=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());el.min=t;el.value=t;}
+})();
+
+/* ═══════════════════════════════════════════════════════
+   CSS STAR LAYERS — 5 independent layers
+═══════════════════════════════════════════════════════ */
+(function() {
+  var W = window.innerWidth, H = window.innerHeight;
+  var spread = Math.max(W, H) * 2.5;
+
+  /* Generate box-shadow string for N stars */
+  function makeStars(n, minR, maxR, colorList, minOp, maxOp, withGlow) {
+    var out = [];
+    for(var i=0;i<n;i++){
+      var x  = (Math.random()*spread - spread/2).toFixed(0);
+      var y  = (Math.random()*spread - spread/2).toFixed(0);
+      var r  = (Math.random()*(maxR-minR)+minR).toFixed(2);
+      var c  = colorList[Math.floor(Math.random()*colorList.length)];
+      var op = (Math.random()*(maxOp-minOp)+minOp).toFixed(2);
+      var shadow = x+'px '+y+'px 0 '+r+'px '+c+op+')';
+      if(withGlow){
+        var gr = (parseFloat(r)*3).toFixed(1);
+        shadow += ', '+x+'px '+y+'px '+gr+'px '+r+'px '+c+(parseFloat(op)*0.4).toFixed(2)+')';
       }
+      out.push(shadow);
+    }
+    return out.join(', ');
+  }
+
+  var dot = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
+
+  /* L1 — micro dust */
+  var d1=document.createElement('div'); d1.style.cssText=dot;
+  d1.style.boxShadow = makeStars(450, 0.15, 0.55, ['rgba(255,255,255,'], 0.1, 0.4, false);
+  document.querySelector('.stars.l1').appendChild(d1);
+
+  /* L2 — small background stars */
+  var d2=document.createElement('div'); d2.style.cssText=dot;
+  d2.style.boxShadow = makeStars(280, 0.35, 0.85, ['rgba(255,255,255,','rgba(220,235,255,'], 0.2, 0.55, false);
+  document.querySelector('.stars.l2').appendChild(d2);
+
+  /* L3 — medium twinkling */
+  var d3=document.createElement('div'); d3.style.cssText=dot;
+  d3.style.boxShadow = makeStars(130, 0.65, 1.3,
+    ['rgba(255,255,255,','rgba(210,230,255,','rgba(255,245,215,'], 0.35, 0.75, false);
+  document.querySelector('.stars.l3').appendChild(d3);
+
+  /* L4 — bright colored stars */
+  var d4=document.createElement('div'); d4.style.cssText=dot;
+  d4.style.boxShadow = makeStars(55, 1.1, 1.9,
+    ['rgba(255,255,255,','rgba(170,210,255,','rgba(255,238,170,','rgba(170,255,230,'], 0.55, 0.9, true);
+  document.querySelector('.stars.l4').appendChild(d4);
+
+  /* L5 — closest large glow stars */
+  var d5=document.createElement('div'); d5.style.cssText=dot;
+  d5.style.boxShadow = makeStars(22, 1.7, 2.8,
+    ['rgba(255,255,255,','rgba(155,205,255,','rgba(255,228,140,'], 0.75, 1.0, true);
+  document.querySelector('.stars.l5').appendChild(d5);
+})();
+
+/* ═══════════════════════════════════════════════════════
+   COMET ENGINE (Canvas)
+═══════════════════════════════════════════════════════ */
+(function() {
+  var c = document.getElementById('comet-canvas');
+  if(!c) return;
+  var ctx = c.getContext('2d');
+  var W, H, comets = [], nextComet = Date.now()+2000;
+
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  function spawnComet() {
+    var dir = Math.random();
+    var vx, vy;
+    if(dir<0.5)      { vx=-(Math.random()*7+4); vy=Math.random()*4+1.5; }
+    else if(dir<0.75){ vx=-(Math.random()*5+3); vy=Math.random()*6+3; }
+    else             { vx=-(Math.random()*9+6); vy=Math.random()*2+0.5; }
+    var rgb = Math.random()<0.6 ? '255,255,255' : Math.random()<0.5 ? '170,215,255' : '255,245,190';
+    comets.push({
+      x: Math.random()*W*0.85+W*0.05,
+      y: Math.random()*H*0.4,
+      vx:vx, vy:vy, life:1,
+      tail: Math.random()*140+60,
+      decay: Math.random()*0.008+0.006,
+      rgb:rgb
+    });
+  }
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+
+    if(Date.now()>nextComet){
+      spawnComet();
+      if(Math.random()<0.3) spawnComet(); // double occasionally
+      nextComet = Date.now() + Math.random()*1000+3000; // every 3-4s
     }
 
-    // 2. ЛОГИКА СТРАНИЦ
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      
-      const body = document.getElementById('app-body');
-      // Скрываем Землю на всех страницах, кроме главной
-      if (id === 'page-main') body.classList.remove('not-main');
-      else body.classList.add('not-main');
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    comets = comets.filter(function(m){
+      m.x+=m.vx; m.y+=m.vy; m.life-=m.decay;
+      if(m.life<=0) return false;
 
-    // 3. КОМЕТЫ (РАЗ В 3.5 СЕКУНДЫ)
-    setInterval(() => {
-      const c = document.createElement('div');
-      c.className = 'comet';
-      document.body.appendChild(c);
-      c.style.left = Math.random() * window.innerWidth + 100 + 'px';
-      c.style.top = Math.random() * 200 + 'px';
-      c.style.width = (Math.random() * 100 + 80) + 'px';
-      c.style.animation = 'cometStrike 2s linear forwards';
-      setTimeout(() => c.remove(), 2100);
-    }, 3500);
+      var angle = Math.atan2(m.vy,m.vx);
+      var tlen  = m.tail*m.life;
+      var tx = m.x - Math.cos(angle)*tlen;
+      var ty = m.y - Math.sin(angle)*tlen;
 
-    // СТАРТ
-    document.addEventListener('DOMContentLoaded', initGalaxy);
-  </script>
+      var g = ctx.createLinearGradient(tx,ty,m.x,m.y);
+      g.addColorStop(0,'rgba('+m.rgb+',0)');
+      g.addColorStop(0.6,'rgba('+m.rgb+','+(m.life*0.35)+')');
+      g.addColorStop(1,'rgba('+m.rgb+','+m.life+')');
+
+      ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(m.x,m.y);
+      ctx.strokeStyle=g; ctx.lineWidth=m.life*1.8; ctx.lineCap='round'; ctx.stroke();
+
+      // Head glow
+      ctx.beginPath(); ctx.arc(m.x,m.y,m.life*2.5,0,Math.PI*2);
+      ctx.fillStyle='rgba('+m.rgb+','+(m.life*0.8)+')'; ctx.fill();
+      ctx.beginPath(); ctx.arc(m.x,m.y,m.life*1.1,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,'+m.life+')'; ctx.fill();
+      return true;
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+</script>
 </body>
 </html>
