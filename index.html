@@ -4,252 +4,570 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Walle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    /* ═══════════════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --navy: #0a0f1e; --navy-2: #0f1628; --navy-3: #151d35; --navy-4: #1c2640; --navy-5: #243050;
-      --green: #34d399; --green-2: #10b981; --text: #f0f6ff; --text-2: #a8bdd8; --text-3: #5a7a9a;
+      --green:     #34d399;
+      --green-2:   #10b981;
+      --green-glow:rgba(52,211,153,0.45);
+      --text:      #f0f6ff;
+      --text-2:    #94a3b8;
+      --text-3:    #475569;
+      --glass-bg:  rgba(15,23,42,0.6);
+      --glass-border: rgba(255,255,255,0.1);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
     }
-    html, body { height: 100%; width: 100%; color: var(--text); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
 
-    /* Deep space background - NASA color reference */
+    html, body {
+      height: 100%; width: 100%;
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       DEEP SPACE BACKGROUND
+    ═══════════════════════════════════════════════════════ */
     body {
-      background:
-        radial-gradient(ellipse 80% 60% at 25% 15%, #0d1b4a 0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 75% 65%, #061228 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 50% 90%, #030c1e 0%, transparent 60%),
-        #010409;
+      background: radial-gradient(circle at center, #0a1122 0%, #000000 100%);
     }
 
-    /* Nebula layers */
-    body::before {
-      content: '';
+    /* ── Star layers via CSS (box-shadow trick) ── */
+    #stars-1, #stars-2, #stars-3, #stars-4, #stars-5 {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      will-change: transform;
+    }
+
+    /* Layer 1 — tiny far dust */
+    #stars-1 { animation: twinkle1 6s ease-in-out infinite alternate, parallax1 20s ease-in-out infinite alternate; }
+    /* Layer 2 — small far stars */
+    #stars-2 { animation: twinkle2 8s ease-in-out infinite alternate, parallax2 25s ease-in-out infinite alternate; }
+    /* Layer 3 — medium stars */
+    #stars-3 { animation: twinkle3 4.5s ease-in-out infinite alternate, parallax3 18s ease-in-out infinite alternate; }
+    /* Layer 4 — bright glowing stars */
+    #stars-4 { animation: twinkle4 5.5s ease-in-out infinite alternate, parallax4 22s ease-in-out infinite alternate; }
+    /* Layer 5 — closest bright stars */
+    #stars-5 { animation: twinkle5 3.5s ease-in-out infinite alternate, parallax5 15s ease-in-out infinite alternate; }
+
+    @keyframes twinkle1 { 0%{opacity:.3} 100%{opacity:.7} }
+    @keyframes twinkle2 { 0%{opacity:.4} 100%{opacity:.8} }
+    @keyframes twinkle3 { 0%{opacity:.5} 50%{opacity:.15} 100%{opacity:.9} }
+    @keyframes twinkle4 { 0%{opacity:.6} 40%{opacity:.2} 100%{opacity:1} }
+    @keyframes twinkle5 { 0%{opacity:.8} 30%{opacity:.3} 100%{opacity:1} }
+
+    @keyframes parallax1 { 0%{transform:translate(0,0)} 100%{transform:translate(2px,3px)} }
+    @keyframes parallax2 { 0%{transform:translate(0,0)} 100%{transform:translate(4px,6px)} }
+    @keyframes parallax3 { 0%{transform:translate(0,0)} 100%{transform:translate(8px,10px)} }
+    @keyframes parallax4 { 0%{transform:translate(0,0)} 100%{transform:translate(14px,18px)} }
+    @keyframes parallax5 { 0%{transform:translate(0,0)} 100%{transform:translate(20px,25px)} }
+
+    /* Nebula haze */
+    #nebula {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 110% 22% at 55% 32%, rgba(100,150,255,0.045) 0%, transparent 70%),
-        radial-gradient(ellipse 70% 18% at 25% 52%, rgba(52,211,153,0.025) 0%, transparent 70%),
-        radial-gradient(ellipse 55% 28% at 82% 18%, rgba(160,100,255,0.03) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 14% at 12% 28%, rgba(80,170,255,0.04) 0%, transparent 65%);
+        radial-gradient(ellipse 110% 22% at 58% 30%, rgba(80,120,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 18% at 22% 55%, rgba(52,211,153,0.022) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 28% at 85% 18%, rgba(140,80,255,0.028) 0%, transparent 65%);
     }
 
-    /* Stars + meteors canvas */
-    #star-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-
-    #app { min-height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 2; }
-
-    .screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 30px 20px; }
-    .screen.active { display: flex; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Earth - no float, just stays in place */
-    .earth-wrap {
-      width: 160px; height: 160px; margin-bottom: 8px;
-      position: relative; display: flex; align-items: center; justify-content: center;
+    /* Canvas for comets */
+    #comet-canvas {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      width: 100%; height: 100%;
     }
+
+    /* ═══════════════════════════════════════════════════════
+       APP SHELL
+    ═══════════════════════════════════════════════════════ */
+    #app {
+      position: relative; z-index: 2;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh; min-height: 100dvh;
+      padding: 0 20px 36px;
+      position: relative;
+      overflow-y: auto;
+    }
+    .screen.active {
+      display: flex;
+      animation: screenIn 0.45s cubic-bezier(0.34,1.3,0.64,1) both;
+    }
+    @keyframes screenIn {
+      from { opacity:0; transform:translateY(22px) scale(0.97); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       EARTH
+    ═══════════════════════════════════════════════════════ */
+    .earth-container {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.6s cubic-bezier(0.34,1.2,0.64,1);
+    }
+
+    .earth-container.large  { width:200px; height:200px; margin: 36px 0 12px; }
+    .earth-container.small  { width:80px;  height:80px;  margin: 20px 0 8px; }
+
     #earth-canvas {
       border-radius: 50%;
-      filter: drop-shadow(0 0 12px rgba(60,140,255,0.35)) drop-shadow(0 0 28px rgba(30,80,200,0.12));
+      display: block;
+      width: 100%; height: 100%;
+      transition: all 0.6s ease;
     }
 
-    /* Neon glow brand name - white text with green glow */
+    /* Thin atmosphere ring via pseudo-element */
+    .earth-container::after {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow:
+        0 0 0 1.5px rgba(80,160,255,0.25),
+        0 0 12px 4px rgba(60,130,255,0.15),
+        0 0 30px 8px rgba(30,80,200,0.08);
+      pointer-events: none;
+      transition: all 0.6s ease;
+    }
+    .earth-container.small::after { box-shadow: 0 0 0 1px rgba(80,160,255,0.2), 0 0 6px 2px rgba(60,130,255,0.1); }
+
+    /* ═══════════════════════════════════════════════════════
+       WELCOME SCREEN
+    ═══════════════════════════════════════════════════════ */
+    #screen-welcome { justify-content: flex-start; align-items: center; text-align: center; padding-top: 0; }
+
+    /* Neon brand */
     .brand-name {
-      font-size: 30px; font-weight: 600;
-      color: #ffffff;
+      font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+      color: #fff;
       text-shadow:
-        0 0 7px rgba(52,211,153,1),
-        0 0 15px rgba(52,211,153,0.8),
-        0 0 30px rgba(52,211,153,0.5),
-        0 0 60px rgba(52,211,153,0.25);
-      margin-bottom: 2px;
-      animation: neonPulse 2.5s ease-in-out infinite;
+        0 0 6px rgba(52,211,153,1),
+        0 0 14px rgba(52,211,153,0.85),
+        0 0 28px rgba(52,211,153,0.55),
+        0 0 55px rgba(52,211,153,0.25);
+      animation: neonPulse 2.8s ease-in-out infinite;
+      margin-bottom: 3px;
     }
     @keyframes neonPulse {
-      0%,100% { text-shadow: 0 0 7px rgba(52,211,153,1), 0 0 15px rgba(52,211,153,0.8), 0 0 30px rgba(52,211,153,0.5); }
-      50%      { text-shadow: 0 0 10px rgba(52,211,153,1), 0 0 25px rgba(52,211,153,1), 0 0 50px rgba(52,211,153,0.7), 0 0 90px rgba(52,211,153,0.3); }
+      0%,100% { text-shadow: 0 0 6px rgba(52,211,153,1), 0 0 14px rgba(52,211,153,0.85), 0 0 28px rgba(52,211,153,0.55); }
+      50%      { text-shadow: 0 0 10px rgba(52,211,153,1), 0 0 22px rgba(52,211,153,1), 0 0 44px rgba(52,211,153,0.7), 0 0 80px rgba(52,211,153,0.3); }
     }
-    .brand-sub { font-size: 13px; color: var(--text-2); margin-bottom: 14px; }
 
-    .hero-card { width: 100%; max-width: 360px; border-radius: 28px; padding: 20px; margin-bottom: 14px; background: linear-gradient(145deg, var(--navy-3), var(--navy-4)); border: 1px solid rgba(52,211,153,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-    .promo-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); border-radius: 100px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: var(--green); margin-bottom: 14px; }
-    .hero-tag-text { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-    .hero-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 14px; }
+    .brand-sub { font-size: 13px; color: var(--text-2); font-weight: 400; margin-bottom: 18px; letter-spacing: 0.3px; }
+
+    /* ── Hero card — glassmorphism ── */
+    .hero-card {
+      width: 100%; max-width: 360px;
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      margin-bottom: 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+
+    .promo-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.28);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 12px; font-weight: 600; color: var(--green);
+      margin-bottom: 14px;
+    }
+
+    .hero-tag-text { font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .hero-desc { font-size: 13px; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; }
+
     .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
-    .price-from { font-size: 13px; color: var(--text-3); }
-    .price-num { font-size: 38px; font-weight: 900; }
-    .price-unit { font-size: 14px; color: var(--text-2); }
-    .promo-note { font-size: 12px; color: var(--green); font-weight: 700; }
+    .price-from { font-size: 12px; color: var(--text-3); }
+    .price-num { font-size: 40px; font-weight: 800; letter-spacing: -2px; }
+    .price-unit { font-size: 13px; color: var(--text-2); }
+    .promo-note { font-size: 12px; color: var(--green); font-weight: 600; }
 
-    .progress-wrap { display: flex; gap: 6px; margin-bottom: 24px; }
-    .pd { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); width: 20px; }
-    .pd.active { background: var(--green); width: 36px; }
+    /* ═══════════════════════════════════════════════════════
+       FORM SCREENS
+    ═══════════════════════════════════════════════════════ */
+    .screen-inner {
+      width: 100%; max-width: 400px;
+      display: flex; flex-direction: column;
+      align-items: center; flex: 1;
+    }
 
-    .s-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; text-align: center; }
-    .s-sub { font-size: 14px; color: var(--text-2); text-align: center; margin-bottom: 24px; }
+    .progress-wrap { display: flex; gap: 6px; margin-bottom: 28px; }
+    .pd { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); width: 20px; transition: all 0.3s; }
+    .pd.active { background: var(--green); width: 40px; box-shadow: 0 0 8px var(--green-glow); }
 
-    .field { width: 100%; max-width: 360px; margin-bottom: 12px; }
-    .field-label { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; display: block; margin-bottom: 8px; }
+    .s-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 5px; text-align: center; }
+    .s-sub   { font-size: 14px; color: var(--text-2); text-align: center; margin-bottom: 24px; font-weight: 400; }
+
+    /* Glass field */
+    .field { width: 100%; margin-bottom: 12px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      display: block; margin-bottom: 8px;
+    }
     .req { color: #f87171; }
-    .field-input { width: 100%; background: var(--navy-3); border: 1.5px solid rgba(255,255,255,0.07); border-radius: 16px; color: var(--text); font-size: 16px; font-family: 'Nunito', sans-serif; padding: 14px 16px; outline: none; -webkit-appearance: none; transition: border-color 0.2s; }
+
+    .field-input {
+      width: 100%;
+      background: rgba(15,23,42,0.55);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-lg);
+      color: var(--text);
+      font-size: 16px; font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      padding: 14px 16px;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
     .field-input::placeholder { color: var(--text-3); }
-    .field-input:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px rgba(52,211,153,0.08); }
-    .field-input.err { border-color: #f87171; }
+    .field-input:focus {
+      border-color: rgba(52,211,153,0.5);
+      background: rgba(15,23,42,0.75);
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.1), 0 0 15px rgba(52,211,153,0.08);
+    }
+    .field-input.err { border-color: rgba(248,113,113,0.6); box-shadow: 0 0 0 3px rgba(248,113,113,0.08); }
     .field-hint { font-size: 12px; color: var(--text-3); margin-top: 6px; }
-    .row-fields { display: flex; gap: 10px; width: 100%; max-width: 360px; margin-bottom: 12px; }
+
+    .row-fields { display: flex; gap: 10px; width: 100%; margin-bottom: 12px; }
     .row-fields .field { margin-bottom: 0; }
 
-    .tariff-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .tariff { border-radius: 22px; padding: 18px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.06); background: var(--navy-3); display: flex; gap: 14px; align-items: flex-start; -webkit-tap-highlight-color: transparent; transition: all 0.2s; }
+    /* Glass form card wrapper */
+    .form-card {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+      margin-bottom: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       TARIFF CARDS
+    ═══════════════════════════════════════════════════════ */
+    .tariff-wrap { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+    .tariff {
+      border-radius: var(--radius-xl); padding: 18px;
+      cursor: pointer;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; gap: 14px; align-items: flex-start;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.25s cubic-bezier(0.34,1.3,0.64,1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
     .tariff:active { transform: scale(0.97); }
-    .tariff.sel { border-color: var(--green); background: rgba(52,211,153,0.05); }
-    .t-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--navy-5); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-    .tariff.sel .t-icon { background: rgba(52,211,153,0.12); }
+    .tariff.sel {
+      border-color: rgba(52,211,153,0.5);
+      background: rgba(52,211,153,0.07);
+      box-shadow: 0 0 0 1px rgba(52,211,153,0.2), 0 0 20px rgba(52,211,153,0.08);
+    }
+
+    .t-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .tariff.sel .t-icon { background: rgba(52,211,153,0.15); }
     .t-body { flex: 1; }
-    .t-name { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
+    .t-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
     .t-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
-    .t-more { font-size: 12px; color: var(--green); font-weight: 700; margin-top: 6px; display: inline-block; cursor: pointer; }
+    .t-more { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 6px; display: inline-block; cursor: pointer; }
     .t-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-    .t-price { font-size: 18px; font-weight: 900; color: var(--green); }
-    .t-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); transition: all 0.2s; }
-    .tariff.sel .t-radio { border-color: var(--green); background: var(--green); }
+    .t-price { font-size: 17px; font-weight: 700; color: var(--green); }
+    .t-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: all 0.2s; }
+    .tariff.sel .t-radio { border-color: var(--green); background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
 
-    .done-glow { width: 100px; height: 100px; border-radius: 50%; background: rgba(52,211,153,0.15); border: 2px solid rgba(52,211,153,0.35); display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 22px; animation: pulse 2.5s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,0.3)} 50%{box-shadow:0 0 0 16px rgba(52,211,153,0)} }
-    .done-title { font-size: 28px; font-weight: 900; margin-bottom: 10px; }
-    .done-sub { font-size: 15px; color: var(--text-2); text-align: center; max-width: 260px; line-height: 1.6; }
-    .done-receipt { width: 100%; max-width: 300px; border-radius: 22px; background: var(--navy-3); border: 1px solid rgba(52,211,153,0.2); padding: 18px 22px; margin-top: 24px; text-align: center; }
-    .done-receipt-label { font-size: 11px; color: var(--text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-    .done-receipt-amount { font-size: 42px; font-weight: 900; color: var(--green); letter-spacing: -2px; }
-    .done-receipt-note { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+    /* ═══════════════════════════════════════════════════════
+       DONE SCREEN
+    ═══════════════════════════════════════════════════════ */
+    #screen-done { justify-content: center; align-items: center; text-align: center; }
 
+    .done-glow {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: rgba(52,211,153,0.1);
+      border: 2px solid rgba(52,211,153,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      margin-bottom: 24px;
+      animation: donePulse 2.5s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.4),
+                  inset 0 0 30px rgba(52,211,153,0.1);
+    }
+    @keyframes donePulse {
+      0%  { box-shadow: 0 0 0 0 rgba(52,211,153,0.4), 0 0 30px rgba(52,211,153,0.15); }
+      50% { box-shadow: 0 0 0 20px rgba(52,211,153,0), 0 0 50px rgba(52,211,153,0.25); }
+      100%{ box-shadow: 0 0 0 0 rgba(52,211,153,0), 0 0 30px rgba(52,211,153,0.15); }
+    }
+
+    .done-title { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 10px; }
+    .done-sub   { font-size: 15px; color: var(--text-2); max-width: 270px; line-height: 1.6; }
+
+    .done-receipt {
+      width: 100%; max-width: 300px;
+      border-radius: var(--radius-xl);
+      background: var(--glass-bg);
+      border: 1px solid rgba(52,211,153,0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 20px; margin-top: 24px; text-align: center;
+    }
+    .done-receipt-label  { font-size: 11px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .done-receipt-amount { font-size: 46px; font-weight: 900; color: var(--green); letter-spacing: -2px;
+      text-shadow: 0 0 20px rgba(52,211,153,0.4); }
+    .done-receipt-note   { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+    /* ═══════════════════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════════════════ */
     .spacer { flex: 1; min-height: 16px; }
-    .btn-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
-    .btn-main { width: 100%; background: linear-gradient(135deg, #34d399, #10b981); color: #052e1c; border: none; border-radius: 22px; font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 20px rgba(52,211,153,0.3); transition: transform 0.15s; }
-    .btn-main:active { transform: scale(0.97); }
-    .btn-ghost { width: 100%; background: transparent; color: var(--text-2); border: 1.5px solid rgba(255,255,255,0.09); border-radius: 22px; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 700; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .btn-text { font-size: 12px; color: var(--text-3); font-weight: 600; cursor: pointer; padding: 6px; }
 
-    .modal-ov { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(5,10,25,0.85); align-items: flex-end; justify-content: center; }
+    .btn-wrap { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #022c1a;
+      border: none; border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 700;
+      padding: 17px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.4),
+                  0 4px 20px rgba(52,211,153,0.25),
+                  inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: -0.2px;
+    }
+    .btn-main:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 0 6px rgba(52,211,153,0.15), 0 2px 10px rgba(52,211,153,0.2);
+    }
+
+    .btn-ghost {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 500;
+      padding: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(10px);
+    }
+    .btn-ghost:active { transform: scale(0.97); }
+
+    .btn-text { font-size: 12px; color: var(--text-3); font-weight: 500; cursor: pointer; padding: 6px; }
+
+    /* ═══════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════ */
+    .modal-ov {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: rgba(0,3,12,0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: flex-end; justify-content: center;
+    }
     .modal-ov.open { display: flex; animation: ovIn 0.2s ease; }
     @keyframes ovIn { from{opacity:0} to{opacity:1} }
-    .modal-box { background: var(--navy-2); border-radius: 28px 28px 0 0; border-top: 1px solid rgba(255,255,255,0.07); width: 100%; max-width: 480px; max-height: 88vh; display: flex; flex-direction: column; animation: boxIn 0.32s cubic-bezier(0.34,1.4,0.64,1); }
+
+    .modal-box {
+      background: rgba(10,17,34,0.92);
+      border-radius: 28px 28px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      width: 100%; max-width: 480px; max-height: 88vh;
+      display: flex; flex-direction: column;
+      animation: boxIn 0.35s cubic-bezier(0.34,1.3,0.64,1);
+    }
     @keyframes boxIn { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.12); border-radius: 2px; margin: 14px auto 4px; flex-shrink: 0; }
-    .modal-scroll { overflow-y: auto; padding: 16px 24px 48px; flex: 1; -webkit-overflow-scrolling: touch; }
-    .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 18px; }
+
+    .modal-handle {
+      width: 36px; height: 4px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      margin: 14px auto 4px; flex-shrink: 0;
+    }
+    .modal-scroll { overflow-y: auto; padding: 16px 24px 52px; flex: 1; -webkit-overflow-scrolling: touch; }
+    .modal-title  { font-size: 20px; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.3px; }
     .modal-section { margin-bottom: 20px; }
-    .modal-s-title { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .modal-s-title { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
     .modal-text { font-size: 14px; color: var(--text-2); line-height: 1.75; }
     .modal-text p { margin-bottom: 8px; }
+
     .how-step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
-    .how-n { width: 28px; height: 28px; border-radius: 50%; background: rgba(52,211,153,0.18); border: 1px solid rgba(52,211,153,0.25); color: var(--green); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .how-n {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.3);
+      color: var(--green); font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
     .how-t { font-size: 14px; color: var(--text-2); line-height: 1.6; padding-top: 4px; }
     .how-t strong { color: var(--text); }
     .faq-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .faq-item:last-child { border-bottom: none; }
-    .faq-q { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .faq-q { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
   </style>
 </head>
 <body>
 
-<canvas id="star-canvas"></canvas>
+<!-- ═══ STAR LAYERS ═══ -->
+<div id="nebula"></div>
+<div id="stars-1"></div>
+<div id="stars-2"></div>
+<div id="stars-3"></div>
+<div id="stars-4"></div>
+<div id="stars-5"></div>
 
+<!-- ═══ COMET CANVAS ═══ -->
+<canvas id="comet-canvas"></canvas>
+
+<!-- ═══ APP ═══ -->
 <div id="app">
 
-  <!-- SCREEN 1: Welcome -->
+  <!-- WELCOME -->
   <div id="screen-welcome" class="screen active">
-    <div class="earth-wrap">
-      <canvas id="earth-canvas" width="150" height="150"></canvas>
+    <div class="earth-container large" id="earth-wrap">
+      <canvas id="earth-canvas"></canvas>
     </div>
+
     <div class="brand-name">Walle</div>
     <div class="brand-sub">Сервис умного выноса мусора</div>
+
     <div class="hero-card">
       <div class="promo-pill">🎁 Акция · Первая неделя за 1 ₽</div>
       <div class="hero-tag-text">Утро без мусорного ведра</div>
       <div class="hero-desc">Вы занимаетесь жизнью — мусором займёмся мы. Ежедневно, в любую погоду.</div>
-      <div class="price-row"><span class="price-from">от&nbsp;</span><span class="price-num">990</span><span class="price-unit">₽/мес</span></div>
+      <div class="price-row">
+        <span class="price-from">от&nbsp;</span>
+        <span class="price-num">990</span>
+        <span class="price-unit">₽/мес</span>
+      </div>
       <div class="promo-note">✦ Первая неделя всего 1 ₽</div>
     </div>
+
     <div class="spacer"></div>
     <div class="btn-wrap">
       <button class="btn-main" onclick="showScreen('register')">Попробовать за 1 ₽</button>
       <button class="btn-ghost" onclick="openModal('modal-howto')">Как это работает?</button>
     </div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:16px;padding-bottom:16px;">
-      <span class="btn-text" onclick="openModal('modal-privacy')">Политика конфиденциальности</span>
-      <span class="btn-text" onclick="openModal('modal-offer')">Публичная оферта</span>
+      <span class="btn-text" onclick="openModal('modal-privacy')">Политика</span>
+      <span class="btn-text" onclick="openModal('modal-offer')">Оферта</span>
       <span class="btn-text" onclick="openModal('modal-about')">О компании</span>
     </div>
   </div>
 
-  <!-- SCREEN 2: Register -->
+  <!-- REGISTER -->
   <div id="screen-register" class="screen">
-    <div class="progress-wrap"><div class="pd active"></div><div class="pd"></div><div class="pd"></div></div>
-    <div class="s-title">Регистрация</div>
-    <div class="s-sub">Расскажите немного о себе</div>
-    <div class="field"><label class="field-label">Имя</label><input class="field-input" placeholder="Ваше имя" id="inp-name" autocomplete="given-name"></div>
-    <div class="field"><label class="field-label">Телефон</label><input class="field-input" type="tel" placeholder="+7 (___) ___-__-__" id="inp-phone" autocomplete="tel"></div>
-    <div class="field"><label class="field-label">Email</label><input class="field-input" type="email" placeholder="your@email.com" id="inp-email" autocomplete="email"><div class="field-hint">📧 Пришлём чек об оплате</div></div>
-    <div class="spacer"></div>
-    <div class="btn-wrap">
-      <button class="btn-main" onclick="showScreen('address')">Далее</button>
-      <button class="btn-ghost" onclick="showScreen('welcome')">Назад</button>
+    <div class="earth-container small"><canvas id="earth-canvas-2"></canvas></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd active"></div><div class="pd"></div><div class="pd"></div></div>
+      <div class="s-title">Регистрация</div>
+      <div class="s-sub">Расскажите немного о себе</div>
+      <div class="form-card" style="width:100%;">
+        <div class="field"><label class="field-label">Имя</label><input class="field-input" placeholder="Ваше имя" id="inp-name" autocomplete="given-name"></div>
+        <div class="field"><label class="field-label">Телефон</label><input class="field-input" type="tel" placeholder="+7 (___) ___-__-__" id="inp-phone" autocomplete="tel"></div>
+        <div class="field" style="margin-bottom:0"><label class="field-label">Email</label><input class="field-input" type="email" placeholder="your@email.com" id="inp-email" autocomplete="email"><div class="field-hint">📧 Пришлём чек об оплате</div></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="showScreen('address')">Далее</button>
+        <button class="btn-ghost" onclick="showScreen('welcome')">Назад</button>
+      </div>
     </div>
   </div>
 
-  <!-- SCREEN 3: Address -->
+  <!-- ADDRESS -->
   <div id="screen-address" class="screen">
-    <div class="progress-wrap"><div class="pd"></div><div class="pd active"></div><div class="pd"></div></div>
-    <div class="s-title">Адрес</div>
-    <div class="s-sub">Куда приедет Walle?</div>
-    <div class="field"><label class="field-label">Улица и дом <span class="req">*</span></label><input class="field-input" placeholder="ул. Ленина, д. 1" id="inp-street" autocomplete="street-address"></div>
-    <div class="row-fields">
-      <div class="field"><label class="field-label">Подъезд <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-entrance" min="1"></div>
-      <div class="field"><label class="field-label">Этаж <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-floor" min="1"></div>
-      <div class="field"><label class="field-label">Квартира <span class="req">*</span></label><input class="field-input" placeholder="№" id="inp-apt"></div>
-    </div>
-    <div class="field"><label class="field-label">Код домофона <span class="req">*</span></label><input class="field-input" placeholder="Например: 123#45" id="inp-intercom"></div>
-    <div class="field"><label class="field-label">Дата и время первого забора <span class="req">*</span></label>
-      <div style="display:flex;gap:10px;">
-        <input class="field-input" type="date" id="inp-date" style="flex:1.4">
-        <input class="field-input" type="time" id="inp-time" value="07:00" style="flex:1">
+    <div class="earth-container small"><canvas id="earth-canvas-3"></canvas></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd"></div><div class="pd active"></div><div class="pd"></div></div>
+      <div class="s-title">Адрес</div>
+      <div class="s-sub">Куда приедет Walle?</div>
+      <div class="form-card" style="width:100%;">
+        <div class="field"><label class="field-label">Улица и дом <span class="req">*</span></label><input class="field-input" placeholder="ул. Ленина, д. 1" id="inp-street" autocomplete="street-address"></div>
+        <div class="row-fields">
+          <div class="field"><label class="field-label">Подъезд <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-entrance" min="1"></div>
+          <div class="field"><label class="field-label">Этаж <span class="req">*</span></label><input class="field-input" type="number" placeholder="№" id="inp-floor" min="1"></div>
+          <div class="field"><label class="field-label">Квартира <span class="req">*</span></label><input class="field-input" placeholder="№" id="inp-apt"></div>
+        </div>
+        <div class="field"><label class="field-label">Код домофона <span class="req">*</span></label><input class="field-input" placeholder="Например: 123#45" id="inp-intercom"></div>
+        <div class="field" style="margin-bottom:0"><label class="field-label">Дата и время <span class="req">*</span></label>
+          <div style="display:flex;gap:10px;">
+            <input class="field-input" type="date" id="inp-date" style="flex:1.4">
+            <input class="field-input" type="time" id="inp-time" value="07:00" style="flex:1">
+          </div>
+          <div class="field-hint">⏰ 07:00–11:00 или 19:00–23:00</div>
+        </div>
       </div>
-      <div class="field-hint">⏰ Утро: 07:00–11:00 · Вечер: 19:00–23:00</div>
-    </div>
-    <div class="spacer"></div>
-    <div class="btn-wrap">
-      <button class="btn-main" onclick="validateAddr()">Далее</button>
-      <button class="btn-ghost" onclick="showScreen('register')">Назад</button>
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="validateAddr()">Далее</button>
+        <button class="btn-ghost" onclick="showScreen('register')">Назад</button>
+      </div>
     </div>
   </div>
 
-  <!-- SCREEN 4: Tariff -->
+  <!-- TARIFF -->
   <div id="screen-tariff" class="screen">
-    <div class="progress-wrap"><div class="pd"></div><div class="pd"></div><div class="pd active"></div></div>
-    <div class="s-title">Тариф</div>
-    <div class="s-sub">Выберите удобный вариант</div>
-    <div class="tariff-wrap">
-      <div class="tariff sel" onclick="selectTariff(this)">
-        <div class="t-icon">🚪</div>
-        <div class="t-body"><div class="t-name">Лайт</div><div class="t-desc">Оставьте пакет за дверью — курьер заберёт сам</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-lite')">Подробнее →</div></div>
-        <div class="t-right"><div class="t-price">990 ₽</div><div class="t-radio"></div></div>
+    <div class="earth-container small"><canvas id="earth-canvas-4"></canvas></div>
+    <div class="screen-inner">
+      <div class="progress-wrap"><div class="pd"></div><div class="pd"></div><div class="pd active"></div></div>
+      <div class="s-title">Тариф</div>
+      <div class="s-sub">Выберите удобный вариант</div>
+      <div class="tariff-wrap">
+        <div class="tariff sel" onclick="selectTariff(this)">
+          <div class="t-icon">🚪</div>
+          <div class="t-body"><div class="t-name">Лайт</div><div class="t-desc">Оставьте пакет за дверью — курьер заберёт сам</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-lite')">Подробнее →</div></div>
+          <div class="t-right"><div class="t-price">990 ₽</div><div class="t-radio"></div></div>
+        </div>
+        <div class="tariff" onclick="selectTariff(this)">
+          <div class="t-icon">♻️</div>
+          <div class="t-body"><div class="t-name">Забота</div><div class="t-desc">Курьер заберёт мусор из ведра и оставит новый пакет</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-care')">Подробнее →</div></div>
+          <div class="t-right"><div class="t-price">1490 ₽</div><div class="t-radio"></div></div>
+        </div>
       </div>
-      <div class="tariff" onclick="selectTariff(this)">
-        <div class="t-icon">♻️</div>
-        <div class="t-body"><div class="t-name">Забота</div><div class="t-desc">Курьер заберёт мусор из ведра и оставит новый пакет</div><div class="t-more" onclick="event.stopPropagation();openModal('modal-t-care')">Подробнее →</div></div>
-        <div class="t-right"><div class="t-price">1490 ₽</div><div class="t-radio"></div></div>
+      <div class="spacer"></div>
+      <div class="btn-wrap">
+        <button class="btn-main" onclick="showScreen('done')">Оформить подписку</button>
+        <button class="btn-ghost" onclick="showScreen('address')">Назад</button>
       </div>
-    </div>
-    <div class="spacer"></div>
-    <div class="btn-wrap">
-      <button class="btn-main" onclick="showScreen('done')">Оформить подписку</button>
-      <button class="btn-ghost" onclick="showScreen('address')">Назад</button>
     </div>
   </div>
 
-  <!-- SCREEN 5: Done -->
-  <div id="screen-done" class="screen" style="justify-content:center;align-items:center;text-align:center;">
+  <!-- DONE -->
+  <div id="screen-done" class="screen">
     <div class="done-glow">✅</div>
     <div class="done-title">Готово!</div>
     <div class="done-sub">Подписка оформлена. Walle уже скоро появится у вашей двери</div>
@@ -264,7 +582,7 @@
 
 </div>
 
-<!-- MODALS -->
+<!-- ═══ MODALS ═══ -->
 <div id="modal-howto" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -282,7 +600,7 @@
         <div class="faq-item"><div class="faq-q">Как часто приезжает курьер?</div><div class="faq-a">Ежедневно — каждый день в выбранное время, без выходных.</div></div>
         <div class="faq-item"><div class="faq-q">Что если я забуду оставить пакет?</div><div class="faq-a">Ничего страшного — курьер приедет на следующий день. Бот заранее напомнит.</div></div>
         <div class="faq-item"><div class="faq-q">Можно ли изменить время?</div><div class="faq-a">Да, через поддержку в любой момент.</div></div>
-        <div class="faq-item"><div class="faq-q">Как отменить подписку?</div><div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня. Остаток вернём.</div></div>
+        <div class="faq-item"><div class="faq-q">Как отменить подписку?</div><div class="faq-a">Напишите в поддержку — отменим в течение одного рабочего дня.</div></div>
       </div>
       <button class="btn-main" onclick="closeModalById('modal-howto');showScreen('register')">Попробовать за 1 ₽</button>
     </div>
@@ -317,10 +635,9 @@
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">Политика конфиденциальности</div>
-      <div class="modal-section"><div class="modal-s-title">Какие данные мы собираем</div><div class="modal-text"><p>Имя, телефон, email, адрес — только то, что нужно для оказания услуги.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">Как мы используем данные</div><div class="modal-text"><p>Исключительно для организации сервиса. Не продаём и не передаём третьим лицам.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">Хранение и удаление</div><div class="modal-text"><p>Данные хранятся на защищённых серверах. По запросу удаляем в течение 30 дней.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">Контакты</div><div class="modal-text"><p>[email для связи по вопросам персональных данных]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Данные</div><div class="modal-text"><p>Имя, телефон, email, адрес — только для оказания услуги.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Использование</div><div class="modal-text"><p>Исключительно для организации сервиса. Не продаём и не передаём третьим лицам.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Хранение</div><div class="modal-text"><p>Данные хранятся на защищённых серверах. По запросу удаляем в течение 30 дней.</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-privacy')">Закрыть</button>
     </div>
   </div>
@@ -330,11 +647,9 @@
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">Публичная оферта</div>
-      <div class="modal-section"><div class="modal-s-title">1. Общие положения</div><div class="modal-text"><p>ИП [ФИО], ОГРНИП [номер], ИНН [номер] — услуги по выносу бытовых отходов.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">2. Стоимость</div><div class="modal-text"><p>Тариф «Лайт» — 990 ₽/мес. Тариф «Забота» — 1490 ₽/мес. Первая неделя — 1 ₽ (акция).</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">3. Обязанности сторон</div><div class="modal-text"><p>Заказчик предоставляет актуальный адрес и код домофона. Исполнитель оказывает услугу ежедневно в согласованное время.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">4. Отказ от услуг</div><div class="modal-text"><p>В любое время через поддержку. Возврат за неиспользованный период — в течение 10 рабочих дней.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">5. Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">1. Стороны</div><div class="modal-text"><p>ИП [ФИО], ОГРНИП [номер], ИНН [номер]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">2. Стоимость</div><div class="modal-text"><p>Тариф «Лайт» — 990 ₽/мес. Тариф «Забота» — 1490 ₽/мес. Первая неделя — 1 ₽.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">3. Отмена</div><div class="modal-text"><p>В любое время через поддержку. Возврат за неиспользованный период в течение 10 рабочих дней.</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-offer')">Закрыть</button>
     </div>
   </div>
@@ -344,402 +659,299 @@
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
     <div class="modal-scroll">
       <div class="modal-title">О компании</div>
-      <div class="modal-section"><div class="modal-s-title">Walle — сервис выноса мусора</div><div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины ежедневного выноса мусора. Работаем каждый день, в любую погоду.</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]<br>Сайт: [ссылка]</p></div></div>
-      <div class="modal-section"><div class="modal-s-title">Поддержка</div><div class="modal-text"><p>[контакт поддержки]</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Walle</div><div class="modal-text"><p>Помогаем жителям многоквартирных домов избавиться от рутины выноса мусора. Работаем каждый день, в любую погоду.</p></div></div>
+      <div class="modal-section"><div class="modal-s-title">Реквизиты</div><div class="modal-text"><p>ИП [ФИО]<br>ОГРНИП: [номер]<br>ИНН: [номер]<br>Email: [email]</p></div></div>
       <button class="btn-main" onclick="closeModalById('modal-about')">Закрыть</button>
     </div>
   </div>
 </div>
 
 <script>
-  // Telegram
-  try { var tg = window.Telegram && window.Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); } } catch(e) {}
+/* ═══════════════════════════════════════════════════════
+   TELEGRAM
+═══════════════════════════════════════════════════════ */
+try { var tg = window.Telegram && window.Telegram.WebApp; if(tg){tg.ready();tg.expand();} } catch(e){}
 
-  // Screens
-  function showScreen(name) {
-    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-    var s = document.getElementById('screen-' + name);
-    if (s) { s.classList.add('active'); s.scrollTop = 0; }
+/* ═══════════════════════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════════════════════ */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var s = document.getElementById('screen-'+name);
+  if(s){ s.classList.add('active'); s.scrollTop=0; }
+}
+
+function selectTariff(el) {
+  document.querySelectorAll('.tariff').forEach(function(t){t.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function openModal(id)   { var m=document.getElementById(id); if(m)m.classList.add('open'); }
+function closeModal(ov)  { ov.classList.remove('open'); }
+function closeModalById(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }
+
+function validateAddr() {
+  var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
+  var ok=true;
+  ids.forEach(function(id){
+    var el=document.getElementById(id); el.classList.remove('err');
+    if(!el.value.trim()){el.classList.add('err');ok=false;}
+  });
+  var t=document.getElementById('inp-time');
+  if(t&&t.value){ var h=parseInt(t.value.split(':')[0]);
+    if(!((h>=7&&h<=11)||(h>=19&&h<=23))){t.classList.add('err');ok=false;} else t.classList.remove('err'); }
+  if(!ok){document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'});return;}
+  showScreen('tariff');
+}
+
+/* Date */
+(function(){
+  var d=new Date(); d.setDate(d.getDate()+1);
+  var pad=function(n){return n<10?'0'+n:n;};
+  var el=document.getElementById('inp-date');
+  if(el){var t=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());el.min=t;el.value=t;}
+})();
+
+/* ═══════════════════════════════════════════════════════
+   CSS STAR LAYERS (box-shadow technique)
+═══════════════════════════════════════════════════════ */
+(function() {
+  var W = window.innerWidth, H = window.innerHeight;
+
+  function makeShadows(n, minR, maxR, colors, opacity) {
+    var shadows = [];
+    for(var i=0;i<n;i++) {
+      var x = Math.floor(Math.random()*W*3-W);
+      var y = Math.floor(Math.random()*H*3-H);
+      var r = (Math.random()*(maxR-minR)+minR).toFixed(1);
+      var c = colors[Math.floor(Math.random()*colors.length)];
+      var op = (Math.random()*opacity+opacity*0.3).toFixed(2);
+      var glow = maxR > 1.5 ? ' 0 0 '+(r*3)+'px '+c : '';
+      shadows.push(x+'px '+y+'px 0 '+r+'px '+c+glow);
+    }
+    return shadows.join(',');
   }
 
-  // Tariff
-  function selectTariff(el) {
-    document.querySelectorAll('.tariff').forEach(function(t) { t.classList.remove('sel'); });
-    el.classList.add('sel');
+  // Layer 1 - tiny dust
+  var l1 = document.createElement('div');
+  l1.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;will-change:transform;';
+  var dot1 = document.createElement('div');
+  dot1.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
+  dot1.style.boxShadow = makeShadows(400, 0.2, 0.6, ['rgba(255,255,255,'], 0.25);
+  l1.appendChild(dot1);
+  document.body.insertBefore(l1, document.body.firstChild);
+
+  // Layer 2 - small stars
+  var dot2 = document.createElement('div');
+  dot2.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;will-change:transform;';
+  dot2.style.boxShadow = makeShadows(250, 0.4, 0.9, ['rgba(255,255,255,'], 0.35);
+  l1.appendChild(dot2);
+
+  // Layer 3 - medium twinkling
+  var l3 = document.getElementById('stars-3');
+  var dot3 = document.createElement('div');
+  dot3.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
+  dot3.style.boxShadow = makeShadows(120, 0.7, 1.4,
+    ['rgba(255,255,255,','rgba(220,235,255,','rgba(255,245,220,'], 0.5);
+  l3.appendChild(dot3);
+
+  // Layer 4 - bright colored stars with glow
+  var l4 = document.getElementById('stars-4');
+  var dot4 = document.createElement('div');
+  dot4.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
+  dot4.style.boxShadow = makeShadows(50, 1.2, 2.0,
+    ['rgba(255,255,255,','rgba(180,215,255,','rgba(255,240,180,','rgba(180,255,240,'], 0.7);
+  l4.appendChild(dot4);
+
+  // Layer 5 - closest largest stars
+  var l5 = document.getElementById('stars-5');
+  var dot5 = document.createElement('div');
+  dot5.style.cssText = 'width:1px;height:1px;border-radius:50%;background:transparent;position:absolute;top:50%;left:50%;';
+  dot5.style.boxShadow = makeShadows(20, 1.8, 2.8,
+    ['rgba(255,255,255,','rgba(160,210,255,','rgba(255,230,150,'], 0.85);
+  l5.appendChild(dot5);
+})();
+
+/* ═══════════════════════════════════════════════════════
+   COMET ENGINE (Canvas)
+═══════════════════════════════════════════════════════ */
+(function() {
+  var c = document.getElementById('comet-canvas');
+  if(!c) return;
+  var ctx = c.getContext('2d');
+  var W, H, comets = [], nextComet = Date.now()+2000;
+
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  function spawnComet() {
+    var dir = Math.random();
+    var vx, vy;
+    if(dir<0.5)      { vx=-(Math.random()*7+4); vy=Math.random()*4+1.5; }
+    else if(dir<0.75){ vx=-(Math.random()*5+3); vy=Math.random()*6+3; }
+    else             { vx=-(Math.random()*9+6); vy=Math.random()*2+0.5; }
+    var rgb = Math.random()<0.6 ? '255,255,255' : Math.random()<0.5 ? '170,215,255' : '255,245,190';
+    comets.push({
+      x: Math.random()*W*0.85+W*0.05,
+      y: Math.random()*H*0.4,
+      vx:vx, vy:vy, life:1,
+      tail: Math.random()*140+60,
+      decay: Math.random()*0.008+0.006,
+      rgb:rgb
+    });
   }
 
-  // Modals
-  function openModal(id) { var m = document.getElementById(id); if (m) m.classList.add('open'); }
-  function closeModal(ov) { ov.classList.remove('open'); }
-  function closeModalById(id) { var m = document.getElementById(id); if (m) m.classList.remove('open'); }
+  function loop(){
+    ctx.clearRect(0,0,W,H);
 
-  // Address validation
-  function validateAddr() {
-    var ids = ['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
-    var ok = true;
-    ids.forEach(function(id) {
-      var el = document.getElementById(id);
-      el.classList.remove('err');
-      if (!el.value.trim()) { el.classList.add('err'); ok = false; }
-    });
-    var t = document.getElementById('inp-time');
-    if (t && t.value) {
-      var h = parseInt(t.value.split(':')[0]);
-      if (!((h>=7&&h<=11)||(h>=19&&h<=23))) { t.classList.add('err'); ok = false; }
-      else t.classList.remove('err');
+    if(Date.now()>nextComet){
+      spawnComet();
+      if(Math.random()<0.3) spawnComet(); // double occasionally
+      nextComet = Date.now() + Math.random()*1000+3000; // every 3-4s
     }
-    if (!ok) { document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'}); return; }
-    showScreen('tariff');
+
+    comets = comets.filter(function(m){
+      m.x+=m.vx; m.y+=m.vy; m.life-=m.decay;
+      if(m.life<=0) return false;
+
+      var angle = Math.atan2(m.vy,m.vx);
+      var tlen  = m.tail*m.life;
+      var tx = m.x - Math.cos(angle)*tlen;
+      var ty = m.y - Math.sin(angle)*tlen;
+
+      var g = ctx.createLinearGradient(tx,ty,m.x,m.y);
+      g.addColorStop(0,'rgba('+m.rgb+',0)');
+      g.addColorStop(0.6,'rgba('+m.rgb+','+(m.life*0.35)+')');
+      g.addColorStop(1,'rgba('+m.rgb+','+m.life+')');
+
+      ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(m.x,m.y);
+      ctx.strokeStyle=g; ctx.lineWidth=m.life*1.8; ctx.lineCap='round'; ctx.stroke();
+
+      // Head glow
+      ctx.beginPath(); ctx.arc(m.x,m.y,m.life*2.5,0,Math.PI*2);
+      ctx.fillStyle='rgba('+m.rgb+','+(m.life*0.8)+')'; ctx.fill();
+      ctx.beginPath(); ctx.arc(m.x,m.y,m.life*1.1,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,'+m.life+')'; ctx.fill();
+      return true;
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ═══════════════════════════════════════════════════════
+   EARTH (draws on any canvas with id starting "earth-canvas")
+═══════════════════════════════════════════════════════ */
+(function() {
+  var img = new Image();
+  var loaded = false;
+  var paths = ['assets/images/earth.jpg','assets/images/earth.jpeg','./assets/images/earth.jpg'];
+  var pi = 0;
+
+  function tryLoad(){
+    if(pi>=paths.length){ startAll(); return; }
+    img = new Image();
+    img.onload = function(){ loaded=true; startAll(); };
+    img.onerror = function(){ pi++; tryLoad(); };
+    img.crossOrigin='anonymous';
+    img.src = paths[pi++];
+  }
+  tryLoad();
+
+  function startAll(){
+    // Draw earth on all canvas elements that start with 'earth-canvas'
+    document.querySelectorAll('canvas[id^="earth-canvas"]').forEach(function(canvas){
+      initEarth(canvas);
+    });
   }
 
-  // Date
-  (function() {
-    var d = new Date(); d.setDate(d.getDate() + 1);
-    var pad = function(n) { return n < 10 ? '0'+n : n; };
-    var el = document.getElementById('inp-date');
-    if (el) { var t = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); el.min = t; el.value = t; }
-  })();
+  function initEarth(canvas) {
+    var isLarge = canvas.id === 'earth-canvas';
+    var size = isLarge ? 190 : 76;
+    var R    = isLarge ? 92  : 36;
+    canvas.width  = size;
+    canvas.height = size;
+    canvas.style.width  = size+'px';
+    canvas.style.height = size+'px';
 
-  // ── REALISTIC STARFIELD + METEORS + PARALLAX ─────────
-  (function() {
-    var c = document.getElementById('star-canvas');
-    if (!c) return;
-    var ctx = c.getContext('2d');
-    var W, H, stars = [], meteors = [];
-    var nextMeteor = Date.now() + 2000;
-    var scrollY = 0;
-
-    function resize() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Parallax on scroll
-    window.addEventListener('scroll', function() { scrollY = window.scrollY || 0; }, {passive:true});
-    document.querySelectorAll('.screen').forEach(function(s) {
-      s.addEventListener('scroll', function() { scrollY = s.scrollTop || 0; }, {passive:true});
-    });
-
-    // NASA star colors: O/B blue-white, A white, F yellow-white, K orange
-    var starPalette = [
-      {c:'#ffffff', w:40}, {c:'#f0f4ff', w:25}, {c:'#e0eaff', w:15},
-      {c:'#c8dcff', w:10}, {c:'#b0ccff', w:6},
-      {c:'#fff8e8', w:3},  {c:'#ffe8c8', w:1}
-    ];
-    var palette = [];
-    starPalette.forEach(function(p) { for(var i=0;i<p.w;i++) palette.push(p.c); });
-
-    // Generate 500 stars in 3 depth layers (for parallax)
-    for (var i = 0; i < 500; i++) {
-      var bright = Math.random() < 0.045;
-      var med    = Math.random() < 0.2;
-      var layer  = Math.floor(Math.random()*3); // 0=far,1=mid,2=near
-      stars.push({
-        x: Math.random(), y: Math.random(),
-        r: bright ? Math.random()*1.8+1.4 : med ? Math.random()*1.1+0.65 : Math.random()*0.7+0.18,
-        baseOp: bright ? Math.random()*0.25+0.75 : med ? Math.random()*0.3+0.35 : Math.random()*0.3+0.08,
-        speed: Math.random()*1.8+0.4,
-        phase: Math.random()*Math.PI*2,
-        color: palette[Math.floor(Math.random()*palette.length)],
-        glow: bright,
-        glowR: Math.random()*5+3,
-        layer: layer,
-        parallax: layer===0 ? 0.01 : layer===1 ? 0.025 : 0.05
-      });
-    }
-
-    // Milky way clusters
-    [[0.15,0.2],[0.6,0.08],[0.84,0.44],[0.33,0.72],[0.71,0.85],[0.48,0.35]].forEach(function(cl) {
-      for(var n=0;n<20;n++) {
-        stars.push({
-          x: cl[0]+(Math.random()-0.5)*0.1, y: cl[1]+(Math.random()-0.5)*0.1,
-          r: Math.random()*0.6+0.15, baseOp: Math.random()*0.2+0.06,
-          speed: Math.random()*2+0.6, phase: Math.random()*Math.PI*2,
-          color: '#deeaff', glow: false, layer: 0, parallax: 0.008
-        });
-      }
-    });
-
-    function spawnMeteor() {
-      meteors.push({
-        x: Math.random()*W*0.8+W*0.05,
-        y: Math.random()*H*0.28,
-        vx: -(Math.random()*6+3.5),
-        vy:  Math.random()*3.5+1.5,
-        life: 1,
-        tailLen: Math.random()*130+60,
-        decay: Math.random()*0.008+0.006,
-        rgb: Math.random()<0.65 ? '255,255,255' : Math.random()<0.5 ? '180,220,255' : '255,245,200'
-      });
-    }
-
-    function loop() {
-      ctx.clearRect(0,0,W,H);
-      var now = Date.now()/1000;
-
-      stars.forEach(function(s) {
-        var op = s.baseOp * (0.45 + 0.55*Math.sin(now*s.speed + s.phase));
-        // Parallax offset
-        var py = (s.y*H + scrollY*s.parallax) % H;
-        if (py < 0) py += H;
-
-        ctx.globalAlpha = op;
-        if (s.glow) {
-          ctx.shadowBlur = s.glowR;
-          ctx.shadowColor = s.color;
-        }
-        ctx.beginPath();
-        ctx.arc(s.x*W, py, s.r, 0, Math.PI*2);
-        ctx.fillStyle = s.color;
-        ctx.fill();
-        if (s.glow) ctx.shadowBlur = 0;
-      });
-      ctx.globalAlpha = 1;
-
-      // Spawn meteors more frequently
-      if (Date.now() > nextMeteor) {
-        spawnMeteor();
-        if (Math.random() < 0.3) spawnMeteor(); // occasionally double
-        nextMeteor = Date.now() + Math.random()*1500+1500;
-      }
-
-      meteors = meteors.filter(function(m) {
-        m.x += m.vx; m.y += m.vy; m.life -= m.decay;
-        if (m.life <= 0) return false;
-
-        var angle = Math.atan2(m.vy, m.vx);
-        var tLen = m.tailLen * m.life;
-        var tx = m.x - Math.cos(angle)*tLen;
-        var ty = m.y - Math.sin(angle)*tLen;
-
-        var g = ctx.createLinearGradient(tx,ty,m.x,m.y);
-        g.addColorStop(0,'rgba('+m.rgb+',0)');
-        g.addColorStop(0.6,'rgba('+m.rgb+','+(m.life*0.4)+')');
-        g.addColorStop(1,'rgba('+m.rgb+','+m.life+')');
-        ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(m.x,m.y);
-        ctx.strokeStyle=g; ctx.lineWidth=m.life*2.2; ctx.lineCap='round'; ctx.stroke();
-
-        // Head
-        ctx.beginPath(); ctx.arc(m.x,m.y,m.life*2.8,0,Math.PI*2);
-        ctx.fillStyle='rgba('+m.rgb+','+(m.life*0.85)+')'; ctx.fill();
-        ctx.beginPath(); ctx.arc(m.x,m.y,m.life*1.2,0,Math.PI*2);
-        ctx.fillStyle='rgba(255,255,255,'+m.life+')'; ctx.fill();
-        return true;
-      });
-
-      requestAnimationFrame(loop);
-    }
-    loop();
-  })();
-  (function() {
-    var c = document.getElementById('star-canvas');
-    if (!c) return;
-    var ctx = c.getContext('2d');
-    var W, H, stars = [], meteors = [], nextMeteor = Date.now() + 3000;
-
-    function resize() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // NASA-referenced star colors:
-    // O/B type: blue-white, A type: white, F/G: yellow-white, K/M: orange
-    var starColors = [
-      '#ffffff','#ffffff','#ffffff','#ffffff','#ffffff',
-      '#f0f4ff','#f0f4ff','#e8f0ff','#e8f0ff',
-      '#d0e4ff','#c0d8ff','#b8d0ff',
-      '#fff8e8','#fef0d0',
-      '#ffe8c0'
-    ];
-
-    // 460 stars — varying sizes and brightness
-    for (var i = 0; i < 460; i++) {
-      var isBright = Math.random() < 0.04; // 4% bright with glow
-      var isMed    = Math.random() < 0.22;
-      stars.push({
-        x: Math.random(),
-        y: Math.random(),
-        r: isBright ? Math.random()*1.6+1.6 : isMed ? Math.random()*1.2+0.7 : Math.random()*0.8+0.2,
-        baseOp: isBright ? Math.random()*0.3+0.7 : isMed ? Math.random()*0.35+0.35 : Math.random()*0.35+0.1,
-        speed: Math.random()*1.6+0.5,
-        phase: Math.random()*Math.PI*2,
-        color: starColors[Math.floor(Math.random()*starColors.length)],
-        glow: isBright,
-        glowSize: Math.random()*4+3
-      });
-    }
-
-    // Star clusters (Milky Way effect - denser regions)
-    var clusters = [{cx:0.18,cy:0.22},{cx:0.62,cy:0.08},{cx:0.85,cy:0.45},{cx:0.35,cy:0.7},{cx:0.72,cy:0.82}];
-    clusters.forEach(function(cl) {
-      for (var n = 0; n < 18; n++) {
-        stars.push({
-          x: cl.cx + (Math.random()-0.5)*0.12,
-          y: cl.cy + (Math.random()-0.5)*0.12,
-          r: Math.random()*0.7+0.2,
-          baseOp: Math.random()*0.25+0.08,
-          speed: Math.random()*2+0.8,
-          phase: Math.random()*Math.PI*2,
-          color: '#e8f0ff', glow: false
-        });
-      }
-    });
-
-    function spawnMeteor() {
-      var dir = Math.random();
-      var vx, vy;
-      if (dir < 0.5) { vx=-(Math.random()*6+3.5); vy=Math.random()*3.5+1.5; }
-      else if (dir < 0.75) { vx=-(Math.random()*4+2); vy=Math.random()*5+3; }
-      else { vx=-(Math.random()*8+5); vy=Math.random()*2+0.5; }
-      meteors.push({
-        x: Math.random()*W*0.85+W*0.05,
-        y: Math.random()*H*0.4,
-        vx: vx, vy: vy, life: 1,
-        tailLen: Math.random()*130+60,
-        decay: Math.random()*0.008+0.007,
-        color: Math.random()<0.6 ? '255,255,255' : (Math.random()<0.5 ? '180,220,255' : '255,245,200')
-      });
-    }
-
-    function loop() {
-      ctx.clearRect(0,0,W,H);
-      var now = Date.now()/1000;
-
-      // Draw stars
-      stars.forEach(function(s) {
-        var op = s.baseOp * (0.5 + 0.5*Math.sin(now*s.speed + s.phase));
-        ctx.globalAlpha = op;
-        if (s.glow) {
-          ctx.shadowBlur = s.glowSize;
-          ctx.shadowColor = s.color;
-        }
-        ctx.beginPath();
-        ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2);
-        ctx.fillStyle = s.color;
-        ctx.fill();
-        if (s.glow) ctx.shadowBlur = 0;
-      });
-      ctx.globalAlpha = 1;
-
-      // Meteors
-      if (Date.now() > nextMeteor) {
-        spawnMeteor();
-        spawnMeteor();
-        if(Math.random()<0.35) spawnMeteor();
-        nextMeteor = Date.now() + Math.random()*1000+700;
-      }
-
-      meteors = meteors.filter(function(m) {
-        m.x += m.vx; m.y += m.vy; m.life -= m.decay;
-        if (m.life <= 0) return false;
-
-        var tLen = m.tailLen * m.life;
-        var angle = Math.atan2(m.vy, m.vx);
-        var tx = m.x - Math.cos(angle)*tLen;
-        var ty = m.y - Math.sin(angle)*tLen;
-
-        var g = ctx.createLinearGradient(tx,ty,m.x,m.y);
-        g.addColorStop(0,'rgba('+m.color+',0)');
-        g.addColorStop(0.65,'rgba('+m.color+','+(m.life*0.45)+')');
-        g.addColorStop(1,'rgba('+m.color+','+m.life+')');
-        ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(m.x,m.y);
-        ctx.strokeStyle = g; ctx.lineWidth = m.life*2; ctx.lineCap='round'; ctx.stroke();
-
-        // Head glow
-        ctx.beginPath(); ctx.arc(m.x,m.y,m.life*2.5,0,Math.PI*2);
-        ctx.fillStyle='rgba('+m.color+','+(m.life*0.95)+')'; ctx.fill();
-        // Sparkle
-        ctx.beginPath(); ctx.arc(m.x,m.y,m.life*1,0,Math.PI*2);
-        ctx.fillStyle='rgba(255,255,255,'+m.life+')'; ctx.fill();
-
-        return true;
-      });
-
-      requestAnimationFrame(loop);
-    }
-    loop();
-  })();
-
-  // ── EARTH ROTATION ───────────────────────────────────
-  (function() {
-    var canvas = document.getElementById('earth-canvas');
-    if (!canvas) return;
     var ctx = canvas.getContext('2d');
-    var W = 150, H = 150, R = 72;
-    canvas.width = W; canvas.height = H;
+    var offset = Math.random()*1000; // different start positions
 
-    var img = new Image();
-    var offset = 0;
-    var loaded = false;
+    function draw(){
+      ctx.clearRect(0,0,size,size);
+      var cx = size/2, cy = size/2;
 
-    // Try multiple paths
-    var paths = ['assets/images/earth.jpg', './assets/images/earth.jpg', 'earth.jpg'];
-    var pi = 0;
-
-    function tryNext() {
-      if (pi >= paths.length) { draw(); return; }
-      img = new Image();
-      img.onload = function() { loaded = true; draw(); };
-      img.onerror = function() { pi++; tryNext(); };
-      img.src = paths[pi++];
-    }
-    tryNext();
-
-    function draw() {
-      ctx.clearRect(0,0,W,H);
-
+      // Clip to circle
       ctx.save();
-      ctx.beginPath();
-      ctx.arc(W/2,H/2,R,0,Math.PI*2);
-      ctx.clip();
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
 
-      if (loaded && img.naturalWidth > 0) {
-        var scale = (R*2) / img.naturalHeight;
-        var sw = img.naturalWidth * scale;
+      if(loaded && img.naturalWidth>0){
+        // Scroll texture = Y-axis rotation simulation
+        var scale = (R*2)/img.naturalHeight;
+        var sw = img.naturalWidth*scale;
         var sh = R*2;
-        var sy = H/2 - R;
-        var sx = W/2 - R;
-        var x0 = sx - (offset % sw);
-        ctx.drawImage(img, x0-sw, sy, sw, sh);
-        ctx.drawImage(img, x0,    sy, sw, sh);
-        ctx.drawImage(img, x0+sw, sy, sw, sh);
+        var sx = cx-R, sy = cy-R;
+        var x0 = sx-(offset%sw);
+        ctx.drawImage(img,x0-sw,sy,sw,sh);
+        ctx.drawImage(img,x0,   sy,sw,sh);
+        ctx.drawImage(img,x0+sw,sy,sw,sh);
       } else {
-        // Fallback
-        var g = ctx.createRadialGradient(50,44,4,W/2,H/2,R);
-        g.addColorStop(0,'#4fc3f7'); g.addColorStop(0.4,'#1565c0'); g.addColorStop(1,'#011a3a');
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-        ctx.fillStyle='rgba(40,110,40,0.82)';
-        ctx.beginPath(); ctx.ellipse(68,58,17,21,0.3,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(38,64,12,17,0.1,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(106,52,15,11,0.4,0,Math.PI*2); ctx.fill();
+        // Fallback sphere
+        var g=ctx.createRadialGradient(cx-R*0.3,cy-R*0.3,R*0.05,cx,cy,R);
+        g.addColorStop(0,'#3ea8d8'); g.addColorStop(0.4,'#1155a0'); g.addColorStop(1,'#010d24');
+        ctx.fillStyle=g; ctx.fillRect(0,0,size,size);
+        // Continents
+        ctx.fillStyle='rgba(38,105,38,0.85)';
+        ctx.beginPath(); ctx.ellipse(cx*0.9,cy*0.78,R*0.22,R*0.28,0.3,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx*0.52,cy*0.85,R*0.15,R*0.23,0.1,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx*1.38,cy*0.7,R*0.2,R*0.15,0.4,0,Math.PI*2); ctx.fill();
       }
       ctx.restore();
 
-      // Night shadow
+      // Evening terminator — only right crescent lit
       ctx.save();
-      ctx.beginPath(); ctx.arc(W/2,H/2,R,0,Math.PI*2); ctx.clip();
-      var shadow = ctx.createRadialGradient(W/2+42,H/2+20,5,W/2+28,H/2+8,R);
-      shadow.addColorStop(0,'rgba(0,3,16,0.82)');
-      shadow.addColorStop(0.38,'rgba(0,3,16,0.32)');
-      shadow.addColorStop(1,'transparent');
-      ctx.fillStyle=shadow; ctx.fillRect(0,0,W,H);
-      var shine = ctx.createRadialGradient(W/2-26,H/2-25,0,W/2-20,H/2-18,44);
-      shine.addColorStop(0,'rgba(255,255,255,0.17)');
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
+
+      // Dark terminator (most of sphere in shadow - evening side)
+      var terminator = ctx.createRadialGradient(cx-R*0.35,cy,R*0.1,cx-R*0.2,cy,R*1.1);
+      terminator.addColorStop(0,'transparent');
+      terminator.addColorStop(0.45,'rgba(0,3,18,0.2)');
+      terminator.addColorStop(0.72,'rgba(0,3,18,0.65)');
+      terminator.addColorStop(1,'rgba(0,3,18,0.88)');
+      ctx.fillStyle=terminator; ctx.fillRect(0,0,size,size);
+
+      // City lights on night side (subtle warm dots pattern)
+      if(R>50){
+        ctx.globalCompositeOperation='screen';
+        var cityGlow = ctx.createRadialGradient(cx+R*0.25,cy,0,cx+R*0.25,cy,R*0.8);
+        cityGlow.addColorStop(0,'rgba(255,200,80,0.06)');
+        cityGlow.addColorStop(0.4,'rgba(255,160,50,0.04)');
+        cityGlow.addColorStop(1,'transparent');
+        ctx.fillStyle=cityGlow; ctx.fillRect(0,0,size,size);
+        ctx.globalCompositeOperation='source-over';
+      }
+
+      // Specular shine on lit side
+      var shine = ctx.createRadialGradient(cx-R*0.35,cy-R*0.35,0,cx-R*0.25,cy-R*0.25,R*0.6);
+      shine.addColorStop(0,'rgba(255,255,255,0.14)');
       shine.addColorStop(1,'transparent');
-      ctx.fillStyle=shine; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle=shine; ctx.fillRect(0,0,size,size);
       ctx.restore();
 
-      // Atmosphere - very subtle, just a thin haze
-      var atm = ctx.createRadialGradient(W/2,H/2,R-2,W/2,H/2,R+5);
-      atm.addColorStop(0,'rgba(80,160,255,0.12)');
-      atm.addColorStop(0.6,'rgba(60,130,255,0.05)');
+      // Thin atmosphere ring
+      var atm = ctx.createRadialGradient(cx,cy,R-1,cx,cy,R+3);
+      atm.addColorStop(0,'rgba(70,150,255,0.18)');
+      atm.addColorStop(0.6,'rgba(50,120,255,0.07)');
       atm.addColorStop(1,'transparent');
-      ctx.beginPath(); ctx.arc(W/2,H/2,R+5,0,Math.PI*2);
+      ctx.beginPath(); ctx.arc(cx,cy,R+3,0,Math.PI*2);
       ctx.fillStyle=atm; ctx.fill();
 
-      offset += 0.35;
+      offset += 0.3; // rotation speed
       requestAnimationFrame(draw);
     }
-  })();
+    draw();
+  }
+})();
 </script>
 </body>
 </html>
