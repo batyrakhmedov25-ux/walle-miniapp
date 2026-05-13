@@ -3,315 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Walle — Космический сервис</title>
+  <title>Walle — Вынос мусора</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════════════════════
-       BASE & CSS VARIABLES
+       1. ГЛОБАЛЬНЫЕ СТИЛИ И КОСМОС
     ═══════════════════════════════════════════════════════ */
     :root {
-      --green: #22c55e;
-      --green-glow: rgba(34, 197, 94, 0.4);
+      --green: #34d399;
+      --green-2: #10b981;
+      --green-glow: rgba(52, 211, 153, 0.45);
       --glass-bg: rgba(15, 23, 42, 0.6);
       --glass-border: rgba(255, 255, 255, 0.1);
-      --text-main: #f0f6ff;
-      --text-sec: #94a3b8;
+      --text: #f0f6ff;
+      --text-2: #94a3b8;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body, html {
       width: 100%; height: 100%;
-      background: radial-gradient(circle at center, #0a1122 0%, #000000 100%);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      background: radial-gradient(circle at center, #0a1122 0%, #000000 100%) no-repeat fixed;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       1. ЗВЕЗДНОЕ НЕБО (5 СЛОЕВ)
-    ═══════════════════════════════════════════════════════ */
-    .stars-viewport {
-      position: fixed; inset: 0; z-index: -10; pointer-events: none;
-    }
-
-    .star-layer {
-      position: absolute; top: 0; left: 0; width: 2px; height: 2px;
-      background: transparent; will-change: transform;
-    }
-
-    /* Генерация слоев через box-shadow */
-    .l1 { box-shadow: 10vw 20vh #fff, 50vw 10vh #fff, 80vw 30vh #fff, 20vw 70vh #fff, 90vw 80vh #fff; animation: blink 4s infinite; }
-    .l2 { width: 1px; box-shadow: 5vw 5vh #80aaff, 45vw 65vh #80aaff, 85vw 15vh #80aaff, 25vw 85vh #80aaff; animation: blink 7s infinite; opacity: 0.7; }
-    .l3 { box-shadow: 30vw 10vh #ffe0b3, 70vw 40vh #ffe0b3, 10vw 60vh #ffe0b3, 50vw 90vh #ffe0b3; animation: blink 5s infinite; opacity: 0.5; }
-    .l4 { width: 3px; height: 3px; box-shadow: 15vw 35vh #fff, 60vw 75vh #fff, 85vw 95vh #fff; animation: blink 3s infinite; filter: blur(1px); }
-    .l5 { box-shadow: 22vw 88vh #fff, 38vw 12vh #fff, 66vw 44vh #fff, 11vw 33vh #fff; animation: blink 6s infinite; opacity: 0.4; }
+    /* 5 СЛОЕВ ЗВЕЗД */
+    .stars-bg { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
+    .star-l { position: absolute; top: 0; left: 0; background: transparent; }
+    .l1 { width: 1px; height: 1px; box-shadow: 10vw 20vh #fff, 50vw 10vh #fff, 80vw 30vh #fff, 20vw 70vh #fff; animation: blink 4s infinite; }
+    .l2 { width: 1.5px; height: 1.5px; box-shadow: 5vw 45vh #80aaff, 45vw 85vh #80aaff, 85vw 15vh #80aaff; animation: blink 6s infinite; }
+    .l3 { width: 2px; height: 2px; box-shadow: 30vw 10vh #ffe0b3, 70vw 50vh #ffe0b3, 10vw 60vh #ffe0b3; animation: blink 5s infinite; }
+    .l4 { width: 2.5px; height: 2.5px; box-shadow: 15vw 35vh #fff, 60vw 75vh #fff; animation: blink 3s infinite; filter: blur(0.5px); }
+    .l5 { width: 3px; height: 3px; box-shadow: 22vw 88vh #80aaff, 88vw 22vh #fff; animation: blink 7s infinite; opacity: 0.6; }
 
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+    /* КОМЕТА */
+    .comet { position: fixed; width: 2px; height: 2px; background: linear-gradient(to right, #fff, transparent); box-shadow: 0 0 10px #fff; border-radius: 50%; z-index: -5; pointer-events: none; }
+    @keyframes cometFly { 0% { transform: translate(0,0) rotate(-45deg) scale(0); opacity: 0; } 10% { opacity: 1; scale: 1; } 100% { transform: translate(-400px, 400px) rotate(-45deg) scale(0); opacity: 0; } }
+
     /* ═══════════════════════════════════════════════════════
-       2. ВЕЧЕРНЯЯ ЗЕМЛЯ (NASA STYLE)
+       2. ЗЕМЛЯ (NASA STYLE)
     ═══════════════════════════════════════════════════════ */
-    .earth-stage {
-      position: relative; width: 100%; height: 45vh;
+    .earth-container {
+      position: relative; width: 100%; height: 42vh;
       display: flex; justify-content: center; align-items: center;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 5;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5;
     }
 
     .earth-sphere {
-      position: relative; width: 280px; height: 280px;
-      border-radius: 50%; overflow: hidden;
-      background: #000; transform: translateZ(0);
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      position: relative; width: 260px; height: 260px;
+      border-radius: 50%; overflow: hidden; background: #000;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
     }
 
     .earth-texture {
       width: 200%; height: 100%;
-      background: url('earth.jpg') repeat-x;
-      background-size: 50% 100%;
-      position: absolute; animation: earthRotate 100s linear infinite;
+      background: url('earth.jpg') repeat-x; background-size: 50% 100%;
+      position: absolute; animation: rotate 90s linear infinite;
     }
 
-    /* Тонкий синий ореол (атмосфера) */
+    /* Тень и атмосфера */
+    .earth-sphere::before {
+      content: ''; position: absolute; inset: 0; z-index: 3;
+      background: radial-gradient(circle at 30% 50%, transparent 35%, rgba(0,0,0,0.9) 70%, #000 100%);
+    }
     .earth-sphere::after {
-      content: ''; position: absolute; inset: 0;
-      border-radius: 50%; z-index: 4;
-      box-shadow: inset 2px 0 12px rgba(100, 150, 255, 0.4);
-      border: 1px solid rgba(100, 150, 255, 0.15);
-      pointer-events: none;
+      content: ''; position: absolute; inset: -1px; border-radius: 50%; z-index: 4;
+      box-shadow: inset 2px 0 10px rgba(100, 150, 255, 0.4);
+      border: 1.5px solid rgba(100, 150, 255, 0.15); pointer-events: none;
     }
 
-    /* Тень терминатора (Вечерняя Земля) */
-    .earth-terminator {
-      position: absolute; inset: 0; z-index: 3;
-      background: radial-gradient(circle at 30% 50%, transparent 35%, rgba(0,0,0,0.85) 70%, #000 100%);
-    }
+    @keyframes rotate { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    @keyframes earthRotate { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-    /* Компактная земля для внутренних страниц */
-    body.is-inner .earth-stage { height: 15vh; transform: scale(0.45) translateY(-30px); opacity: 0.6; }
+    /* Уменьшение земли на внутренних страницах */
+    body.is-inner .earth-container { height: 12vh; transform: scale(0.4) translateY(-40px); opacity: 0.6; }
 
     /* ═══════════════════════════════════════════════════════
-       3. ИНТЕРФЕЙС & GLASSMORPHISM
+       3. ИНТЕРФЕЙС (GLASSMORPHISM)
     ═══════════════════════════════════════════════════════ */
-    .app-wrap {
-      position: relative; z-index: 20; padding: 0 20px 40px;
-      max-width: 480px; margin: 0 auto;
-    }
-
-    .page { display: none; animation: pageIn 0.5s ease forwards; }
+    .app-viewport { position: relative; z-index: 20; padding: 0 20px 40px; max-width: 480px; margin: 0 auto; }
+    
+    .page { display: none; animation: slideUp 0.5s ease forwards; }
     .page.active { display: block; }
-
-    @keyframes pageIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 30px; padding: 32px 24px;
-      text-align: center; margin-top: -15px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--glass-border); border-radius: 28px;
+      padding: 30px 24px; text-align: center; margin-top: -10px;
     }
 
-    h1 { font-size: 34px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 8px; 
+    h1 { font-size: 32px; font-weight: 900; letter-spacing: -1.2px; margin-bottom: 8px; 
          background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    p.subtitle { color: var(--text-sec); font-size: 16px; line-height: 1.5; margin-bottom: 0; }
-
-    /* ФОРМЫ */
-    .input-group { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
-    input {
-      width: 100%; padding: 18px; border-radius: 16px; border: 1px solid var(--glass-border);
-      background: rgba(0,0,0,0.2); color: #fff; font-size: 16px; font-family: inherit; outline: none;
-      transition: 0.3s;
-    }
-    input:focus { border-color: var(--green); background: rgba(34, 197, 94, 0.05); }
-
-    /* КНОПКИ */
-    .btn {
-      display: flex; align-items: center; justify-content: center;
-      width: 100%; height: 66px; border-radius: 22px;
-      font-size: 17px; font-weight: 700; text-decoration: none;
-      margin-top: 14px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: none; cursor: pointer;
-    }
 
     .btn-main {
-      background: var(--green); color: #062010;
-      box-shadow: 0 0 20px var(--green-glow), inset 0 0 15px rgba(255,255,255,0.3);
-    }
-
-    .btn-back {
-      background: rgba(255,255,255,0.05); color: #fff;
-      border: 1px solid var(--glass-border); margin-top: 10px;
-    }
-
-    .btn:active { transform: scale(0.96); opacity: 0.9; }
-
-    /* ═══════════════════════════════════════════════════════
-       4. КОМЕТЫ & ГАЛОЧКА
-    ═══════════════════════════════════════════════════════ */
-    .comet {
-      position: fixed; width: 2px; height: 2px;
-      background: linear-gradient(to right, #fff, transparent);
-      box-shadow: 0 0 10px #fff; border-radius: 50%;
-      pointer-events: none; z-index: -1;
-    }
-
-    .success-badge {
-      width: 90px; height: 90px; background: var(--green);
-      border-radius: 50%; margin: 0 auto 20px;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 50px var(--green);
-      animation: neonPulse 2s infinite;
+      width: 100%; height: 64px; border-radius: 20px; border: none;
+      background: var(--green); color: #062010; font-size: 17px; font-weight: 700;
+      margin-top: 15px; cursor: pointer; transition: 0.3s;
+      box-shadow: 0 0 20px var(--green-glow), inset 0 0 12px rgba(255,255,255,0.3);
     }
+    .btn-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 64px; border-radius: 20px; border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; font-weight: 600;
+      margin-top: 10px; cursor: pointer; text-decoration: none;
+    }
+    .btn-main:active, .btn-back:active { transform: scale(0.96); }
 
-    @keyframes neonPulse {
-      0% { box-shadow: 0 0 20px var(--green); transform: scale(1); }
-      50% { box-shadow: 0 0 60px var(--green); transform: scale(1.05); }
-      100% { box-shadow: 0 0 20px var(--green); transform: scale(1); }
+    input {
+      width: 100%; padding: 18px; border-radius: 16px; border: 1px solid var(--glass-border);
+      background: rgba(0,0,0,0.3); color: #fff; font-size: 16px; margin-top: 12px; outline: none;
     }
+    input:focus { border-color: var(--green); }
 
-    @keyframes slideComet {
-      0% { transform: translate(0,0) rotate(-45deg) scale(0); opacity: 0; }
-      15% { opacity: 1; scale: 1; }
-      100% { transform: translate(-400px, 400px) rotate(-45deg) scale(0); opacity: 0; }
+    /* ГАЛОЧКА УСПЕХА */
+    .success-neon {
+      width: 80px; height: 80px; background: var(--green); border-radius: 50%;
+      margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 40px var(--green); animation: pulseNeon 2s infinite;
     }
+    @keyframes pulseNeon { 0%, 100% { box-shadow: 0 0 20px var(--green); } 50% { box-shadow: 0 0 60px var(--green); } }
 
   </style>
 </head>
 <body>
 
-  <div class="stars-viewport">
-    <div class="star-layer l1"></div>
-    <div class="star-layer l2"></div>
-    <div class="star-layer l3"></div>
-    <div class="star-layer l4"></div>
-    <div class="star-layer l5"></div>
+  <div class="stars-bg">
+    <div class="star-l l1"></div>
+    <div class="star-l l2"></div>
+    <div class="star-l l3"></div>
+    <div class="star-l l4"></div>
+    <div class="star-l l5"></div>
   </div>
 
-  <div class="earth-stage">
+  <div class="earth-container">
     <div class="earth-sphere">
       <div class="earth-texture"></div>
-      <div class="earth-terminator"></div>
     </div>
   </div>
 
-  <div class="app-wrap">
+  <div class="app-viewport">
     
     <div id="page-main" class="page active">
       <div class="glass-card">
         <h1>walle</h1>
-        <p class="subtitle">Ваш личный ассистент по чистоте.<br>Вынесем мусор, пока вы отдыхаете.</p>
+        <p style="color: var(--text-2)">Ваш личный ассистент по чистоте.<br>Вынесем мусор за вас.</p>
       </div>
-      <button class="btn btn-main" onclick="showPage('page-address')">Попробовать за 1 ₽</button>
-      <button class="btn btn-back">Как это работает?</button>
+      <button class="btn-main" onclick="showPage('page-address')">Попробовать за 1 ₽</button>
+      <a href="#" class="btn-back">Как это работает?</a>
     </div>
 
     <div id="page-address" class="page">
       <div class="glass-card">
         <h1>Ваш адрес</h1>
-        <p class="subtitle">Укажите, откуда забирать мусор</p>
-        <div class="input-group">
-          <input type="text" placeholder="Улица и дом">
-          <input type="text" placeholder="Подъезд и квартира">
-        </div>
+        <p style="color: var(--text-2)">Куда отправить курьера?</p>
+        <input type="text" placeholder="Улица и дом">
+        <input type="text" placeholder="Квартира и подъезд">
       </div>
-      <button class="btn btn-main" onclick="showPage('page-reg')">Далее</button>
-      <button class="btn btn-back" onclick="showPage('page-main')">Назад</button>
+      <button class="btn-main" onclick="showPage('page-reg')">Далее</button>
+      <button class="btn-back" onclick="showPage('page-main')">Назад</button>
     </div>
 
     <div id="page-reg" class="page">
       <div class="glass-card">
         <h1>Регистрация</h1>
-        <p class="subtitle">Нужен только ваш телефон</p>
-        <div class="input-group">
-          <input type="text" placeholder="Имя">
-          <input type="tel" placeholder="+7 (999) 000-00-00">
-        </div>
+        <p style="color: var(--text-2)">Всего пару секунд</p>
+        <input type="text" placeholder="Ваше имя">
+        <input type="tel" placeholder="+7 (999) 000-00-00">
       </div>
-      <button class="btn btn-main" onclick="showPage('page-tariffs')">Продолжить</button>
-      <button class="btn btn-back" onclick="showPage('page-address')">Назад</button>
+      <button class="btn-main" onclick="showPage('page-tariffs')">Продолжить</button>
+      <button class="btn-back" onclick="showPage('page-address')">Назад</button>
     </div>
 
     <div id="page-tariffs" class="page">
       <div class="glass-card">
         <h1>Тарифы</h1>
-        <p class="subtitle">Выберите удобный план</p>
-        <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-          <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--green); text-align: left;">
-            <div style="font-weight: 800;">Пробный день</div>
-            <div style="font-size: 13px; color: var(--text-sec);">Разовый вынос — 1 ₽</div>
-          </div>
-          <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); text-align: left;">
-            <div style="font-weight: 800;">Месяц чистоты</div>
-            <div style="font-size: 13px; color: var(--text-sec);">Ежедневно — 990 ₽</div>
-          </div>
+        <div style="margin: 20px 0; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid var(--green);">
+          <div style="font-weight: 800;">Пробный период</div>
+          <div style="font-size: 13px; color: var(--text-2)">Разовый вынос мусора — 1 ₽</div>
         </div>
       </div>
-      <button class="btn btn-main" onclick="showPage('page-success')">Оплатить 1 ₽</button>
-      <button class="btn btn-back" onclick="showPage('page-reg')">Назад</button>
+      <button class="btn-main" onclick="showPage('page-success')">Оплатить 1 ₽</button>
+      <button class="btn-back" onclick="showPage('page-reg')">Назад</button>
     </div>
 
     <div id="page-success" class="page">
       <div class="glass-card">
-        <div class="success-badge">
-          <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#062010" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <div class="success-neon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#062010" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <h1>Успешно!</h1>
-        <p class="subtitle">Walle уже в пути.<br>Мы пришлем уведомление за 10 мин.</p>
+        <p style="color: var(--text-2)">Walle уже выезжает к вам.<br>Ожидайте уведомление.</p>
       </div>
-      <button class="btn btn-main" onclick="showPage('page-main')">На главную</button>
+      <button class="btn-main" onclick="showPage('page-main')">На главную</button>
     </div>
 
   </div>
 
   <script>
-    // 1. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ (SPA)
+    // 1. ЛОГИКА SPA (СОХРАНЕНА)
     function showPage(pageId) {
-      // Скрыть все страницы
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      // Показать нужную
       document.getElementById(pageId).classList.add('active');
       
-      // Эффект уменьшения Земли для внутренних страниц
+      // Анимация Земли
       if (pageId === 'page-main') {
         document.body.classList.remove('is-inner');
       } else {
         document.body.classList.add('is-inner');
       }
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo(0,0);
     }
 
-    // 2. ГЕНЕРАЦИЯ КОМЕТ
-    function launchComet() {
-      const comet = document.createElement('div');
-      comet.className = 'comet';
-      document.body.appendChild(comet);
-
-      const x = Math.random() * window.innerWidth + 100;
-      const y = Math.random() * (window.innerHeight / 2);
-      
-      comet.style.left = x + 'px';
-      comet.style.top = y + 'px';
-      comet.style.width = (Math.random() * 80 + 100) + 'px';
-      comet.style.animation = 'slideComet 1.8s linear forwards';
-
-      setTimeout(() => comet.remove(), 2000);
+    // 2. ГЕНЕРАТОР КОМЕТ
+    function shootComet() {
+      const c = document.createElement('div');
+      c.className = 'comet';
+      document.body.appendChild(c);
+      c.style.left = Math.random() * window.innerWidth + 100 + 'px';
+      c.style.top = Math.random() * 200 + 'px';
+      c.style.width = (Math.random() * 100 + 100) + 'px';
+      c.style.animation = 'cometFly 1.8s linear forwards';
+      setTimeout(() => c.remove(), 2000);
     }
+    setInterval(shootComet, 3500);
 
-    setInterval(launchComet, 3500);
-
-    // 3. ПРОВЕРКА ТЕКСТУРЫ
-    const checkImg = new Image();
-    checkImg.src = 'earth.jpg';
-    checkImg.onerror = () => {
-      console.warn("Файл earth.jpg не найден! Использую системный фон для сферы.");
-      document.querySelector('.earth-texture').style.background = 'linear-gradient(45deg, #1e293b, #0f172a)';
+    // 3. ПРОВЕРКА ФАЙЛА
+    const testImg = new Image();
+    testImg.src = 'earth.jpg';
+    testImg.onerror = () => {
+      console.warn("Файл earth.jpg не найден!");
+      document.querySelector('.earth-texture').style.background = '#1e293b';
     };
   </script>
 </body>
