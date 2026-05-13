@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════════════════════
-       BASE & COSMOS
+       1. ГЛОБАЛЬНЫЙ КОСМОС
     ═══════════════════════════════════════════════════════ */
     :root {
       --green: #34d399;
@@ -27,32 +27,40 @@
       overflow-x: hidden; -webkit-font-smoothing: antialiased;
     }
 
-    /* 5 СЛОЕВ ЗВЕЗД */
-    .stars-viewport { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
-    .star-l { position: absolute; top: 0; left: 0; background: transparent; }
-    .l1 { width: 1px; height: 1px; box-shadow: 15vw 10vh #fff, 85vw 25vh #fff, 40vw 70vh #fff; animation: blink 4s infinite; }
-    .l2 { width: 1.5px; height: 1.5px; box-shadow: 25vw 5vh #80aaff, 75vw 65vh #80aaff, 5vw 35vh #80aaff; animation: blink 7s infinite; }
-    .l3 { width: 2px; height: 2px; box-shadow: 10vw 20vh #ffe0b3, 60vw 30vh #ffe0b3, 95vw 50vh #ffe0b3; animation: blink 5s infinite; }
-    .l4 { width: 2px; height: 2px; box-shadow: 35vw 45vh #fff, 55vw 5vh #fff, 15vw 95vh #fff; animation: blink 3.5s infinite; filter: blur(0.5px); }
-    .l5 { width: 1px; height: 1px; box-shadow: 50vw 50vh #fff, 20vw 80vh #fff, 80vw 20vh #fff; animation: blink 6s infinite; opacity: 0.4; }
+    /* КОНТЕЙНЕР ДЛЯ 500 ЗВЕЗД */
+    .stars-viewport {
+      position: fixed; inset: 0; z-index: -10; pointer-events: none;
+      overflow: hidden; background: transparent;
+    }
 
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .star-l {
+      position: absolute; border-radius: 50%; will-change: opacity;
+    }
+
+    /* Анимации мерцания слоев */
+    .layer-0 { animation: blink 4s infinite; }
+    .layer-1 { animation: blink 7s infinite 1s; }
+    .layer-2 { animation: blink 5s infinite 2s; }
+    .layer-3 { animation: blink 3s infinite 0.5s; filter: blur(0.5px); }
+    .layer-4 { animation: blink 8s infinite; opacity: 0.4; }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
     /* КОМЕТЫ */
     .comet { position: fixed; width: 2px; height: 2px; background: linear-gradient(to right, #fff, transparent); box-shadow: 0 0 8px #fff; border-radius: 50%; z-index: -5; pointer-events: none; }
     @keyframes cometStrike { 0% { transform: translate(0,0) rotate(-45deg) scale(0); opacity: 0; } 10% { opacity: 1; scale: 1; } 100% { transform: translate(-500px, 500px) rotate(-45deg) scale(0); opacity: 0; } }
 
     /* ═══════════════════════════════════════════════════════
-       ЗЕМЛЯ (NASA STYLE - ОРИГИНАЛЬНЫЙ РАЗМЕР)
+       2. ЗЕМЛЯ (УСКОРЕННОЕ ВРАЩЕНИЕ)
     ═══════════════════════════════════════════════════════ */
     .earth-wrap {
       position: relative; width: 100%; height: 35vh;
       display: flex; justify-content: center; align-items: center;
-      z-index: 5; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s;
+      z-index: 5; transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
     .earth-sphere {
-      position: relative; width: 200px; height: 200px; /* Вернул твой размер */
+      position: relative; width: 200px; height: 200px;
       border-radius: 50%; overflow: hidden; background: #000;
       box-shadow: 0 0 50px rgba(0,0,0,0.9);
     }
@@ -60,10 +68,12 @@
     .earth-texture {
       width: 200%; height: 100%;
       background: url('earth.jpg') repeat-x; background-size: 50% 100%;
-      position: absolute; animation: earthRotate 120s linear infinite;
+      position: absolute; 
+      /* УСКОРЕНО: было 120s, стало 30s */
+      animation: earthRotate 30s linear infinite; 
     }
 
-    /* Вечернее освещение */
+    /* Освещение и атмосфера */
     .earth-sphere::before {
       content: ''; position: absolute; inset: 0; z-index: 2;
       background: radial-gradient(circle at 30% 50%, transparent 35%, rgba(0,0,0,0.85) 70%, #000 100%);
@@ -76,17 +86,17 @@
 
     @keyframes earthRotate { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* Скрытие земли на других страницах */
-    body.not-main .earth-wrap { opacity: 0; transform: scale(0.8) translateY(-50px); pointer-events: none; }
+    /* Скрытие на других страницах */
+    body.not-main .earth-wrap { opacity: 0; transform: scale(0.8) translateY(-30px); pointer-events: none; }
 
     /* ═══════════════════════════════════════════════════════
-       ИНТЕРФЕЙС (ТВОЙ ОРИГИНАЛЬНЫЙ КОД)
+       3. ИНТЕРФЕЙС ПРИЛОЖЕНИЯ
     ═══════════════════════════════════════════════════════ */
     .app-main { position: relative; z-index: 20; padding: 0 24px 40px; max-width: 480px; margin: 0 auto; }
     
     .page { display: none; animation: fadeIn 0.4s ease-out; }
     .page.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
     .glass-card {
       background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -110,17 +120,14 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; font-weight: 600;
       margin-top: 10px; cursor: pointer; text-decoration: none;
     }
-    .btn-action:active { transform: scale(0.97); }
-
     input {
       width: 100%; padding: 18px; border-radius: 16px; border: 1px solid var(--glass-border);
-      background: rgba(0,0,0,0.3); color: #fff; font-size: 16px; margin-top: 12px; outline: none; font-family: inherit;
+      background: rgba(0,0,0,0.3); color: #fff; font-size: 16px; margin-top: 12px; outline: none;
     }
 
-    /* ИКОНКА УСПЕХА */
     .success-icon {
-      width: 84px; height: 84px; background: var(--green); border-radius: 50%;
-      margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px; background: var(--green); border-radius: 50%;
+      margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 0 40px var(--green); animation: successPulse 2s infinite;
     }
     @keyframes successPulse { 0%, 100% { box-shadow: 0 0 20px var(--green); } 50% { box-shadow: 0 0 50px var(--green); } }
@@ -129,20 +136,15 @@
 </head>
 <body id="app-body">
 
-  <div class="stars-viewport">
-    <div class="star-l l1"></div><div class="star-l l2"></div>
-    <div class="star-l l3"></div><div class="star-l l4"></div>
-    <div class="star-l l5"></div>
-  </div>
+  <div class="stars-viewport"></div>
 
-  <div class="earth-wrap" id="earth-container">
+  <div class="earth-wrap">
     <div class="earth-sphere">
       <div class="earth-texture"></div>
     </div>
   </div>
 
   <div class="app-main">
-    
     <div id="page-main" class="page active">
       <div class="glass-card">
         <h1>walle</h1>
@@ -155,9 +157,8 @@
     <div id="page-address" class="page">
       <div class="glass-card">
         <h1>Ваш адрес</h1>
-        <p style="color: var(--text-dim)">Укажите точку сбора</p>
         <input type="text" placeholder="Улица и дом">
-        <input type="text" placeholder="Подъезд и квартира">
+        <input type="text" placeholder="Квартира и подъезд">
       </div>
       <button class="btn-action" onclick="showPage('page-reg')">Далее</button>
       <button class="btn-secondary" onclick="showPage('page-main')">Назад</button>
@@ -166,7 +167,6 @@
     <div id="page-reg" class="page">
       <div class="glass-card">
         <h1>Регистрация</h1>
-        <p style="color: var(--text-dim)">Нужен только телефон</p>
         <input type="text" placeholder="Имя">
         <input type="tel" placeholder="+7 (999) 000-00-00">
       </div>
@@ -179,7 +179,7 @@
         <h1>Тарифы</h1>
         <div style="margin: 20px 0; text-align: left; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 18px; border: 1px solid var(--green);">
           <div style="font-weight: 800;">Пробный день</div>
-          <div style="font-size: 13px; color: var(--text-dim)">Один вынос мусора — 1 ₽</div>
+          <div style="font-size: 13px; color: var(--text-dim)">Разовый вынос мусора — 1 ₽</div>
         </div>
       </div>
       <button class="btn-action" onclick="showPage('page-success')">Оплатить 1 ₽</button>
@@ -192,50 +192,60 @@
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#062010" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <h1>Готово!</h1>
-        <p style="color: var(--text-dim)">Заявка принята. <br>Walle уже в пути.</p>
+        <p style="color: var(--text-dim)">Walle уже в пути.</p>
       </div>
       <button class="btn-action" onclick="showPage('page-main')">На главную</button>
     </div>
-
   </div>
 
   <script>
-    // ЛОГИКА ПЕРЕКЛЮЧЕНИЯ
-    function showPage(pageId) {
+    // 1. ГЕНЕРАТОР 500 ЗВЕЗД (JS)
+    function initGalaxy() {
+      const vp = document.querySelector('.stars-viewport');
+      const colors = ['#ffffff', '#80aaff', '#ffe0b3', '#ffffff', '#ffffff'];
+      const sizes = [1, 1.5, 2, 2.5, 1];
+
+      for (let i = 0; i < 500; i++) {
+        const star = document.createElement('div');
+        const layer = i % 5;
+        star.className = `star-l layer-${layer}`;
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.width = sizes[layer] + 'px';
+        star.style.height = sizes[layer] + 'px';
+        star.style.background = colors[layer];
+        star.style.animationDelay = Math.random() * 5 + 's';
+        vp.appendChild(star);
+      }
+    }
+
+    // 2. ЛОГИКА СТРАНИЦ
+    function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
+      document.getElementById(id).classList.add('active');
       
       const body = document.getElementById('app-body');
-      
-      // Показываем/Скрываем землю в зависимости от страницы
-      if (pageId === 'page-main') {
-        body.classList.remove('not-main');
-      } else {
-        body.classList.add('not-main');
-      }
+      // Скрываем Землю на всех страницах, кроме главной
+      if (id === 'page-main') body.classList.remove('not-main');
+      else body.classList.add('not-main');
       
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // КОМЕТЫ
-    function generateComet() {
+    // 3. КОМЕТЫ (РАЗ В 3.5 СЕКУНДЫ)
+    setInterval(() => {
       const c = document.createElement('div');
       c.className = 'comet';
       document.body.appendChild(c);
       c.style.left = Math.random() * window.innerWidth + 100 + 'px';
-      c.style.top = Math.random() * 250 + 'px';
+      c.style.top = Math.random() * 200 + 'px';
       c.style.width = (Math.random() * 100 + 80) + 'px';
       c.style.animation = 'cometStrike 2s linear forwards';
       setTimeout(() => c.remove(), 2100);
-    }
-    setInterval(generateComet, 3500);
+    }, 3500);
 
-    // ПРОВЕРКА ТЕКСТУРЫ
-    const t = new Image();
-    t.src = 'earth.jpg';
-    t.onerror = () => {
-      document.querySelector('.earth-texture').style.background = '#1a202c';
-    };
+    // СТАРТ
+    document.addEventListener('DOMContentLoaded', initGalaxy);
   </script>
 </body>
 </html>
