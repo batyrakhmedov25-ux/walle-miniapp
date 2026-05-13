@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Walle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -23,7 +23,7 @@
 
     html, body {
       height: 100%; width: 100%;
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: 'Nunito', 'Inter', -apple-system, sans-serif;
       color: var(--text); overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -49,14 +49,7 @@
     }
     @keyframes blink-star { 0%,100%{opacity:1} 50%{opacity:0.15} }
 
-    /* ── Nebula ── */
-    #nebula {
-      position: fixed; inset: 0; z-index: -9; pointer-events: none;
-      background:
-        radial-gradient(ellipse 110% 22% at 58% 30%, rgba(80,120,255,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 70% 18% at 22% 55%, rgba(52,211,153,0.025) 0%, transparent 70%),
-        radial-gradient(ellipse 55% 28% at 85% 18%, rgba(140,80,255,0.03) 0%, transparent 65%);
-    }
+    /* Nebula removed — was causing grey fog */
 
     /* ── Comet canvas ── */
     #comet-canvas {
@@ -69,6 +62,7 @@
       position: relative; z-index: 2;
       min-height: 100svh;
       display: flex; flex-direction: column;
+      background: transparent;
     }
 
     .screen {
@@ -78,6 +72,7 @@
       padding: 0 20px 36px;
       position: relative; overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      background: transparent;
     }
     .screen.active {
       display: flex;
@@ -97,7 +92,7 @@
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .earth-container.large { width:200px; height:200px; margin: 36px 0 12px; }
+    .earth-container.large { width:170px; height:170px; margin: 20px 0 8px; }
 
     .earth-sphere {
       width: 100%; height: 100%;
@@ -149,7 +144,7 @@
     /* ── Hero card ── */
     .hero-card {
       width: 100%; max-width: 360px; border-radius: var(--radius-xl);
-      padding: 22px; margin-bottom: 14px;
+      padding: 18px; margin-bottom: 10px;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -222,7 +217,7 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .tariff:active { transform: scale(0.97); }
-    .tariff.sel { border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.07); box-shadow: 0 0 0 1px rgba(52,211,153,0.2); }
+    .tariff.sel { border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.05); box-shadow: 0 0 0 1px rgba(52,211,153,0.25), 0 0 20px rgba(52,211,153,0.1), inset 0 0 20px rgba(52,211,153,0.04); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
     .t-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
     .tariff.sel .t-icon { background: rgba(52,211,153,0.15); }
     .t-body { flex: 1; }
@@ -320,8 +315,6 @@
 
 <!-- Stars viewport -->
 <div class="stars-viewport"></div>
-<!-- Nebula haze -->
-<div id="nebula"></div>
 <!-- Comet canvas -->
 <canvas id="comet-canvas"></canvas>
 
@@ -336,8 +329,8 @@
     <div class="brand-sub">Сервис умного выноса мусора</div>
     <div class="hero-card">
       <div class="promo-pill">🎁 Акция · Первая неделя за 1 ₽</div>
-      <div class="hero-tag-text">Утро без мусорного ведра</div>
-      <div class="hero-desc">Вы занимаетесь жизнью — мусором займёмся мы. Ежедневно, в любую погоду.</div>
+      
+      <div class="hero-desc">Ваш мусор — наша забота.</div>
       <div class="price-row"><span class="price-from">от&nbsp;</span><span class="price-num">990</span><span class="price-unit">₽/мес</span></div>
       <div class="promo-note">✦ Первая неделя всего 1 ₽</div>
     </div>
@@ -430,7 +423,13 @@
 
   <!-- ══ DONE ══ -->
   <div id="screen-done" class="screen">
-    <div class="done-glow">✅</div>
+    <div class="done-glow">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="24" stroke="#34d399" stroke-width="2" opacity="0.4"/>
+        <polyline points="14,26 22,34 38,18" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"
+          style="filter:drop-shadow(0 0 8px rgba(52,211,153,0.9))"/>
+      </svg>
+    </div>
     <div class="done-title">Готово!</div>
     <div class="done-sub">Подписка оформлена. Walle уже скоро появится у вашей двери</div>
     <div class="done-receipt">
