@@ -21,16 +21,11 @@
       --radius-lg:    18px;
     }
 
-html, body {
-      height: 100%;
-      width: 100%;
+    html, body {
+      height: 100%; width: 100%;
       font-family: 'Nunito', 'Inter', -apple-system, sans-serif;
-      color: var(--text);
-      overflow-x: hidden;
+      color: var(--text); overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      background-color: #000000;
-      position: relative;
-      z-index: -2;
     }
 
     /* ── NASA Deep Space background ── */
@@ -42,16 +37,10 @@ html, body {
     }
 
     /* ── 500 Stars (Gemini approach) ── */
-.stars-viewport {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      overflow: hidden;
-      background: transparent !important;
+    .stars-viewport {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -10; pointer-events: none; overflow: hidden;
     }
     .star-l {
       position: absolute; border-radius: 50%;
