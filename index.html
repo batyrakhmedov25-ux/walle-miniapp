@@ -92,7 +92,23 @@
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .earth-container.large { width: 180px; height: 180px; margin: 22px 0 10px; animation: earthBreathe 12s ease-in-out infinite; will-change: transform; }
+    .earth-container.large { 
+  width: 180px; height: 180px; 
+  margin: 22px 0 10px; 
+  animation: earthBreathe 12s ease-in-out infinite; 
+  will-change: transform;
+}
+.earth-fixed {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  width: 180px; height: 180px;
+  animation: earthBreathe 12s ease-in-out infinite;
+  will-change: transform;
+  pointer-events: none;
+}
 
     .earth-sphere {
       width: 100%; height: 100%;
@@ -657,7 +673,7 @@ function autoRegister() {
 /* Tab nav */
 function showTab(name){
   showScreen(name);
-  ["welcome","status","balance","profile"].forEach(function(t){
+  ["welcome","status","balance","profile","orders","notifications"].forEach(function(t){
     var el=document.getElementById("tab-"+t);
     if(el) el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.3)";
   });
