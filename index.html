@@ -583,7 +583,7 @@ try {
 } catch(e){}
 
 /* Screens */
-var tgUser = null; try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){} var API="https://walle-backend-1.onrender.com"; function showTab(name){showScreen(name);document.getElementById("tab-welcome").style.color=name==="welcome"?"#ffffff":"rgba(255,255,255,0.35)";document.getElementById("tab-profile").style.color=name==="profile"?"#ffffff":"rgba(255,255,255,0.35)";} function showScreen(name) {
+var tgUser = null; try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){} var API="https://walle-backend-1.onrender.com"; function showTab(name){showScreen(name);["welcome","orders","notifications","profile"].forEach(function(t){var el=document.getElementById("tab-"+t);if(el)el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.35)";});} function showScreen(name) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s = document.getElementById('screen-'+name);
   if(s){ s.classList.add('active'); s.scrollTop=0; }
