@@ -167,7 +167,7 @@
     .screen-inner {
       width: 100%; max-width: 400px;
       display: flex; flex-direction: column; align-items: center; flex: 1;
-      padding-top: 20px;
+      padding-top: 8px;
     }
     .progress-wrap { display: flex; gap: 6px; margin-bottom: 24px; }
     .pd { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); width: 20px; transition: all 0.3s; }
@@ -744,12 +744,11 @@ function launchSalute() {
 
   <button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:#ffffff;transition:all 0.25s;">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-      <circle cx="12" cy="12" r="3" fill="currentColor"/>
-      <line x1="12" y1="3" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="3" y1="12" x2="7" y2="12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="17" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2" opacity="0.25"/>
+      <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M3 12 Q7 8 12 12 Q17 16 21 12" stroke="currentColor" stroke-width="1" opacity="0.4" fill="none"/>
+      <path d="M3 12 Q7 16 12 12 Q17 8 21 12" stroke="currentColor" stroke-width="1" opacity="0.4" fill="none"/>
     </svg>
     <span style="font-size:9px;font-family:Nunito,sans-serif;font-weight:600;letter-spacing:0.4px;">Главная</span>
   </button>
