@@ -140,6 +140,13 @@
     .brand-sub  { font-size: 14px; color: var(--text-2); font-weight: 400; margin-bottom: 2px; }
     .brand-sub2 { font-size: 12px; color: var(--text-3); font-weight: 400; margin-bottom: 16px; }
 
+    /* Main slogan */
+    .main-slogan {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      color: #ffffff; line-height: 1.3;
+      margin-bottom: 4px; text-align: center;
+    }
+
     /* ── Hero card ── */
     .hero-card {
       width: 100%; max-width: 360px; border-radius: var(--radius-xl);
@@ -361,7 +368,7 @@
     </div>
 
     <div class="brand-name">Walle</div>
-    <div class="brand-sub">Ваш мусор — наша забота.</div>
+    <div class="main-slogan">Надоело выносить мусор?<br>Тогда мы идём к тебе!</div>
     <div class="brand-sub2">Ежедневно, в любую погоду.</div>
 
     <div class="hero-card">
@@ -578,7 +585,10 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
+    setTimeout(function(){ tg.expand(); }, 100);
+    setTimeout(function(){ tg.expand(); }, 500);
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+    if(tg.disableVerticalSwipes) tg.disableVerticalSwipes();
   }
 } catch(e){}
 
