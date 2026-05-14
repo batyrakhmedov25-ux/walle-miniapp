@@ -582,8 +582,43 @@ try {
   }
 } catch(e){}
 
-/* Screens */
-var tgUser = null; try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){} var API="https://walle-backend-1.onrender.com"; function showTab(name){showScreen(name);["welcome","orders","notifications","profile"].forEach(function(t){var el=document.getElementById("tab-"+t);if(el)el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.35)";});} function showScreen(name) {
+/* API */
+var API = "https://walle-backend-1.onrender.com";
+var tgUser = null;
+try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){}
+
+/* Auto-registration on start */
+function autoRegister() {
+  if(!tgUser) return;
+  fetch(API+'/api/users/register', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      telegram_id: tgUser.id,
+      first_name: tgUser.first_name || 'Пользователь',
+      username: tgUser.username || null,
+      last_name: tgUser.last_name || null
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.has_active_subscription) {
+      showScreen('status');
+    }
+  })
+  .catch(function(){});
+}
+
+/* Tab nav */
+function showTab(name){
+  showScreen(name);
+  ["welcome","status","balance","profile"].forEach(function(t){
+    var el=document.getElementById("tab-"+t);
+    if(el) el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.3)";
+  });
+}
+
+function showScreen(name) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s = document.getElementById('screen-'+name);
   if(s){ s.classList.add('active'); s.scrollTop=0; }
