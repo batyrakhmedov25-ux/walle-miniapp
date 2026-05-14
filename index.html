@@ -583,7 +583,7 @@ try {
 } catch(e){}
 
 /* Screens */
-function showScreen(name) {
+var tgUser = null; try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){} var API="https://walle-backend-1.onrender.com"; function showTab(name){showScreen(name);document.getElementById("tab-welcome").style.color=name==="welcome"?"var(--green)":"var(--text-3)";document.getElementById("tab-profile").style.color=name==="profile"?"var(--green)":"var(--text-3)";} function showScreen(name) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s = document.getElementById('screen-'+name);
   if(s){ s.classList.add('active'); s.scrollTop=0; }
@@ -740,5 +740,6 @@ function launchSalute() {
   draw();
 }
 </script>
+<div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;background:rgba(8,14,30,0.95);border-top:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(20px);padding-bottom:env(safe-area-inset-bottom);"><button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--green);cursor:pointer;font-size:22px;">🏠</button><button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--text-3);cursor:pointer;font-size:22px;">👤</button></div>
 </body>
 </html>
