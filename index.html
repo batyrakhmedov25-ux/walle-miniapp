@@ -9,8 +9,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:        #34d399;
-      --green-2:      #10b981;
+      --green:        #2AE881;
+      --green-2:      #22c870;
       --green-glow:   rgba(52,211,153,0.35);
       --text:         #ffffff;
       --text-2:       #94a3b8;
@@ -24,7 +24,7 @@
     /* Force black bg — fixes white screen on Desktop/Safari */
     html, body {
       height: 100%; width: 100%;
-      background-color: #000005;
+      background-color: #05070d;
       font-family: 'Nunito', 'Inter', -apple-system, sans-serif;
       color: var(--text); overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -105,7 +105,7 @@
       background: url('assets/images/earth.jpg') repeat-x;
       background-size: 50% 100%;
       position: absolute; top: 0; left: 0;
-      animation: earthRotate 40s linear infinite;
+      animation: earthRotate 40s linear infinite, earthBreathe 12s ease-in-out infinite;
     }
     @keyframes earthRotate { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
@@ -127,13 +127,13 @@
       font-size: 36px; font-weight: 800; letter-spacing: -0.5px;
       color: #ffffff;
       text-shadow:
-        0 0 8px rgba(52,211,153,0.5),
-        0 0 20px rgba(52,211,153,0.2);
+        0 0 8px rgba(91,140,255,0.3),
+        0 0 20px rgba(91,140,255,0.15);
       margin-bottom: 2px;
       animation: neonPulse 3.5s ease-in-out infinite;
     }
     @keyframes neonPulse {
-      0%,100% { text-shadow: 0 0 8px rgba(52,211,153,0.5), 0 0 20px rgba(52,211,153,0.2); }
+      0%,100% { text-shadow: 0 0 8px rgba(91,140,255,0.3), 0 0 20px rgba(91,140,255,0.15); }
       50%      { text-shadow: 0 0 12px rgba(52,211,153,0.7), 0 0 32px rgba(52,211,153,0.3); }
     }
 
@@ -344,7 +344,7 @@
     .faq-item:last-child { border-bottom: none; }
     .faq-q { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
-  </style>
+  @keyframes earthBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} } .earth-sphere::after { box-shadow: -8px 0 40px rgba(91,140,255,0.2), inset 2px 0 8px rgba(100,150,255,0.15); }</style>
 </head>
 <body>
 
