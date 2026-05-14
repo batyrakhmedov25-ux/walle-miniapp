@@ -140,13 +140,6 @@
     .brand-sub  { font-size: 14px; color: var(--text-2); font-weight: 400; margin-bottom: 2px; }
     .brand-sub2 { font-size: 12px; color: var(--text-3); font-weight: 400; margin-bottom: 16px; }
 
-    /* Main slogan */
-    .main-slogan {
-      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
-      color: #ffffff; line-height: 1.3;
-      margin-bottom: 4px; text-align: center;
-    }
-
     /* ── Hero card ── */
     .hero-card {
       width: 100%; max-width: 360px; border-radius: var(--radius-xl);
@@ -237,12 +230,7 @@
     .t-body { flex: 1; }
     .t-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #fff; }
     .t-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; }
-    .t-more {
-      font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600;
-      margin-top: 8px; display: inline-block; cursor: pointer;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 100px; padding: 3px 10px;
-    }
+    .t-more { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 500; margin-top: 6px; display: inline-block; cursor: pointer; }
     .t-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
     .t-price { font-size: 17px; font-weight: 700; color: #ffffff; }
     .t-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: all 0.2s; }
@@ -373,11 +361,12 @@
     </div>
 
     <div class="brand-name">Walle</div>
-    <div class="main-slogan">Надоело выносить мусор?<br>Тогда мы идём к вам!</div>
+    <div class="brand-sub">Ваш мусор — наша забота.</div>
+    <div class="brand-sub2">Ежедневно, в любую погоду.</div>
 
     <div class="hero-card">
       <div class="promo-pill">🎁 Первая неделя за 1 ₽</div>
-      <div class="hero-desc">Ваш мусор — наша забота.<br>Ежедневно, в любую погоду.</div>
+      <div class="hero-desc">Вы занимаетесь жизнью — мусором займёмся мы. Сервис выноса мусора для тех, кто ценит своё время.</div>
       <div class="price-row">
         <span class="price-from">от&nbsp;</span>
         <span class="price-num">990</span>
@@ -407,7 +396,7 @@
       </div>
       <div class="spacer"></div>
       <div class="btn-wrap">
-        <button id="btn-reg" class="btn-main" onclick="submitRegister()">Далее</button>
+        <button class="btn-main" onclick="showScreen('address')">Далее</button>
         <button class="btn-ghost" onclick="showScreen('welcome')">Назад</button>
       </div>
     </div>
@@ -437,7 +426,7 @@
       </div>
       <div class="spacer"></div>
       <div class="btn-wrap">
-        <button id="btn-addr" class="btn-main" onclick="submitAddress()">Далее</button>
+        <button class="btn-main" onclick="validateAddr()">Далее</button>
         <button class="btn-ghost" onclick="showScreen('register')">Назад</button>
       </div>
     </div>
@@ -454,7 +443,7 @@
           <div class="t-icon">🚪</div>
           <div class="t-body">
             <div class="t-name">Лайт</div>
-            <div class="t-desc">Оставьте пакет за дверью — курьер заберёт в точное время.</div>
+            <div class="t-desc">Профессиональный вынос. Просто оставьте пакет за дверью или передайте курьеру в руки — мы заберём его в точно назначенное время. Идеально для тех, кто ценит чистоту и своё время.</div>
             <div class="t-more" onclick="event.stopPropagation();openModal('modal-t-lite')">Подробнее →</div>
           </div>
           <div class="t-right"><div class="t-price">990 ₽</div><div class="t-radio"></div></div>
@@ -463,7 +452,7 @@
           <div class="t-icon">♻️</div>
           <div class="t-body">
             <div class="t-name">Забота</div>
-            <div class="t-desc">Курьер заберёт мусор из корзины и оставит новый пакет — расходники включены.</div>
+            <div class="t-desc">Полный цикл чистоты. Курьер заберёт мусор прямо из корзины в прихожей и сразу установит новый прочный пакет, который принесёт с собой. Вам больше не нужно думать о расходниках.</div>
             <div class="t-more" onclick="event.stopPropagation();openModal('modal-t-care')">Подробнее →</div>
           </div>
           <div class="t-right"><div class="t-price">1490 ₽</div><div class="t-radio"></div></div>
@@ -471,7 +460,7 @@
       </div>
       <div class="spacer"></div>
       <div class="btn-wrap">
-        <button id="btn-sub" class="btn-main" onclick="submitSubscription()">Оформить подписку</button>
+        <button class="btn-main" onclick="showScreen('done')">Оформить подписку</button>
         <button class="btn-ghost" onclick="showScreen('address')">Назад</button>
       </div>
     </div>
@@ -589,10 +578,7 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
-    setTimeout(function(){ tg.expand(); }, 100);
-    setTimeout(function(){ tg.expand(); }, 500);
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
-    if(tg.disableVerticalSwipes) tg.disableVerticalSwipes();
   }
 } catch(e){}
 
@@ -615,78 +601,8 @@ function openModal(id)     { var m=document.getElementById(id); if(m)m.classList
 function closeModal(ov)    { ov.classList.remove('open'); }
 function closeModalById(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }
 
-/* API */
-var API = 'https://walle-backend-1.onrender.com';
-var tgUser = null;
-try { tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user; } catch(e){}
-
-function apiPost(path, data) {
-  return fetch(API + path, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(data)
-  }).then(function(r){return r.json();}).catch(function(){return {};});
-}
-
-function setBtn(id, loading) {
-  var b = document.getElementById(id);
-  if(!b) return;
-  b.disabled = loading;
-  b.style.opacity = loading ? '0.7' : '1';
-  if(!b._orig) b._orig = b.textContent;
-  b.textContent = loading ? 'Загрузка...' : b._orig;
-}
-
-/* Register with API */
-function submitRegister() {
-  setBtn('btn-reg', true);
-  apiPost('/api/users/register', {
-    name:  document.getElementById('inp-name').value.trim() || 'Пользователь',
-    phone: document.getElementById('inp-phone').value.trim(),
-    email: document.getElementById('inp-email').value.trim(),
-    telegram_id: tgUser ? String(tgUser.id) : '0'
-  }).then(function(){ showScreen('address'); })
-    .finally(function(){ setBtn('btn-reg', false); });
-}
-
-/* Address with API */
-function submitAddress() {
-  var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
-  var ok=true;
-  ids.forEach(function(id){
-    var el=document.getElementById(id); el.classList.remove('err');
-    if(!el.value.trim()){el.classList.add('err');ok=false;}
-  });
-  var t=document.getElementById('inp-time');
-  if(t&&t.value){var h=parseInt(t.value.split(':')[0]);
-    if(!((h>=7&&h<=11)||(h>=19&&h<=23))){t.classList.add('err');ok=false;}else t.classList.remove('err');}
-  if(!ok){document.getElementById('inp-street').scrollIntoView({behavior:'smooth',block:'start'});return;}
-  setBtn('btn-addr', true);
-  apiPost('/api/addresses/create', {
-    street: document.getElementById('inp-street').value,
-    entrance: document.getElementById('inp-entrance').value,
-    floor: document.getElementById('inp-floor').value,
-    apartment: document.getElementById('inp-apt').value,
-    intercom: document.getElementById('inp-intercom').value,
-    pickup_time: document.getElementById('inp-time').value,
-    pickup_date: document.getElementById('inp-date').value,
-    telegram_id: tgUser ? String(tgUser.id) : '0'
-  }).then(function(){ showScreen('tariff'); })
-    .finally(function(){ setBtn('btn-addr', false); });
-}
-
-/* Subscription with API */
-function submitSubscription() {
-  setBtn('btn-sub', true);
-  var sel = document.querySelector('.tariff.sel');
-  var tariff = sel && sel.querySelector('.t-name').textContent === 'Лайт' ? 'lite' : 'care';
-  apiPost('/api/subscriptions/create', {
-    tariff: tariff,
-    price: tariff === 'lite' ? 990 : 1490,
-    telegram_id: tgUser ? String(tgUser.id) : '0'
-  }).then(function(){ showScreen('done'); })
-    .finally(function(){ setBtn('btn-sub', false); });
-}
+/* Address validation */
+function validateAddr() {
   var ids=['inp-street','inp-entrance','inp-floor','inp-apt','inp-intercom','inp-date'];
   var ok=true;
   ids.forEach(function(id){
