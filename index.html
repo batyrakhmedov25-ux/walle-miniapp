@@ -804,7 +804,7 @@ function launchSalute() {
   }
   draw();
 }
-setTimeout(autoRegister, 800);
+setTimeout(function(){ alert("tgUser: " + (tgUser ? tgUser.id : "null")); autoRegister(); }, 800);
 </script>
 <div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;background:rgba(5,7,13,0.75);border-top:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:12px 0 calc(12px + env(safe-area-inset-bottom));">
 
