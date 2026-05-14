@@ -15,7 +15,7 @@
       --text:         #ffffff;
       --text-2:       #94a3b8;
       --text-3:       #475569;
-      --glass-bg:     rgba(15,23,42,0.55);
+      --glass-bg:     rgba(255,255,255,0.04);
       --glass-border: rgba(255,255,255,0.1);
       --radius-xl:    24px;
       --radius-lg:    18px;
@@ -35,7 +35,7 @@
       background:
         radial-gradient(ellipse 80% 60% at 20% 10%, #0d1b4a 0%, transparent 50%),
         radial-gradient(ellipse 60% 50% at 80% 70%, #0a1235 0%, transparent 50%),
-        radial-gradient(circle at center, #060d1f 0%, #000005 100%);
+        radial-gradient(circle at center, #05070d 0%, #020408 100%);
     }
 
     /* Stars — behind everything */
@@ -92,7 +92,7 @@
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .earth-container.large { width: 180px; height: 180px; margin: 22px 0 10px; }
+    .earth-container.large { width: 180px; height: 180px; margin: 22px 0 10px; animation: earthBreathe 12s ease-in-out infinite; }
 
     .earth-sphere {
       width: 100%; height: 100%;
@@ -105,7 +105,7 @@
       background: url('assets/images/earth.jpg') repeat-x;
       background-size: 50% 100%;
       position: absolute; top: 0; left: 0;
-      animation: earthRotate 40s linear infinite, earthBreathe 12s ease-in-out infinite;
+      animation: earthRotate 40s linear infinite;
     }
     @keyframes earthRotate { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
@@ -288,7 +288,7 @@
     /* Primary — green */
     .btn-main {
       width: 100%;
-      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      background: linear-gradient(135deg, #2AE881 0%, #22c870 100%);
       color: #022c1a; border: none; border-radius: 100px;
       font-family: 'Nunito', 'Inter', sans-serif;
       font-size: 17px; font-weight: 700; padding: 17px;
@@ -344,7 +344,7 @@
     .faq-item:last-child { border-bottom: none; }
     .faq-q { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
-  @keyframes earthBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} } .earth-sphere::after { box-shadow: -8px 0 40px rgba(91,140,255,0.2), inset 2px 0 8px rgba(100,150,255,0.15); }</style>
+  @keyframes earthBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }</style>
 </head>
 <body>
 
@@ -740,6 +740,6 @@ function launchSalute() {
   draw();
 }
 </script>
-<div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;background:rgba(8,14,30,0.95);border-top:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(20px);padding-bottom:env(safe-area-inset-bottom);padding:0 20px;"><button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--green);cursor:pointer;font-size:22px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button><button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--text-3);cursor:pointer;font-size:22px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button></div>
+<div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;background:rgba(5,7,13,0.92);border-top:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(20px);padding-bottom:env(safe-area-inset-bottom);padding:0 20px;"><button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--green);cursor:pointer;font-size:22px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button><button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:transparent;border:none;padding:14px 0;color:var(--text-3);cursor:pointer;font-size:22px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button></div>
 </body>
 </html>
