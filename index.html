@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="pragma" content="no-cache">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Walle</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -804,7 +806,7 @@ function launchSalute() {
   }
   draw();
 }
-setTimeout(function(){ alert("tgUser: " + (tgUser ? tgUser.id : "null")); autoRegister(); }, 800);
+setTimeout(autoRegister, 1000);
 </script>
 <div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;background:rgba(5,7,13,0.75);border-top:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:12px 0 calc(12px + env(safe-area-inset-bottom));">
 
