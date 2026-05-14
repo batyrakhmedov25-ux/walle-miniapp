@@ -487,6 +487,42 @@
     <div class="btn-wrap"><button class="btn-main" onclick="showScreen('welcome')">На главную</button></div>
   </div>
 
+
+  <!-- ══ STATUS (для подписанных) ══ -->
+  <div id="screen-status" class="screen">
+    <div class="earth-container large">
+      <div class="earth-sphere"><div class="earth-texture"></div></div>
+    </div>
+    <div class="brand-name">Walle</div>
+    <div class="brand-sub" style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:16px;">Всё под контролем 👌</div>
+
+    <!-- Следующий вынос -->
+    <div class="hero-card" style="width:100%;max-width:360px;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Следующий вынос</div>
+      <div style="font-size:24px;font-weight:800;margin-bottom:4px;" id="status-next-date">Завтра</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.6);" id="status-next-time">07:00 — 11:00</div>
+    </div>
+
+    <!-- Баланс -->
+    <div style="width:100%;max-width:360px;display:flex;gap:12px;margin-bottom:14px;">
+      <div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;text-align:center;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Баланс</div>
+        <div style="font-size:22px;font-weight:800;" id="status-balance">0 ₽</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;text-align:center;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Тариф</div>
+        <div style="font-size:16px;font-weight:800;" id="status-tariff">—</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="btn-wrap">
+      <button class="btn-main" onclick="showTab('balance')">Пополнить баланс</button>
+      <button class="btn-ghost" onclick="showTab('profile')">Личный кабинет</button>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
 </div>
 
 <!-- ══ MODALS ══ -->
@@ -603,7 +639,16 @@ function autoRegister() {
   .then(function(r){return r.json();})
   .then(function(d){
     if(d.has_active_subscription) {
-      showScreen('status');
+      // Загружаем профиль для экрана статуса
+      fetch(API+'/api/users/profile?telegram_id='+tgUser.id)
+        .then(function(r){return r.json();})
+        .then(function(p){
+          var bal = document.getElementById('status-balance');
+          var tar = document.getElementById('status-tariff');
+          if(bal) bal.textContent = (p.balance||0).toFixed(0)+' ₽';
+          if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
+        });
+      showTab('status');
     }
   })
   .catch(function(){});
