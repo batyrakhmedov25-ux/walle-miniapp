@@ -636,7 +636,7 @@ function autoRegister() {
   })
   .then(function(r){return r.json();})
   .then(function(d){
-    try{ localStorage.setItem('walle_tid', String(tid)); }catch(e){}
+    try{ var _tg2=window.Telegram&&window.Telegram.WebApp; if(_tg2&&_tg2.CloudStorage) _tg2.CloudStorage.setItem('tid', String(tid)); }catch(e){}
     if(d.has_active_subscription) {
       showScreen('status');
     }
@@ -809,21 +809,25 @@ function launchSalute() {
   }
   draw();
 }
-// Try to get saved telegram_id
+// Use Telegram CloudStorage to save user id
 try {
-  var savedId = localStorage.getItem('walle_tid');
-  if(savedId) {
-    fetch(API+'/api/users/me?telegram_id='+savedId)
-      .then(function(r){return r.json();})
-      .then(function(d){
-        if(d.has_active_subscription) {
-          var bal = document.getElementById('status-balance');
-          var tar = document.getElementById('status-tariff');
-          if(bal) bal.textContent = (d.balance||0).toFixed(0)+' ₽';
-          if(tar) tar.textContent = d.balance > 0 ? 'Активна' : '—';
-          showTab('status');
-        }
-      }).catch(function(){});
+  var _tg = window.Telegram && window.Telegram.WebApp;
+  if(_tg && _tg.CloudStorage) {
+    _tg.CloudStorage.getItem('tid', function(err, savedId) {
+      if(!err && savedId) {
+        fetch(API+'/api/users/me?telegram_id='+savedId)
+          .then(function(r){return r.json();})
+          .then(function(d){
+            if(d.has_active_subscription) {
+              var bal = document.getElementById('status-balance');
+              var tar = document.getElementById('status-tariff');
+              if(bal) bal.textContent = (d.balance||0).toFixed(0)+' ₽';
+              if(tar) tar.textContent = 'Активна';
+              showTab('status');
+            }
+          }).catch(function(){});
+      }
+    });
   }
 } catch(e){}
 setTimeout(autoRegister, 1000);
