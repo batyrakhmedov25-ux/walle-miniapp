@@ -636,6 +636,7 @@ function autoRegister() {
   })
   .then(function(r){return r.json();})
   .then(function(d){
+    try{ localStorage.setItem('walle_tid', String(tid)); }catch(e){}
     if(d.has_active_subscription) {
       showScreen('status');
     }
@@ -808,6 +809,23 @@ function launchSalute() {
   }
   draw();
 }
+// Try to get saved telegram_id
+try {
+  var savedId = localStorage.getItem('walle_tid');
+  if(savedId) {
+    fetch(API+'/api/users/me?telegram_id='+savedId)
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.has_active_subscription) {
+          var bal = document.getElementById('status-balance');
+          var tar = document.getElementById('status-tariff');
+          if(bal) bal.textContent = (d.balance||0).toFixed(0)+' ₽';
+          if(tar) tar.textContent = d.balance > 0 ? 'Активна' : '—';
+          showTab('status');
+        }
+      }).catch(function(){});
+  }
+} catch(e){}
 setTimeout(autoRegister, 1000);
 </script>
 <div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;background:rgba(5,7,13,0.75);border-top:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:12px 0 calc(12px + env(safe-area-inset-bottom));">
