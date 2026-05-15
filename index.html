@@ -507,14 +507,14 @@
           <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Завтра</div>
           <div style="font-size:14px;color:rgba(255,255,255,0.6);">07:00 — 11:00</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;" onclick="toggleFreeze()">
-          <div id="freeze-toggle" onclick="toggleFreeze()" style="width:44px;height:26px;border-radius:13px;background:rgba(255,255,255,0.15);position:relative;cursor:pointer;transition:background 0.3s;z-index:50;">
-            <div id="freeze-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.3s;"></div>
-          </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
+            <input type="checkbox" id="freeze-toggle" onchange="toggleFreeze()" style="opacity:0;width:0;height:0;position:absolute;">
+            <span id="freeze-slider" style="position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:24px;transition:all 0.25s;"></span>
+            <span id="freeze-knob" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:all 0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
+          </label>
           <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;">Пауза</div>
         </div>
-      </div>
-    </div>
     <div style="width:100%;max-width:360px;display:flex;gap:12px;margin-bottom:14px;">
       <div style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;text-align:center;">
         <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Баланс</div>
