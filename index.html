@@ -71,7 +71,7 @@
     .screen {
       display: none; flex-direction: column;
       align-items: center;
-      min-height: 100svh;
+      min-height: 100dvh;
       padding: 0 20px 90px;
       position: relative; overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -609,30 +609,49 @@
 
 <script>
 /* Telegram */
+var tg = null;
+var tgUser = null;
 try {
-  var tg = window.Telegram && window.Telegram.WebApp;
+  tg = window.Telegram && window.Telegram.WebApp;
   if(tg) {
     tg.ready();
     tg.expand();
-    document.addEventListener("DOMContentLoaded", function(){ tg.expand(); });
-    window.addEventListener("load", function(){ tg.expand(); setTimeout(function(){ tg.expand(); }, 300); setTimeout(function(){ tg.expand(); }, 1000); });
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+    if(tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    // Get user data
+    if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      tgUser = tg.initDataUnsafe.user;
+    }
+    // Expand on load
+    window.addEventListener("load", function(){
+      tg.expand();
+      setTimeout(function(){ tg.expand(); }, 300);
+      setTimeout(function(){ tg.expand(); }, 1000);
+    });
   }
 } catch(e){}
 
 /* API */
 var API = "https://walle-backend-1.onrender.com";
-var tgUser = null;
-try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){}
 
 /* Auto-registration on start */
 function autoRegister() {
+  // Re-try getting tgUser in case it wasn't ready yet
+  try {
+    var _tg = window.Telegram && window.Telegram.WebApp;
+    if(_tg && _tg.initDataUnsafe && _tg.initDataUnsafe.user) {
+      tgUser = _tg.initDataUnsafe.user;
+    }
+  } catch(e){}
+
   if(!tgUser) return;
+  var tid = tgUser.id;
+
   fetch(API+'/api/users/register', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      telegram_id: tgUser.id,
+      telegram_id: tid,
       first_name: tgUser.first_name || 'Пользователь',
       username: tgUser.username || null,
       last_name: tgUser.last_name || null
@@ -640,9 +659,17 @@ function autoRegister() {
   })
   .then(function(r){return r.json();})
   .then(function(d){
-    try{ var _tg2=window.Telegram&&window.Telegram.WebApp; if(_tg2&&_tg2.CloudStorage) _tg2.CloudStorage.setItem('tid', String(tid)); }catch(e){}
     if(d.has_active_subscription) {
-      showScreen('status');
+      // Load profile data for status screen
+      fetch(API+'/api/users/profile?telegram_id='+tid)
+        .then(function(r){return r.json();})
+        .then(function(p){
+          var bal = document.getElementById('status-balance');
+          var tar = document.getElementById('status-tariff');
+          if(bal) bal.textContent = (p.balance||0).toFixed(0)+' ₽';
+          if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
+        }).catch(function(){});
+      showTab('status');
     }
   })
   .catch(function(){});
@@ -658,9 +685,16 @@ function showTab(name){
 }
 
 function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.remove('active');
+    s.scrollTop = 0;
+  });
   var s = document.getElementById('screen-'+name);
-  if(s){ s.classList.add('active'); requestAnimationFrame(function(){ s.scrollTop=0; window.scrollTo(0,0); document.body.scrollTop=0; }); }
+  if(s){
+    s.classList.add('active');
+    s.scrollTop = 0;
+    window.scrollTo(0,0);
+  }
   if(name==='done') launchSalute();
 }
 
