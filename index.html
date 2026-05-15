@@ -719,6 +719,13 @@ function autoRegister() {
   .then(function(d){
     try{ var _tg2=window.Telegram&&window.Telegram.WebApp; if(_tg2&&_tg2.CloudStorage) _tg2.CloudStorage.setItem('tid', String(tid)); }catch(e){}
     if(d.has_active_subscription) {
+      // Hide marketing content for subscribers
+      var heroCard = document.querySelector('.hero-card');
+      var btnWrap = document.querySelector('#screen-welcome .btn-wrap');
+      var promoLinks = document.querySelector('#screen-welcome div[style*="height:16px"]');
+      if(heroCard) heroCard.style.display = 'none';
+      if(btnWrap) btnWrap.style.display = 'none';
+      if(promoLinks) promoLinks.style.display = 'none';
       showScreen('status');
     }
   })
@@ -947,6 +954,13 @@ try {
           .then(function(r){return r.json();})
           .then(function(d){
             if(d.has_active_subscription) {
+      // Hide marketing content for subscribers
+      var heroCard = document.querySelector('.hero-card');
+      var btnWrap = document.querySelector('#screen-welcome .btn-wrap');
+      var promoLinks = document.querySelector('#screen-welcome div[style*="height:16px"]');
+      if(heroCard) heroCard.style.display = 'none';
+      if(btnWrap) btnWrap.style.display = 'none';
+      if(promoLinks) promoLinks.style.display = 'none';
               var bal = document.getElementById('status-balance');
               var tar = document.getElementById('status-tariff');
               if(bal) bal.textContent = (d.balance||0).toFixed(0)+' ₽';
