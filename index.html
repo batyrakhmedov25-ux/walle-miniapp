@@ -515,6 +515,27 @@
         <div style="font-size:16px;font-weight:800;" id="status-tariff">—</div>
       </div>
     </div>
+    <!-- История выносов -->
+    <div style="width:100%;max-width:360px;margin-bottom:14px;text-align:left;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Последние выносы</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div><div style="font-size:14px;font-weight:600;">Вчера</div><div style="font-size:12px;color:rgba(255,255,255,0.4);">07:00 — Лайт</div></div>
+        <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+        <div><div style="font-size:14px;font-weight:600;">2 дня назад</div><div style="font-size:12px;color:rgba(255,255,255,0.4);">07:00 — Лайт</div></div>
+        <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
+      </div>
+    </div>
+    <!-- Действия -->
+    <div style="width:100%;max-width:360px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:14px;">
+      <div onclick="openTelegramSupport()" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-size:14px;">💬 Написать в поддержку</span><span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="freezeSubscription()" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;">
+        <span style="font-size:14px;">⏸️ Заморозить подписку</span><span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+    </div>
     <div style="height:20px"></div>
   </div>
 
