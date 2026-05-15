@@ -1084,13 +1084,13 @@ try {
 } catch(e){}
 setTimeout(autoRegister, 1000);
 
-var isFrozen = false;
+window.isFrozen = false;
 function toggleFreeze() {
-  if(!isFrozen) {
+  if(!window.isFrozen) {
     openModal('modal-freeze-confirm');
   } else {
     if(confirm('Возобновить подписку?')) {
-      isFrozen = false;
+      window.isFrozen = false;
       var t=document.getElementById('freeze-toggle');
       var k=document.getElementById('freeze-knob');
       if(t) t.style.background='rgba(255,255,255,0.15)';
@@ -1099,7 +1099,7 @@ function toggleFreeze() {
   }
 }
 function confirmFreeze() {
-  isFrozen = true;
+  window.isFrozen = true;
   var t=document.getElementById('freeze-toggle');
   var k=document.getElementById('freeze-knob');
   if(t) t.style.background='#5B8CFF';
