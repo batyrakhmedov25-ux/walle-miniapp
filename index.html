@@ -1126,5 +1126,28 @@ setTimeout(autoRegister, 1000);
   </button>
 
 </div>
+
+<div id="modal-history" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">История выносов</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;">
+          <div><div style="font-size:14px;font-weight:600;">Сегодня</div><div style="font-size:12px;color:rgba(255,255,255,0.4);">07:00 — Лайт</div></div>
+          <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;">
+          <div><div style="font-size:14px;font-weight:600;">Вчера</div><div style="font-size:12px;color:rgba(255,255,255,0.4);">07:00 — Лайт</div></div>
+          <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;">
+          <div><div style="font-size:14px;font-weight:600;">2 дня назад</div><div style="font-size:12px;color:rgba(255,255,255,0.4);">07:00 — Лайт</div></div>
+          <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
+        </div>
+      </div>
+      <div style="margin-top:20px"><button class="btn-main" onclick="closeModalById('modal-history')">Закрыть</button></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
