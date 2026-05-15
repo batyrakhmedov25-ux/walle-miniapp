@@ -613,6 +613,8 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
+    document.addEventListener("DOMContentLoaded", function(){ tg.expand(); });
+    window.addEventListener("load", function(){ tg.expand(); setTimeout(function(){ tg.expand(); }, 300); setTimeout(function(){ tg.expand(); }, 1000); });
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
   }
 } catch(e){}
@@ -657,7 +659,7 @@ function showTab(name){
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s = document.getElementById('screen-'+name);
-  if(s){ s.classList.add('active'); s.scrollTop=0; window.scrollTo(0,0); }
+  if(s){ s.classList.add('active'); requestAnimationFrame(function(){ s.scrollTop=0; window.scrollTo(0,0); document.body.scrollTop=0; }); }
   if(name==='done') launchSalute();
 }
 
