@@ -1104,7 +1104,6 @@ function confirmFreeze() {
   if(k) k.style.transform='translateX(18px)';
   closeModalById('modal-freeze-confirm');
 }
-var isFrozen=false;function toggleFreeze(){if(!isFrozen){openModal("modal-freeze-confirm");}else{isFrozen=false;var t=document.getElementById("freeze-toggle");var k=document.getElementById("freeze-knob");if(t)t.style.background="rgba(255,255,255,0.15)";if(k)k.style.transform="translateX(0)";alert("Подписка возобновлена.");}}function confirmFreeze(){isFrozen=true;var t=document.getElementById("freeze-toggle");var k=document.getElementById("freeze-knob");if(t)t.style.background="#5B8CFF";if(k)k.style.transform="translateX(18px)";closeModalById("modal-freeze-confirm");}
 </script>
 <div id="bottom-nav" style="position:fixed;bottom:16px;left:16px;right:16px;z-index:100;display:flex;justify-content:space-around;align-items:center;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:28px;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:10px 8px;">
 
