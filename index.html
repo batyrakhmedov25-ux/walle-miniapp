@@ -365,14 +365,14 @@
 <canvas id="comet-canvas"></canvas>
 <canvas id="salute-canvas" style="display:none"></canvas>
 
+<div id="earth-fixed" style="position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:5;width:180px;height:180px;animation:earthBreathe 12s ease-in-out infinite;will-change:transform;">
+  <div class="earth-sphere"><div class="earth-texture"></div></div>
+</div>
 <div id="app">
 
   <!-- ══ WELCOME ══ -->
   <div id="screen-welcome" class="screen active">
-    <div class="earth-container large">
-      <div class="earth-sphere"><div class="earth-texture"></div></div>
-    </div>
-
+    <div style="height:200px"></div>
     <div class="brand-name">Walle</div>
     <div class="brand-sub" style="font-size:18px;font-weight:600;color:#fff;margin-bottom:2px;">Надоело выносить мусор?</div>
     <div class="brand-sub2" style="font-size:18px;font-weight:600;color:#fff;margin-bottom:16px;">Тогда мы идём к вам!</div>
