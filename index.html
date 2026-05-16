@@ -188,7 +188,7 @@
       border: 1px solid rgba(255,255,255,0.09);
       border-radius: var(--radius-lg); color: var(--text);
       font-size: 16px; font-family: 'Nunito', 'Inter', sans-serif;
-      padding: 14px 16px; outline: none; -webkit-appearance: none;
+      padding: 11px 16px; outline: none; -webkit-appearance: none;
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -294,7 +294,7 @@
       background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
       color: #022c1a; border: none; border-radius: 100px;
       font-family: 'Nunito', 'Inter', sans-serif;
-      font-size: 17px; font-weight: 700; padding: 17px;
+      font-size: 17px; font-weight: 700; padding: 13px 17px;
       cursor: pointer; -webkit-tap-highlight-color: transparent;
       box-shadow: 0 4px 20px rgba(52,211,153,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
       transition: transform 0.15s, box-shadow 0.15s;
@@ -307,7 +307,7 @@
       width: 100%; background: transparent; color: #ffffff;
       border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
       font-family: 'Nunito', 'Inter', sans-serif;
-      font-size: 16px; font-weight: 500; padding: 15px;
+      font-size: 16px; font-weight: 500; padding: 11px 15px;
       cursor: pointer; -webkit-tap-highlight-color: transparent;
       transition: border-color 0.2s, color 0.2s;
     }
@@ -432,7 +432,7 @@
             <input class="field-input" type="date" id="inp-date" style="flex:1.4">
             <input class="field-input" type="time" id="inp-time" value="07:00" style="flex:1">
           </div>
-          <div class="field-hint">⏰ 07:00–11:00 или 19:00–23:00</div></div><div class="field"><label class="field-label">Комментарий (необязательно)</label><input class="field-input" placeholder="Напр: домофон не работает, звонить" id="inp-comment"></div>
+          <div class="field-hint">07:00–11:00 или 19:00–23:00</div></div><div class="field"><label class="field-label">Комментарий</label><input class="field-input" placeholder="Напр: домофон не работает, звонить" id="inp-comment"></div>
         </div>
       </div>
       <div class="spacer"></div>
@@ -444,7 +444,7 @@
   </div>
 
   <!-- ══ TARIFF ══ -->
-  <div id="screen-tariff" class="screen">
+  <div id="screen-tariff" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;min-height:100dvh;overflow-y:auto;pointer-events:auto;z-index:15;">
     <div class="screen-inner">
       <div class="progress-wrap"><div class="pd"></div><div class="pd"></div><div class="pd active"></div></div>
       <div class="s-title">Тарифы</div>
@@ -478,7 +478,7 @@
   </div>
 
   <!-- ══ DONE ══ -->
-  <div id="screen-done" class="screen">
+  <div id="screen-done" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;min-height:100dvh;overflow-y:auto;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
     <div class="done-icon-wrap">
       <div class="done-ring"></div>
       <div class="done-ring-2"></div>
@@ -583,8 +583,8 @@
       <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Пополнить</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
         <button onclick="setTopupAmt(990)"  class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">990 ₽</button>
-        <button onclick="setTopupAmt(1490)" class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">1490 ₽</button>
-        <button onclick="setTopupAmt(2980)" class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">2980 ₽</button>
+        <button onclick="setTopupAmt(1980)" class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">1980 ₽</button>
+        <button onclick="setTopupAmt(2970)" class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">2970 ₽</button>
         <button onclick="setTopupAmt(5000)" class="btn-ghost" style="padding:14px;font-size:15px;font-weight:700;">5000 ₽</button>
       </div>
 
