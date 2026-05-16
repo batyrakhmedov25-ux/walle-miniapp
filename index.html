@@ -1128,6 +1128,15 @@ function confirmFreeze() {
   if(k) k.style.transform='translateX(18px)';
   closeModalById('modal-freeze-confirm');
 }
+
+function openTelegramChannel() {
+  try { window.Telegram.WebApp.openTelegramLink("https://t.me/walle_service"); } 
+  catch(e) { window.open("https://t.me/walle_service", "_blank"); }
+}
+function openTelegramSupport() {
+  try { window.Telegram.WebApp.openTelegramLink("https://t.me/walle_bot"); } 
+  catch(e) { window.open("https://t.me/walle_bot", "_blank"); }
+}
 </script>
 <div id="bottom-nav" style="position:fixed;bottom:16px;left:16px;right:16px;z-index:100;display:flex;justify-content:space-around;align-items:center;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:28px;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:10px 8px;">
 
