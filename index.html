@@ -1203,14 +1203,12 @@ function openTelegramSupport() {
 
 <div id="modal-freeze-confirm" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
-    <div class="modal-scroll" style="text-align:center;">
-      <div style="font-size:32px;margin-bottom:12px;">⏸️</div>
-      <div class="modal-title" style="text-align:center;">Поставить на паузу?</div>
-      <div style="font-size:14px;color:rgba(248,113,113,0.9);font-weight:600;margin-bottom:8px;">⚠️ Внимание</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:24px;line-height:1.6;">Выносы мусора будут приостановлены. Баланс не будет списываться пока подписка на паузе.</div>
+    <div class="modal-scroll" style="text-align:center;padding:16px 24px 36px;">
+      <div class="modal-title" style="text-align:center;margin-bottom:8px;">Поставить на паузу?</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.6;">Выносы будут приостановлены. Баланс не списывается пока подписка на паузе.</div>
       <div style="display:flex;gap:10px;">
-        <button onclick="closeModalById('modal-freeze-confirm')" class="btn-ghost" style="flex:1;">Нет</button>
-        <button onclick="confirmFreeze()" style="flex:1;background:rgba(248,113,113,0.2);border:1px solid rgba(248,113,113,0.4);border-radius:100px;padding:15px;color:#f87171;font-size:16px;font-weight:700;font-family:Nunito,sans-serif;cursor:pointer;">Да, пауза</button>
+        <button onclick="closeModalById('modal-freeze-confirm')" style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:13px;color:rgba(255,255,255,0.7);font-size:15px;font-weight:500;font-family:Nunito,sans-serif;cursor:pointer;">Нет</button>
+        <button onclick="confirmFreeze()" style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(248,113,113,0.3);border-radius:100px;padding:13px;color:#f87171;font-size:15px;font-weight:600;font-family:Nunito,sans-serif;cursor:pointer;">Да, пауза</button>
       </div>
     </div>
   </div>
