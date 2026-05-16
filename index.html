@@ -935,7 +935,18 @@ function showTab(name){
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s = document.getElementById('screen-'+name);
-  if(s){ s.classList.add('active'); requestAnimationFrame(function(){ s.scrollTop=0; window.scrollTo(0,0); document.body.scrollTop=0; }); }
+  if(s){ 
+    s.classList.add('active'); 
+    requestAnimationFrame(function(){ s.scrollTop=0; window.scrollTo(0,0); document.body.scrollTop=0; });
+    // Re-trigger earth animations
+    setTimeout(function(){
+      s.querySelectorAll('.earth-texture').forEach(function(t){
+        t.style.animationPlayState='paused';
+        t.offsetWidth;
+        t.style.animationPlayState='running';
+      });
+    }, 50);
+  }
   if(name==='done') launchSalute();
 }
 
