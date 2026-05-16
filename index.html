@@ -589,13 +589,12 @@
         <span>Пополнить баланс</span>
       </button>
     </div>
-      <div style="margin-top:20px;width:100%;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">История</div>
-        <div id="transactions-list">
+    <div style="width:100%;max-width:360px;margin-top:16px;text-align:left;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">История транзакций</div>
+        <div id="transactions-list" onclick="openModal('modal-all-transactions')">
           <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:14px;padding:20px;">Загрузка...</div>
         </div>
       </div>
-  </div>
 
   <!-- ══ PROFILE ══ -->
   <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
