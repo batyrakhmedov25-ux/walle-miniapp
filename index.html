@@ -96,6 +96,11 @@
       flex-shrink: 0;
     }
     .earth-container.large { width: 180px; height: 180px; margin: 22px 0 10px; animation: earthBreathe 12s ease-in-out infinite; will-change: transform; }
+    .earth-container::after {
+      content: ''; position: absolute; inset: -8px;
+      border-radius: 50%; pointer-events: none; z-index: 0;
+      box-shadow: 0 0 20px 6px rgba(80,140,255,0.3), 0 0 50px 15px rgba(60,120,255,0.12);
+    }
 
     .earth-sphere {
       width: 100%; height: 100%;
