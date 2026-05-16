@@ -597,17 +597,22 @@
   <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;">
     
     <!-- Earth small -->
-    <!-- Аватарка из Telegram -->
-    <div style="position:relative;margin:10px 0 12px;">
-      <img id="profile-avatar" src="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;display:none;border:2px solid rgba(255,255,255,0.1);">
-      <div id="profile-avatar-fallback" style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <!-- User info card -->
+    <div style="width:100%;max-width:360px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;margin:10px 0 12px;text-align:left;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="position:relative;flex-shrink:0;">
+          <img id="profile-avatar" src="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:none;border:2px solid rgba(255,255,255,0.1);">
+          <div id="profile-avatar-fallback" style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:2px;" id="profile-name">—</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);" id="profile-tg-id">—</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);" id="profile-reg-date">—</div>
+        </div>
       </div>
     </div>
-
-    <div style="font-size:20px;font-weight:800;margin-bottom:2px;" id="profile-name">—</div>
-    <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:4px;" id="profile-tg-id">—</div>
-    <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:20px;" id="profile-reg-date">—</div>
 
     <!-- Subscription status -->
     <div style="width:100%;max-width:360px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;margin-bottom:12px;text-align:left;">
