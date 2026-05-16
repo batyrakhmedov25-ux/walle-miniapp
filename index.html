@@ -577,43 +577,20 @@
       <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 50%,transparent 30%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,1) 100%);"></div>
     </div>
     <div style="width:100%;max-width:360px;">
-      <div class="s-title">Баланс</div>
-
-      <!-- Current balance -->
-      <div style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:24px;text-align:center;margin-bottom:20px;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Текущий баланс</div>
+      <div style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:24px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px;">Текущий баланс</div>
         <div style="font-size:52px;font-weight:900;letter-spacing:-2px;" id="balance-amount">0 ₽</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;" id="balance-daily">ежедневное списание: —</div>
+        <button class="btn-main" onclick="openModal('modal-topup')" style="margin-top:16px;padding:11px 17px;font-size:15px;">Пополнить</button>
       </div>
-
-      <!-- Top up amounts -->
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Пополнить</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-        <button onclick="setTopupAmt(990)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">990 ₽</button>
-        <button onclick="setTopupAmt(1980)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">1980 ₽</button>
-        <button onclick="setTopupAmt(2970)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">2970 ₽</button>
-        <button onclick="setTopupAmt(5000)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">5000 ₽</button>
-      </div>
-
-      <!-- Custom amount -->
-      <div class="field" style="margin-bottom:16px;">
-        <label class="field-label">Своя сумма</label>
-        <input class="field-input" type="number" id="topup-custom" placeholder="Введите сумму" oninput="document.getElementById('topup-btn-amt').textContent='Пополнить ' + (this.value||'') + ' ₽'">
-      </div>
-
-      <button id="topup-main-btn" class="btn-main" onclick="openModal('modal-topup')">
-        <span>Пополнить баланс</span>
-      </button>
-    </div>
-      <div style="margin-top:20px;width:100%;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">История</div>
+      <div style="text-align:left;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">История транзакций</div>
         <div id="transactions-list">
           <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:14px;padding:20px;">Загрузка...</div>
         </div>
       </div>
+    </div>
   </div>
-
-  <!-- ══ PROFILE ══ -->
   <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
     
     <!-- Earth small -->
