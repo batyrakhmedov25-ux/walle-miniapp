@@ -1106,7 +1106,7 @@ try {
   }
 } catch(e){}
 setTimeout(autoRegister, 1000);
-if(window.lucide) lucide.createIcons();
+
 
 var isFrozen = false;
 function toggleFreeze() {
@@ -1207,5 +1207,6 @@ function openTelegramSupport() {
     </div>
   </div>
 </div>
+<script>window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons(); });</script>
 </body>
 </html>
