@@ -1097,9 +1097,10 @@ try {
       if(heroCard) heroCard.style.display = 'none';
       if(btnWrap) btnWrap.style.display = 'none';
       if(promoLinks) promoLinks.style.display = 'none';
-              var bal = document.getElementById('status-balance');
               var tar = document.getElementById('status-tariff');
-              if(bal) bal.textContent = (d.balance||0).toFixed(0)+' ₽';
+              var days = document.getElementById('status-days');
+              if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
+              if(days){ var now=new Date(); var end=new Date(now.getFullYear(),now.getMonth()+1,0); days.textContent=Math.ceil((end-now)/86400000)+' дн.'; }
               if(tar) tar.textContent = 'Активна';
               showTab('status');
             }
