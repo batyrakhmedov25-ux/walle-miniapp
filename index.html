@@ -1109,22 +1109,28 @@ setTimeout(autoRegister, 1000);
 
 var isFrozen = false;
 function toggleFreeze() {
-  if(!isFrozen) { if(confirm('Поставить подписку на паузу?\nВыносы будут приостановлены, баланс не списывается.')) { confirmFreeze(); } } 
-  else {
-    isFrozen = false;
-    var t=document.getElementById('freeze-toggle');
-    var k=document.getElementById('freeze-knob');
-    if(t) t.style.background='rgba(255,255,255,0.15)';
-    if(k) k.style.transform='translateX(0)';
-    alert('Подписка возобновлена.');
+  if(!isFrozen) {
+    if(confirm('Поставить подписку на паузу?\nВыносы будут приостановлены.')) {
+      isFrozen = true;
+      var s=document.getElementById('freeze-slider');
+      var k=document.getElementById('freeze-knob');
+      if(s) s.style.background='#5B8CFF';
+      if(k) k.style.left='22px';
+    }
+  } else {
+    if(confirm('Возобновить подписку?')) {
+      isFrozen = false;
+      var s=document.getElementById('freeze-slider');
+      var k=document.getElementById('freeze-knob');
+      if(s) s.style.background='rgba(255,255,255,0.15)';
+      if(k) k.style.left='2px';
+      document.getElementById('freeze-toggle').checked=false;
+    } else {
+      document.getElementById('freeze-toggle').checked=true;
+    }
   }
 }
-function confirmFreeze() {
-  isFrozen = true;
-  var t=document.getElementById('freeze-toggle');
-  var k=document.getElementById('freeze-knob');
-  if(t) t.style.background='#5B8CFF';
-  if(k) k.style.transform='translateX(18px)';
+function confirmFreeze() {}
   closeModalById('modal-freeze-confirm');
 }
 
