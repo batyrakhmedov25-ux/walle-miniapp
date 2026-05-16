@@ -601,8 +601,8 @@
         <input class="field-input" type="number" id="topup-custom" placeholder="Введите сумму" oninput="document.getElementById('topup-btn-amt').textContent='Пополнить ' + (this.value||'') + ' ₽'">
       </div>
 
-      <button id="topup-btn" class="btn-main" onclick="doTopup()">
-        <span id="topup-btn-amt">Пополнить</span>
+      <button id="topup-main-btn" class="btn-main" onclick="openModal('modal-topup')">
+        <span>Пополнить баланс</span>
       </button>
     </div>
       <div style="margin-top:20px;width:100%;">
@@ -1279,20 +1279,3 @@ function openTelegramSupport() {
     </div>
   </div>
 </div>
-<div id="modal-topup" class="modal-ov" onclick="closeModal(this)">
-  <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
-    <div class="modal-scroll">
-      <div class="modal-title">Пополнить баланс</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-        <button onclick="setTopupAmt(990)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">990 ₽</button>
-        <button onclick="setTopupAmt(1980)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">1980 ₽</button>
-        <button onclick="setTopupAmt(2970)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">2970 ₽</button>
-        <button onclick="setTopupAmt(5000)" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:Nunito,sans-serif;">5000 ₽</button>
-      </div>
-      <input class="field-input" type="number" id="topup-custom" placeholder="Другая сумма" style="margin-bottom:16px;" oninput="document.getElementById('topup-btn-amt').textContent='Пополнить ' + (this.value||'') + ' ₽'">
-      <button id="topup-btn" class="btn-main" onclick="doTopup()"><span id="topup-btn-amt">Пополнить</span></button>
-    </div>
-  </div>
-</div>
-</body>
-</html>
