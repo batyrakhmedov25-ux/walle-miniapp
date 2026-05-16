@@ -1136,31 +1136,31 @@ function openTelegramSupport() {
   catch(e) { window.open("https://t.me/walle_bot", "_blank"); }
 }
 </script>
-<div id="bottom-nav" style="position:fixed;bottom:16px;left:16px;right:16px;z-index:100;display:flex;justify-content:space-around;align-items:center;background:rgba(18,18,20,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:28px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:8px;">
+<div id="bottom-nav" style="position:fixed;bottom:12px;left:20px;right:20px;z-index:100;display:flex;justify-content:space-around;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:24px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:5px 4px;">
 
-  <button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#ffffff;transition:all 0.2s;">
-    <div style="width:36px;height:36px;border-radius:10px;background:rgba(42,232,129,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-welcome">
+  <button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:#ffffff;transition:all 0.2s;">
+    <div style="width:32px;height:32px;border-radius:9px;background:rgba(42,232,129,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-welcome">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" opacity="0.3"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/></svg>
     </div>
     <span style="font-size:9px;font-weight:600;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Главная</span>
   </button>
 
-  <button onclick="showTab('status')" id="tab-status" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
-    <div style="width:36px;height:36px;border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-status">
+  <button onclick="showTab('status')" id="tab-status" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
+    <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-status">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="8" opacity="0.3"/><path d="M8 12 L11 15 L16 9"/></svg>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Статус</span>
   </button>
 
-  <button onclick="showTab('balance')" id="tab-balance" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
-    <div style="width:36px;height:36px;border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-balance">
+  <button onclick="showTab('balance')" id="tab-balance" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
+    <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-balance">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="3" opacity="0.3"/><path d="M3 10h18"/><circle cx="17" cy="14" r="1.5" fill="currentColor" stroke="none"/></svg>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Баланс</span>
   </button>
 
-  <button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
-    <div style="width:36px;height:36px;border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-profile">
+  <button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
+    <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-profile">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6" opacity="0.5"/><line x1="12" y1="14" x2="12" y2="20" stroke-linecap="round"/></svg>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Профиль</span>
