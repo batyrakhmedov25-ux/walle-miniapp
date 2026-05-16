@@ -351,6 +351,7 @@
     .faq-q { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
   @keyframes earthBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -1105,6 +1106,7 @@ try {
   }
 } catch(e){}
 setTimeout(autoRegister, 1000);
+if(window.lucide) lucide.createIcons();
 
 var isFrozen = false;
 function toggleFreeze() {
@@ -1140,47 +1142,28 @@ function openTelegramSupport() {
 
   <button onclick="showTab('welcome')" id="tab-welcome" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:#ffffff;transition:all 0.2s;">
     <div style="width:32px;height:32px;border-radius:9px;background:rgba(42,232,129,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-welcome">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/>
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
-      <ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-      <line x1="2" y1="9" x2="22" y2="9" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-      <line x1="2" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-    </svg>
+      <i data-lucide="globe" style="width:20px;height:20px;stroke-width:1.5;"></i>
     </div>
     <span style="font-size:9px;font-weight:600;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Главная</span>
   </button>
 
   <button onclick="showTab('status')" id="tab-status" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
     <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-status">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/>
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
-      <path d="M7.5 12 L10.5 15 L16.5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+      <i data-lucide="check-circle-2" style="width:20px;height:20px;stroke-width:1.5;"></i>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Статус</span>
   </button>
 
   <button onclick="showTab('balance')" id="tab-balance" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
     <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-balance">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor" opacity="0.15"/>
-      <rect x="2" y="5" width="20" height="14" rx="4" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
-      <rect x="2" y="10" width="20" height="3" fill="currentColor" opacity="0.25"/>
-      <rect x="15" y="14" width="4" height="2" rx="1" fill="currentColor" opacity="0.8"/>
-    </svg>
+      <i data-lucide="wallet" style="width:20px;height:20px;stroke-width:1.5;"></i>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Баланс</span>
   </button>
 
   <button onclick="showTab('profile')" id="tab-profile" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:rgba(255,255,255,0.4);transition:all 0.2s;">
     <div style="width:32px;height:32px;border-radius:9px;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" id="tab-bg-profile">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="8" r="4" fill="currentColor" opacity="0.9"/>
-      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="currentColor" opacity="0.4"/>
-      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.2" opacity="0.6" fill="none"/>
-    </svg>
+      <i data-lucide="user-circle-2" style="width:20px;height:20px;stroke-width:1.5;"></i>
     </div>
     <span style="font-size:9px;font-weight:500;letter-spacing:0.3px;font-family:-apple-system,Nunito,sans-serif;">Профиль</span>
   </button>
