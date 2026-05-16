@@ -1109,7 +1109,7 @@ setTimeout(autoRegister, 1000);
 
 var isFrozen = false;
 function toggleFreeze() {
-  if(!isFrozen) { openModal('modal-freeze-confirm'); }
+  if(!isFrozen) { if(confirm('Поставить подписку на паузу? Выносы будут приостановлены, баланс не списывается.')) { confirmFreeze(); } }
   else {
     isFrozen = false;
     var t=document.getElementById('freeze-toggle');
