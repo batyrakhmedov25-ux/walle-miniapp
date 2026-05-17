@@ -1156,7 +1156,10 @@ try {
     });
   }
 } catch(e){}
-setTimeout(autoRegister, 1000);
+// Скрываем все экраны до инициализации
+document.querySelectorAll('.screen').forEach(function(s){ s.style.display='none'; });
+document.getElementById('screen-welcome').style.display='flex';
+setTimeout(autoRegister, 800);
 
 
 var isFrozen = false;
