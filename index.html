@@ -772,6 +772,7 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
+    setTimeout(function(){ alert("tgUser: " + (tgUser ? tgUser.id : "null")); }, 1500);
     if(tg.initDataUnsafe && tg.initDataUnsafe.user) tgUser = tg.initDataUnsafe.user;
     tg.onEvent('viewportChanged', function(){ 
       if(!tgUser && tg.initDataUnsafe && tg.initDataUnsafe.user) {
