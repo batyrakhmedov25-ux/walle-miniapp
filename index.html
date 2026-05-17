@@ -764,12 +764,15 @@
 </div>
 
 <script>
+var tgUser = null;
+var API = "https://walle-backend-1.onrender.com";
 /* Telegram */
 try {
   var tg = window.Telegram && window.Telegram.WebApp;
   if(tg) {
     tg.ready();
     tg.expand();
+    if(tg.initDataUnsafe && tg.initDataUnsafe.user) tgUser = tg.initDataUnsafe.user;
     tg.onEvent('viewportChanged', function(){ 
       if(!tgUser && tg.initDataUnsafe && tg.initDataUnsafe.user) {
         tgUser = tg.initDataUnsafe.user;
@@ -784,8 +787,6 @@ try {
 
 /* API */
 var API = "https://walle-backend-1.onrender.com";
-var tgUser = null;
-try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.initDataUnsafe&&tg2.initDataUnsafe.user; } catch(e){}
 
 /* Auto-registration on start */
 function autoRegister() {
