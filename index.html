@@ -955,12 +955,14 @@ function submitSubscription() {
   .then(function(r){return r.json();})
   .then(function(d){
     if(d.id) {
-      // Обновляем текст на финальном экране
       var note = document.querySelector('.done-receipt-note');
       if(note) note.textContent = 'Затем ' + price + ' ₽/мес · Отменить можно в любой момент';
       showScreen('done');
+    } else if(d.detail && d.detail.includes('уже есть')) {
+      alert('У вас уже есть активная подписка!');
+      showTab('status');
     } else {
-      alert('Ошибка создания подписки');
+      alert('Ошибка: ' + (d.detail || 'попробуйте позже'));
     }
   })
   .catch(function(){ showScreen('done'); });
