@@ -1207,25 +1207,25 @@ setTimeout(autoRegister, 800);
 
 var isFrozen = false;
 function toggleFreeze() {
-  if(!isFrozen) { openModal('modal-freeze-confirm'); }
-  else {
-    isFrozen = false;
-    var t=document.getElementById('freeze-toggle');
-    var k=document.getElementById('freeze-knob');
-    if(t) t.style.background='rgba(255,255,255,0.15)';
-    if(k) k.style.transform='translateX(0)';
-    alert('Подписка возобновлена.');
+  if(!isFrozen) {
+    if(confirm('Поставить подписку на паузу?\nВыносы будут приостановлены.')) {
+      isFrozen = true;
+      var t=document.getElementById('freeze-toggle');
+      var k=document.getElementById('freeze-knob');
+      if(t) t.style.background='#5B8CFF';
+      if(k) k.style.transform='translateX(18px)';
+    }
+  } else {
+    if(confirm('Возобновить подписку?')) {
+      isFrozen = false;
+      var t=document.getElementById('freeze-toggle');
+      var k=document.getElementById('freeze-knob');
+      if(t) t.style.background='rgba(255,255,255,0.15)';
+      if(k) k.style.transform='translateX(0)';
+    }
   }
 }
-function confirmFreeze() {
-  isFrozen = true;
-  var t=document.getElementById('freeze-toggle');
-  var k=document.getElementById('freeze-knob');
-  if(t) t.style.background='#5B8CFF';
-  if(k) k.style.transform='translateX(18px)';
-  closeModalById('modal-freeze-confirm');
-}
-
+function confirmFreeze() {}
 function openTelegramChannel() {
   try { window.Telegram.WebApp.openTelegramLink("https://t.me/walle_service"); } 
   catch(e) { window.open("https://t.me/walle_service", "_blank"); }
