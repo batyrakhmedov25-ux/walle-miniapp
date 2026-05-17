@@ -777,7 +777,34 @@ try {
       }
     });
     document.addEventListener("DOMContentLoaded", function(){ tg.expand(); });
-    window.addEventListener("load", function(){ tg.expand(); setTimeout(function(){ tg.expand(); }, 300); setTimeout(function(){ tg.expand(); }, 1000); });
+    
+function shareReferral() {
+  var link = 'https://t.me/walle_service_bot?start=ref_' + (tgUser ? tgUser.id : '0');
+  var text = 'Попробуй Walle — сервис выноса мусора! Первая неделя за 1 ₽';
+  try {
+    window.Telegram.WebApp.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
+  } catch(e) {
+    if(navigator.share) navigator.share({title:'Walle', text:text, url:link});
+    else copyToClipboard(link);
+  }
+}
+function copyReferral() {
+  var link = 'https://t.me/walle_service_bot?start=ref_' + (tgUser ? tgUser.id : '0');
+  copyToClipboard(link);
+}
+function copyToClipboard(text) {
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function(){ alert('Ссылка скопирована!'); });
+  } else {
+    var el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+    alert('Ссылка скопирована!');
+  }
+}
+
+window.addEventListener("load", function(){ tg.expand(); setTimeout(function(){ tg.expand(); }, 300); setTimeout(function(){ tg.expand(); }, 1000); });
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
   }
 } catch(e){}
@@ -1277,7 +1304,34 @@ function openTelegramSupport() {
     </div>
   </div>
 </div>
-<script>window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons(); });</script>
+<script>
+function shareReferral() {
+  var link = 'https://t.me/walle_service_bot?start=ref_' + (tgUser ? tgUser.id : '0');
+  var text = 'Попробуй Walle — сервис выноса мусора! Первая неделя за 1 ₽';
+  try {
+    window.Telegram.WebApp.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
+  } catch(e) {
+    if(navigator.share) navigator.share({title:'Walle', text:text, url:link});
+    else copyToClipboard(link);
+  }
+}
+function copyReferral() {
+  var link = 'https://t.me/walle_service_bot?start=ref_' + (tgUser ? tgUser.id : '0');
+  copyToClipboard(link);
+}
+function copyToClipboard(text) {
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function(){ alert('Ссылка скопирована!'); });
+  } else {
+    var el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+    alert('Ссылка скопирована!');
+  }
+}
+
+window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons(); });</script>
 
 <div id="modal-topup" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
