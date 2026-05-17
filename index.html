@@ -943,7 +943,23 @@ function loadProfile() {
 
 function cancelSubscription() {
   if(confirm('Отменить подписку? Остаток баланса будет возвращён.')) {
-    alert('Заявка принята. Мы свяжемся с вами в течение дня.');
+    var tid = tgUser ? tgUser.id : null;
+    if(!tid) return;
+    fetch(API+'/api/subscriptions/cancel', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({telegram_id: tid})
+    })
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.ok) {
+        alert('Подписка отменена. Остаток баланса будет возвращён.');
+        showTab('welcome');
+      } else {
+        alert('Ошибка: ' + (d.error || 'попробуйте позже'));
+      }
+    })
+    .catch(function(){ alert('Ошибка соединения. Попробуйте позже.'); });
   }
 }
 
