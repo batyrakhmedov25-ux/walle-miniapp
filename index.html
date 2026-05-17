@@ -765,7 +765,6 @@
 </div>
 
 <script>
-setTimeout(function(){ alert("JS works! tg=" + (window.Telegram ? "yes" : "no")); }, 2000);
 var tgUser = null;
 var API = "https://walle-backend-1.onrender.com";
 /* Telegram */
@@ -774,7 +773,6 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
-    setTimeout(function(){ alert("tgUser: " + (tgUser ? tgUser.id : "null")); }, 1500);
     if(tg.initDataUnsafe && tg.initDataUnsafe.user) tgUser = tg.initDataUnsafe.user;
     tg.onEvent('viewportChanged', function(){ 
       if(!tgUser && tg.initDataUnsafe && tg.initDataUnsafe.user) {
