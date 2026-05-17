@@ -805,7 +805,22 @@ function autoRegister() {
     try{ var _tg2=window.Telegram&&window.Telegram.WebApp; if(_tg2&&_tg2.CloudStorage) _tg2.CloudStorage.setItem('tid', String(tid)); }catch(e){}
     if(d.has_active_subscription && !sessionStorage.getItem('walle_loaded')) {
       sessionStorage.setItem('walle_loaded','1');
-      setTimeout(function(){ showTab('status'); }, 600);
+      setTimeout(function(){ 
+        showTab('status');
+        fetch(API+'/api/users/profile?telegram_id='+tgUser.id)
+          .then(function(r){return r.json();})
+          .then(function(p){
+            var tar = document.getElementById('status-tariff');
+            var days = document.getElementById('status-days');
+            if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
+            if(days && p.subscription && p.subscription.end_date) {
+              var end = new Date(p.subscription.end_date);
+              var now = new Date();
+              var daysLeft = Math.ceil((end - now) / (1000*60*60*24));
+              days.textContent = daysLeft > 0 ? daysLeft + ' дн.' : 'истекла';
+            }
+          }).catch(function(){});
+      }, 600);
     }
   })
   .catch(function(){});
