@@ -781,11 +781,10 @@ try {
 function shareReferral() {
   var link = 'https://t.me/Walle_Musor_bot?start=ref_' + (tgUser ? tgUser.id : '0');
   var text = 'Попробуй Walle — сервис выноса мусора! Первая неделя за 1 ₽';
-  try {
-    window.Telegram.WebApp.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
-  } catch(e) {
-    if(navigator.share) navigator.share({title:'Walle', text:text, url:link});
-    else copyToClipboard(link);
+  if(navigator.share) {
+    navigator.share({title:'Walle', text:text, url:link}).catch(function(){});
+  } else {
+    copyToClipboard(link);
   }
 }
 function copyReferral() {
@@ -1308,11 +1307,10 @@ function openTelegramSupport() {
 function shareReferral() {
   var link = 'https://t.me/Walle_Musor_bot?start=ref_' + (tgUser ? tgUser.id : '0');
   var text = 'Попробуй Walle — сервис выноса мусора! Первая неделя за 1 ₽';
-  try {
-    window.Telegram.WebApp.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
-  } catch(e) {
-    if(navigator.share) navigator.share({title:'Walle', text:text, url:link});
-    else copyToClipboard(link);
+  if(navigator.share) {
+    navigator.share({title:'Walle', text:text, url:link}).catch(function(){});
+  } else {
+    copyToClipboard(link);
   }
 }
 function copyReferral() {
