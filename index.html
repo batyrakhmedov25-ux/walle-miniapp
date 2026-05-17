@@ -789,7 +789,7 @@ try { var tg2 = window.Telegram&&window.Telegram.WebApp; if(tg2) tgUser=tg2.init
 
 /* Auto-registration on start */
 function autoRegister() {
-  if(!tgUser) tgUser = {id: 82306327, first_name: "Тест"};
+  
   fetch(API+'/api/users/register', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
