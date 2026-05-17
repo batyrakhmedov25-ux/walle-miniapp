@@ -610,9 +610,9 @@
         <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;" id="balance-daily">ежедневное списание: —</div>
         <button class="btn-main" onclick="openModal('modal-topup')" style="margin-top:16px;padding:11px 17px;font-size:15px;">Пополнить</button>
       </div>
-      <div onclick="openModal('modal-all-transactions')" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;cursor:pointer;margin-top:10px;width:100%;text-align:left;box-sizing:border-box;">
-        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">История транзакций</span><span style="font-size:24px;color:rgba(255,255,255,0.9);">›</span></div>
-      </div>
+      <div onclick="openModal('modal-all-transactions')" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;cursor:pointer;margin-top:10px;width:100%;text-align:left;box-sizing:border-box;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='rgba(30,35,55,0.85)'">
+    </div>
+  </div>
   <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
     
     <!-- Earth small -->
