@@ -519,9 +519,12 @@
           <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Завтра</div>
           <div style="font-size:14px;color:rgba(255,255,255,0.6);">07:00 — 11:00</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;" onclick="toggleFreeze()">
-          <div id="freeze-toggle" onclick="toggleFreeze()" ontouchstart="toggleFreeze()" style="width:44px;height:26px;border-radius:13px;background:rgba(255,255,255,0.15);position:relative;cursor:pointer;transition:background 0.3s;z-index:50;">
-            <div id="freeze-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.3s;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
+            <input type="checkbox" id="freeze-toggle" onchange="toggleFreeze()" style="opacity:0;width:0;height:0;position:absolute;">
+            <span id="freeze-slider" style="position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:24px;transition:all 0.25s;"></span>
+            <span id="freeze-knob" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:all 0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
+          </label>
           </div>
           <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;">Пауза</div>
         </div>
@@ -1207,14 +1210,23 @@ setTimeout(autoRegister, 800);
 
 var isFrozen = false;
 function toggleFreeze() {
-  if(!isFrozen) { openModal('modal-freeze-confirm'); }
-  else {
-    isFrozen = false;
-    var t=document.getElementById('freeze-toggle');
-    var k=document.getElementById('freeze-knob');
-    if(t) t.style.background='rgba(255,255,255,0.15)';
-    if(k) k.style.transform='translateX(0)';
-    alert('Подписка возобновлена.');
+  var cb = document.getElementById('freeze-toggle');
+  var s = document.getElementById('freeze-slider');
+  var k = document.getElementById('freeze-knob');
+  if(cb.checked) {
+    if(confirm('Поставить подписку на паузу?\nВыносы будут приостановлены.')) {
+      if(s) s.style.background = '#5B8CFF';
+      if(k) k.style.left = '22px';
+    } else {
+      cb.checked = false;
+    }
+  } else {
+    if(confirm('Возобновить подписку?')) {
+      if(s) s.style.background = 'rgba(255,255,255,0.15)';
+      if(k) k.style.left = '2px';
+    } else {
+      cb.checked = true;
+    }
   }
 }
 function confirmFreeze() {
