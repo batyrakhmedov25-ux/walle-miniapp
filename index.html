@@ -476,7 +476,7 @@
       </div>
       <div class="spacer"></div>
       <div class="btn-wrap">
-        <button class="btn-main" onclick="showScreen('done')">Оформить подписку</button>
+        <button class="btn-main" onclick="submitSubscription()">Оформить подписку</button>
         <button class="btn-ghost" onclick="showScreen('address')">Назад</button>
       </div>
     </div>
@@ -939,6 +939,31 @@ function loadProfile() {
         if(daily) daily.textContent = p.subscription.daily_charge+' ₽';
       }
     }).catch(function(){});
+}
+
+function submitSubscription() {
+  var tid = tgUser ? tgUser.id : null;
+  if(!tid) return;
+  var sel = document.querySelector('.tariff.sel');
+  var tariff = sel && sel.querySelector('.t-name').textContent.trim() === 'Лайт' ? 'lite' : 'care';
+  var price = tariff === 'lite' ? 990 : 1490;
+  fetch(API+'/api/subscriptions/create', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({telegram_id: tid, tariff: tariff, price: price, address_id: 1})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.id) {
+      // Обновляем текст на финальном экране
+      var note = document.querySelector('.done-receipt-note');
+      if(note) note.textContent = 'Затем ' + price + ' ₽/мес · Отменить можно в любой момент';
+      showScreen('done');
+    } else {
+      alert('Ошибка создания подписки');
+    }
+  })
+  .catch(function(){ showScreen('done'); });
 }
 
 function cancelSubscription() {
