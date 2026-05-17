@@ -805,8 +805,7 @@ function autoRegister() {
     try{ var _tg2=window.Telegram&&window.Telegram.WebApp; if(_tg2&&_tg2.CloudStorage) _tg2.CloudStorage.setItem('tid', String(tid)); }catch(e){}
     if(d.has_active_subscription && !sessionStorage.getItem('walle_loaded')) {
       sessionStorage.setItem('walle_loaded','1');
-      // subscriber logged in
-      showScreen('status');
+      setTimeout(function(){ showTab('status'); }, 600);
     }
   })
   .catch(function(){});
