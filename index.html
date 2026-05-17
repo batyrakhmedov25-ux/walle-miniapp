@@ -962,8 +962,8 @@ function showTab(name){
     if(el) el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.35)";
     if(bg) bg.style.background=name===t?"rgba(42,232,129,0.15)":"transparent";
   });
-  if(name==="balance") { setTimeout(loadBalance, 300); setTimeout(loadBalance, 1500); }
-  if(name==="profile") { loadProfile(); setTimeout(loadProfile, 1500); }
+  if(name==="balance") { setTimeout(loadBalance, 200); setTimeout(loadBalance, 800); }
+  if(name==="profile") { loadProfile(); setTimeout(loadProfile, 500); }
 }
 
 function showScreen(name) {
