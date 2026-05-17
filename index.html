@@ -859,6 +859,24 @@ function doTopup() {
   .catch(function(){ btn.disabled = false; });
 }
 
+function loadStatus() {
+  var tid = tgUser ? tgUser.id : null;
+  if(!tid) return;
+  fetch(API+'/api/users/profile?telegram_id='+tid)
+    .then(function(r){return r.json();})
+    .then(function(p){
+      var tar = document.getElementById('status-tariff');
+      var days = document.getElementById('status-days');
+      if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
+      if(days && p.subscription && p.subscription.end_date) {
+        var end = new Date(p.subscription.end_date);
+        var now = new Date();
+        var daysLeft = Math.ceil((end - now) / (1000*60*60*24));
+        days.textContent = daysLeft > 0 ? daysLeft + ' дн.' : 'истекла';
+      }
+    }).catch(function(){});
+}
+
 function loadProfile() {
   var tid = tgUser ? tgUser.id : null;
   if(!tid) return;
