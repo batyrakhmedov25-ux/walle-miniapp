@@ -1165,7 +1165,7 @@ try {
               var days = document.getElementById('status-days');
               if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
               if(days){ var now=new Date(); var end=new Date(now.getFullYear(),now.getMonth()+1,0); days.textContent=Math.ceil((end-now)/86400000)+' дн.'; }
-              showTab('status');
+              setTimeout(function(){ showTab('status'); }, 400);
             }
           }).catch(function(){});
       }
