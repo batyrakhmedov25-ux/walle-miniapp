@@ -610,9 +610,104 @@
         <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;" id="balance-daily">ежедневное списание: —</div>
         <button class="btn-main" onclick="openModal('modal-topup')" style="margin-top:16px;padding:11px 17px;font-size:15px;">Пополнить</button>
       </div>
-      <div onclick="openModal('modal-all-transactions')" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;cursor:pointer;transition:background 0.15s;text-align:left;width:100%;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='rgba(30,35,55,0.85)'">
-        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">История транзакций</span><span style="font-size:24px;color:rgba(255,255,255,0.9);">›</span></div>
+      <div onclick="openModal('modal-all-transactions')" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;cursor:pointer;transition:background 0.15s;text-align:left;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='rgba(30,35,55,0.85)'">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0;"><span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">История транзакций</span><span style="font-size:24px;color:rgba(255,255,255,0.9);">›</span></div>
+        <div id="transactions-list" style="margin-top:10px;">
+          <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:14px;padding:20px;">Загрузка...</div>
+        </div>
       </div>
+    </div>
+  </div>
+  <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
+    
+    <!-- Earth small -->
+    <!-- Earth small -->
+    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin:10px 0 12px;box-shadow:0 0 30px rgba(0,0,0,0.9);filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));">
+      <div style="width:200%;height:100%;background:url(assets/images/earth.jpg) repeat-x;background-size:50% 100%;position:absolute;top:0;left:0;animation:earthRotate 25s linear infinite;filter:brightness(1.25) saturate(1.35);"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 50%,transparent 30%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,1) 100%);"></div>
+    </div>
+
+    <div style="font-size:24px;font-weight:800;margin-bottom:12px;">Walle</div>
+    <!-- User info card -->
+    <div style="width:100%;max-width:360px;background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;margin:10px 0 12px;text-align:left;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="position:relative;flex-shrink:0;">
+          <img id="profile-avatar" src="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:none;border:2px solid rgba(255,255,255,0.1);">
+          <div id="profile-avatar-fallback" style="width:56px;height:56px;border-radius:50%;background:rgba(30,35,55,0.9);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:2px;" id="profile-name">—</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);" id="profile-tg-id">—</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);" id="profile-reg-date">—</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Menu -->
+    <div style="width:100%;max-width:360px;background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:12px;">
+      <div onclick="openTelegramChannel()" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="send" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Наш канал</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="showTab('tariff')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="credit-card" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Тарифы</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="openTelegramSupport()" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);-webkit-tap-highlight-color:rgba(255,255,255,0.05);transition:background 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.03)'" onmouseleave="this.style.background=''">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="message-circle" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Написать в поддержку</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="openModal('modal-howto')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="help-circle" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Как это работает</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="openModal('modal-offer')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="file-text" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Публичная оферта</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="openModal('modal-privacy')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="shield-check" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Политика конфиденциальности</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+      <div onclick="openModal('modal-about')" class="menu-row" style="">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i data-lucide="info" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">О компании</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.3);">›</span>
+      </div>
+    </div>
+
+    <!-- Cancel -->
+    <button onclick="cancelSubscription()" style="width:100%;max-width:360px;background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:11px;color:rgba(248,113,113,0.7);font-size:14px;font-weight:600;font-family:Nunito,sans-serif;cursor:pointer;margin-bottom:8px;">
+      Отменить подписку
+    </button>
+    <div style="height:10px;"></div>
+  </div>
+
+</div>
 
 <!-- ══ MODALS ══ -->
 <div id="modal-howto" class="modal-ov" onclick="closeModal(this)">
