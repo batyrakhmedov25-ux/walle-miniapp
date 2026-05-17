@@ -363,6 +363,35 @@
 <body>
 
 <div class="stars-viewport"></div>
+<!-- Bright foreground stars -->
+<div style="position:fixed;inset:0;z-index:2;pointer-events:none;">
+  <!-- Star 1 -->
+  <div style="position:absolute;top:8%;left:15%;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 6px 2px rgba(255,255,255,0.8),0 0 20px 4px rgba(200,220,255,0.4);animation:blink-star 3s infinite ease-in-out;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);width:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);"></div>
+  </div>
+  <!-- Star 2 -->
+  <div style="position:absolute;top:15%;right:20%;width:2px;height:2px;background:#fff;border-radius:50%;box-shadow:0 0 4px 2px rgba(255,255,255,0.7),0 0 15px 3px rgba(200,220,255,0.3);animation:blink-star 4s infinite ease-in-out 1s;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);width:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);"></div>
+  </div>
+  <!-- Star 3 -->
+  <div style="position:absolute;top:35%;right:8%;width:4px;height:4px;background:#fff;border-radius:50%;box-shadow:0 0 8px 3px rgba(255,255,255,0.9),0 0 25px 6px rgba(180,210,255,0.4);animation:blink-star 5s infinite ease-in-out 0.5s;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.7),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.7),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:18px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);"></div>
+  </div>
+  <!-- Star 4 -->
+  <div style="position:absolute;top:60%;left:5%;width:2px;height:2px;background:#fff;border-radius:50%;box-shadow:0 0 4px 2px rgba(255,255,255,0.6),0 0 12px 3px rgba(200,220,255,0.25);animation:blink-star 3.5s infinite ease-in-out 2s;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);width:14px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);"></div>
+  </div>
+  <!-- Star 5 -->
+  <div style="position:absolute;top:75%;right:25%;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 6px 2px rgba(255,255,255,0.7),0 0 18px 4px rgba(210,225,255,0.3);animation:blink-star 4.5s infinite ease-in-out 1.5s;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);width:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);"></div>
+  </div>
+</div>
 <canvas id="comet-canvas"></canvas>
 <canvas id="salute-canvas" style="display:none"></canvas>
 
