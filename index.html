@@ -856,8 +856,9 @@ function loadProfile() {
       // Показываем инициалы в нашем стиле
       var fallback = document.getElementById('profile-avatar-fallback');
       if(fallback && u.first_name) {
-        var initials = u.first_name.charAt(0).toUpperCase();
-        if(u.last_name) initials += u.last_name.charAt(0).toUpperCase();
+        var parts = (u.first_name + (u.last_name ? ' ' + u.last_name : '')).trim().split(' ');
+        var initials = parts[0].charAt(0).toUpperCase();
+        if(parts.length > 1) initials += parts[1].charAt(0).toUpperCase();
         fallback.innerHTML = '<span style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.9);">'+initials+'</span>';
         fallback.style.background = 'rgba(42,232,129,0.15)';
         fallback.style.border = '1px solid rgba(42,232,129,0.3)';
