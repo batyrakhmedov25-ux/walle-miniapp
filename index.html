@@ -770,6 +770,12 @@ try {
   if(tg) {
     tg.ready();
     tg.expand();
+    tg.onEvent('viewportChanged', function(){ 
+      if(!tgUser && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        tgUser = tg.initDataUnsafe.user;
+        autoRegister();
+      }
+    });
     document.addEventListener("DOMContentLoaded", function(){ tg.expand(); });
     window.addEventListener("load", function(){ tg.expand(); setTimeout(function(){ tg.expand(); }, 300); setTimeout(function(){ tg.expand(); }, 1000); });
     if(tg.enableClosingConfirmation) tg.enableClosingConfirmation();
