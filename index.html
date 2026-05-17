@@ -1134,29 +1134,6 @@ function launchSalute() {
   draw();
 }
 // Use Telegram CloudStorage to save user id
-try {
-  var _tg = window.Telegram && window.Telegram.WebApp;
-  if(_tg && _tg.CloudStorage) {
-    _tg.CloudStorage.getItem('tid', function(err, savedId) {
-      if(!err && savedId) {
-        fetch(API+'/api/users/me?telegram_id='+savedId)
-          .then(function(r){return r.json();})
-          .then(function(d){
-            if(d.has_active_subscription && !sessionStorage.getItem('walle_loaded')) {
-      sessionStorage.setItem('walle_loaded','1');
-      // subscriber logged in
-              var tar = document.getElementById('status-tariff');
-              var days = document.getElementById('status-days');
-              if(tar && p.subscription) tar.textContent = p.subscription.tariff==='lite'?'Лайт':'Забота';
-              if(days){ var now=new Date(); var end=new Date(now.getFullYear(),now.getMonth()+1,0); days.textContent=Math.ceil((end-now)/86400000)+' дн.'; }
-              setTimeout(function(){ showTab('status'); }, 400);
-            }
-          }).catch(function(){});
-      }
-    });
-  }
-} catch(e){}
-// Скрываем все экраны до инициализации
 document.querySelectorAll('.screen').forEach(function(s){ s.style.display='none'; });
 document.getElementById('screen-welcome').style.display='flex';
 setTimeout(autoRegister, 800);
