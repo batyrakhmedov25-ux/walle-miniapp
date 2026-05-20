@@ -541,12 +541,15 @@
     </div>
     <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Walle</div>
     <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;">Всё под контролем</div>
-    <div class="hero-card" style="width:100%;max-width:360px;">
+    <div class="hero-card" style="width:100%;max-width:360px;cursor:pointer;" onclick="openModal('modal-change-time')" onmousedown="this.style.opacity='0.85'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.85'" ontouchend="this.style.opacity='1'">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div>
           <div style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;margin-bottom:8px;">Следующий вынос</div>
           <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Завтра</div>
-          <div style="font-size:14px;color:rgba(255,255,255,0.6);">07:00 — 11:00</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:14px;color:rgba(255,255,255,0.6);" id="status-time">07:00</div>
+            <div style="font-size:11px;color:rgba(42,232,129,0.8);background:rgba(42,232,129,0.1);border:1px solid rgba(42,232,129,0.2);border-radius:6px;padding:2px 7px;font-weight:600;">изменить</div>
+          </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
           <div id="freeze-toggle" onclick="toggleFreeze()" style="width:44px;height:26px;border-radius:13px;background:rgba(255,255,255,0.15);position:relative;cursor:pointer;transition:background 0.3s;z-index:50;">
@@ -1483,7 +1486,108 @@ openModal = function(id) {
   if (id === 'modal-addresses') { renderAddressList(); if(window.lucide) lucide.createIcons(); }
 };
 
-window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons(); });</script>
+// ── Изменить время выноса ──
+var selectedPeriod = 'morning';
+var selectedTime = '07:00';
+var morningSlots = ['07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30'];
+var eveningSlots = ['19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30'];
+
+function selectPeriod(period) {
+  selectedPeriod = period;
+  var isMorning = period === 'morning';
+  document.getElementById('period-morning').style.background = isMorning ? 'rgba(42,232,129,0.15)' : 'rgba(30,35,55,0.85)';
+  document.getElementById('period-morning').style.border = isMorning ? '1px solid rgba(42,232,129,0.4)' : '1px solid rgba(255,255,255,0.08)';
+  document.getElementById('period-morning').style.color = isMorning ? '#2AE881' : 'rgba(255,255,255,0.6)';
+  document.getElementById('period-evening').style.background = !isMorning ? 'rgba(42,232,129,0.15)' : 'rgba(30,35,55,0.85)';
+  document.getElementById('period-evening').style.border = !isMorning ? '1px solid rgba(42,232,129,0.4)' : '1px solid rgba(255,255,255,0.08)';
+  document.getElementById('period-evening').style.color = !isMorning ? '#2AE881' : 'rgba(255,255,255,0.6)';
+  // сбрасываем выбор времени на первый слот периода
+  selectedTime = isMorning ? morningSlots[0] : eveningSlots[0];
+  renderTimeSlots();
+}
+
+function renderTimeSlots() {
+  var slots = selectedPeriod === 'morning' ? morningSlots : eveningSlots;
+  var html = slots.map(function(t) {
+    var active = t === selectedTime;
+    return '<button onclick="selectTime(\'' + t + '\')" id="slot-' + t.replace(':','-') + '" style="border-radius:10px;padding:10px 4px;font-size:13px;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:all 0.15s;' +
+      (active ? 'background:rgba(42,232,129,0.15);border:1px solid rgba(42,232,129,0.5);color:#2AE881;' : 'background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);') +
+      '">' + t + '</button>';
+  }).join('');
+  document.getElementById('time-slots').innerHTML = html;
+}
+
+function selectTime(t) {
+  selectedTime = t;
+  renderTimeSlots();
+}
+
+function savePickupTime() {
+  var el = document.getElementById('status-time');
+  if (el) el.textContent = selectedTime;
+  // сохраняем в localStorage
+  localStorage.setItem('walle_pickup_time', JSON.stringify({period: selectedPeriod, time: selectedTime}));
+  closeModalById('modal-change-time');
+}
+
+// Загрузка сохранённого времени
+(function() {
+  var saved = localStorage.getItem('walle_pickup_time');
+  if (saved) {
+    try {
+      var d = JSON.parse(saved);
+      selectedPeriod = d.period || 'morning';
+      selectedTime = d.time || '07:00';
+    } catch(e) {}
+  }
+})();
+
+// Инициализация модала при открытии
+var _origOpenModal2 = openModal;
+openModal = function(id) {
+  _origOpenModal2(id);
+  if (id === 'modal-change-time') {
+    selectPeriod(selectedPeriod);
+    // восстановить выбранное время
+    selectedTime = selectedTime;
+    renderTimeSlots();
+  }
+};
+
+window.addEventListener("load", function(){
+  // Показать сохранённое время на карточке статуса
+  var el = document.getElementById('status-time');
+  if (el) el.textContent = selectedTime;
+  if(window.lucide) lucide.createIcons();
+});</script>
+
+<div id="modal-change-time" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Изменить время выноса</div>
+
+      <!-- Период -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <button id="period-morning" onclick="selectPeriod('morning')" style="flex:1;border-radius:12px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:all 0.2s;background:rgba(42,232,129,0.15);border:1px solid rgba(42,232,129,0.4);color:#2AE881;">
+          🌅 Утро
+        </button>
+        <button id="period-evening" onclick="selectPeriod('evening')" style="flex:1;border-radius:12px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:all 0.2s;background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);">
+          🌙 Вечер
+        </button>
+      </div>
+
+      <!-- Слоты времени -->
+      <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:10px;font-weight:500;">Выберите время (±15 мин)</div>
+      <div id="time-slots" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;"></div>
+
+      <div style="font-size:12px;color:rgba(255,255,255,0.35);text-align:center;margin-bottom:20px;line-height:1.5;">Курьер приедет в выбранное время ±15 минут</div>
+
+      <button class="btn-main" onclick="savePickupTime()" id="save-time-btn" style="margin-bottom:8px;">Сохранить</button>
+      <button class="btn-ghost" onclick="closeModalById('modal-change-time')">Отмена</button>
+    </div>
+  </div>
+</div>
 
 <div id="modal-topup" class="modal-ov" onclick="closeModal(this)">
   <div class="modal-box" onclick="event.stopPropagation()"><div class="modal-handle"></div>
