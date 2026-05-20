@@ -1432,18 +1432,3 @@ window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons
     </div>
   </div>
 </div>
-
-<div id="modal-all-transactions" class="modal-ov" onclick="closeModal(this)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-scroll">
-      <div class="modal-title">История транзакций</div>
-      <div id="all-transactions-list" style="display:flex;flex-direction:column;gap:8px;">
-        <div style="text-align:center;color:rgba(255,255,255,0.4);padding:40px 20px;">Загрузка...</div>
-      </div>
-      <div style="margin-top:24px;">
-        <button class="btn-main" onclick="closeModalById('modal-all-transactions')">Закрыть</button>
-      </div>
-    </div>
-  </div>
-</div>
