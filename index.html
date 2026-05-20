@@ -573,23 +573,6 @@
         <div style="font-size:12px;color:#2AE881;font-weight:600;">✓ Выполнен</div>
       </div>
     </div>
-    <!-- Реферальная программа -->
-    <div style="width:100%;max-width:360px;background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:14px;margin-bottom:8px;text-align:left;">
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px;font-weight:500;">Пригласить друга</div>
-      <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Получи месяц подписки бесплатно</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:14px;">Приглашай друзей — каждый приглашённый даёт тебе +1 месяц в подарок</div>
-      <div style="display:flex;gap:8px;">
-        <button onclick="shareReferral()" style="flex:1;background:rgba(42,232,129,0.15);border:1px solid rgba(42,232,129,0.3);border-radius:14px;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:#2AE881;font-size:13px;font-weight:600;font-family:Nunito,sans-serif;">
-          <i data-lucide="share-2" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;flex-shrink:0;"></i>
-          Отправить
-        </button>
-        <button onclick="copyReferral()" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:rgba(255,255,255,0.8);font-size:13px;font-weight:600;font-family:Nunito,sans-serif;">
-          <i data-lucide="copy" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;flex-shrink:0;"></i>
-          Скопировать
-        </button>
-      </div>
-    </div>
-
     <!-- Действия -->
 
     </div>
@@ -613,6 +596,22 @@
       <div onclick="openModal('modal-all-transactions')" style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;margin-top:12px;cursor:pointer;transition:all 0.15s ease;display:flex;justify-content:space-between;align-items:center;user-select:none;" onmousedown="this.style.background='rgba(255,255,255,0.06)';this.style.transform='scale(0.99)'" onmouseup="this.style.background='rgba(30,35,55,0.85)';this.style.transform='scale(1)'" ontouchstart="this.style.background='rgba(255,255,255,0.06)';this.style.transform='scale(0.99)'" ontouchend="this.style.background='rgba(30,35,55,0.85)';this.style.transform='scale(1)'">
         <span style="font-size:14px;color:rgba(255,255,255,0.85);font-weight:600;">История транзакций</span>
         <span style="font-size:24px;color:rgba(255,255,255,0.9);">›</span>
+      </div>
+      <!-- Реферальная программа -->
+      <div style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:16px;margin-top:12px;text-align:left;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:6px;font-weight:500;">Пригласить друга</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px;">Получи месяц бесплатно</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:14px;line-height:1.5;">Каждый приглашённый друг даёт тебе +1 месяц в подарок</div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="shareReferral()" style="flex:1;background:rgba(42,232,129,0.15);border:1px solid rgba(42,232,129,0.3);border-radius:14px;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:#2AE881;font-size:13px;font-weight:600;font-family:Nunito,sans-serif;">
+            <i data-lucide="share-2" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;flex-shrink:0;"></i>
+            Отправить
+          </button>
+          <button onclick="copyReferral()" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:rgba(255,255,255,0.8);font-size:13px;font-weight:600;font-family:Nunito,sans-serif;">
+            <i data-lucide="copy" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;flex-shrink:0;"></i>
+            Скопировать
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -668,10 +667,10 @@
         </div>
         <span style="color:rgba(255,255,255,0.3);">›</span>
       </div>
-      <div onclick="openModal('modal-howto')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div onclick="openModal('modal-addresses')" class="menu-row" style="border-bottom:1px solid rgba(255,255,255,0.05);">
         <div style="display:flex;align-items:center;gap:10px;">
-          <i data-lucide="help-circle" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
-          <span style="font-size:14px;">Как это работает</span>
+          <i data-lucide="map-pin" style="width:20px;height:20px;stroke:rgba(255,255,255,0.8);stroke-width:1.5;"></i>
+          <span style="font-size:14px;">Мои адреса</span>
         </div>
         <span style="color:rgba(255,255,255,0.3);">›</span>
       </div>
@@ -1402,6 +1401,88 @@ function copyToClipboard(text) {
   }
 }
 
+// ── Мои адреса ──
+var userAddresses = JSON.parse(localStorage.getItem('walle_addresses') || '[]');
+
+function saveAddressesToStorage() {
+  localStorage.setItem('walle_addresses', JSON.stringify(userAddresses));
+}
+
+function renderAddressList() {
+  var list = document.getElementById('addresses-list');
+  if (!list) return;
+  if (userAddresses.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.35);padding:28px 0;font-size:14px;">Нет сохранённых адресов</div>';
+    return;
+  }
+  list.innerHTML = userAddresses.map(function(addr, i) {
+    var label = addr.street + (addr.apt ? ', кв. ' + addr.apt : '');
+    var sub = [addr.entrance ? 'Подъезд ' + addr.entrance : '', addr.floor ? 'Этаж ' + addr.floor : '', addr.intercom ? 'Домофон ' + addr.intercom : ''].filter(Boolean).join(' · ');
+    return '<div style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:14px;font-weight:700;margin-bottom:4px;">' + label + '</div>' +
+        (sub ? '<div style="font-size:12px;color:rgba(255,255,255,0.45);">' + sub + '</div>' : '') +
+        (addr.comment ? '<div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px;">' + addr.comment + '</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;gap:8px;flex-shrink:0;">' +
+        '<button onclick="editAddress(' + i + ')" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:6px 10px;color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;cursor:pointer;font-family:Nunito,sans-serif;">Изменить</button>' +
+        '<button onclick="deleteAddress(' + i + ')" style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);border-radius:10px;padding:6px 10px;color:rgba(248,113,113,0.8);font-size:12px;font-weight:600;cursor:pointer;font-family:Nunito,sans-serif;">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function openAddressForm(idx) {
+  document.getElementById('address-edit-index').value = (idx !== undefined) ? idx : -1;
+  document.getElementById('address-form-title').textContent = (idx !== undefined) ? 'Изменить адрес' : 'Новый адрес';
+  var addr = (idx !== undefined) ? userAddresses[idx] : {};
+  document.getElementById('addr-street').value = addr.street || '';
+  document.getElementById('addr-entrance').value = addr.entrance || '';
+  document.getElementById('addr-floor').value = addr.floor || '';
+  document.getElementById('addr-apt').value = addr.apt || '';
+  document.getElementById('addr-intercom').value = addr.intercom || '';
+  document.getElementById('addr-comment').value = addr.comment || '';
+  openModal('modal-address-form');
+}
+
+function editAddress(idx) { openAddressForm(idx); }
+
+function deleteAddress(idx) {
+  if (confirm('Удалить этот адрес?')) {
+    userAddresses.splice(idx, 1);
+    saveAddressesToStorage();
+    renderAddressList();
+    if(window.lucide) lucide.createIcons();
+  }
+}
+
+function saveAddress() {
+  var street = document.getElementById('addr-street').value.trim();
+  if (!street) { document.getElementById('addr-street').classList.add('err'); return; }
+  document.getElementById('addr-street').classList.remove('err');
+  var addr = {
+    street: street,
+    entrance: document.getElementById('addr-entrance').value.trim(),
+    floor: document.getElementById('addr-floor').value.trim(),
+    apt: document.getElementById('addr-apt').value.trim(),
+    intercom: document.getElementById('addr-intercom').value.trim(),
+    comment: document.getElementById('addr-comment').value.trim()
+  };
+  var idx = parseInt(document.getElementById('address-edit-index').value);
+  if (idx >= 0) { userAddresses[idx] = addr; } else { userAddresses.push(addr); }
+  saveAddressesToStorage();
+  closeModalById('modal-address-form');
+  renderAddressList();
+  if(window.lucide) lucide.createIcons();
+}
+
+// Рендер при открытии модала адресов
+var _origOpenModal = openModal;
+openModal = function(id) {
+  _origOpenModal(id);
+  if (id === 'modal-addresses') { renderAddressList(); if(window.lucide) lucide.createIcons(); }
+};
+
 window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons(); });</script>
 
 <div id="modal-topup" class="modal-ov" onclick="closeModal(this)">
@@ -1418,6 +1499,62 @@ window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons
       <button id="topup-btn" class="btn-main" onclick="doTopup()">
         <span id="topup-btn-amt">Пополнить</span>
       </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-addresses" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">Мои адреса</div>
+      <div id="addresses-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+      <button class="btn-main" onclick="openAddressForm()" style="margin-bottom:8px;">
+        <span style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <i data-lucide="plus" style="width:18px;height:18px;stroke:currentColor;stroke-width:2.5;"></i>
+          Добавить адрес
+        </span>
+      </button>
+      <button class="btn-ghost" onclick="closeModalById('modal-addresses')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- Форма добавления/редактирования адреса -->
+<div id="modal-address-form" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title" id="address-form-title">Новый адрес</div>
+      <input type="hidden" id="address-edit-index" value="-1">
+      <div class="field" style="margin-bottom:12px;">
+        <label class="field-label">Улица и дом</label>
+        <input class="field-input" type="text" id="addr-street" placeholder="ул. Пушкина, д. 10">
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <div class="field" style="flex:1;margin-bottom:0;">
+          <label class="field-label">Подъезд</label>
+          <input class="field-input" type="text" id="addr-entrance" placeholder="1">
+        </div>
+        <div class="field" style="flex:1;margin-bottom:0;">
+          <label class="field-label">Этаж</label>
+          <input class="field-input" type="text" id="addr-floor" placeholder="5">
+        </div>
+        <div class="field" style="flex:1;margin-bottom:0;">
+          <label class="field-label">Кв.</label>
+          <input class="field-input" type="text" id="addr-apt" placeholder="42">
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:12px;">
+        <label class="field-label">Домофон</label>
+        <input class="field-input" type="text" id="addr-intercom" placeholder="42К">
+      </div>
+      <div class="field" style="margin-bottom:20px;">
+        <label class="field-label">Комментарий</label>
+        <input class="field-input" type="text" id="addr-comment" placeholder="Оставить у двери">
+      </div>
+      <button class="btn-main" onclick="saveAddress()" style="margin-bottom:8px;">Сохранить</button>
+      <button class="btn-ghost" onclick="closeModalById('modal-address-form')">Отмена</button>
     </div>
   </div>
 </div>
