@@ -1103,7 +1103,7 @@ function showTab(name){
     if(el) el.style.color=name===t?"#ffffff":"rgba(255,255,255,0.35)";
     if(bg) bg.style.background=name===t?"rgba(124,58,237,0.15)":"transparent";
   });
-  if(name==="balance") { loadBalance(); setTimeout(loadBalance, 500); }
+  if(name==="balance") { loadBalance(); setTimeout(loadBalance, 500); setTimeout(loadAllTransactions, 600); }
   if(name==="profile") { loadProfile(); setTimeout(loadProfile, 300); }
   if(name==="status") { loadStatus(); setTimeout(loadStatus, 500); }
   if(name==="status") { loadStatus(); setTimeout(loadStatus, 500); }
@@ -1429,6 +1429,21 @@ window.addEventListener("load", function(){ if(window.lucide) lucide.createIcons
       <button id="topup-btn" class="btn-main" onclick="doTopup()">
         <span id="topup-btn-amt">Пополнить</span>
       </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-all-transactions" class="modal-ov" onclick="closeModal(this)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-scroll">
+      <div class="modal-title">История транзакций</div>
+      <div id="all-transactions-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;color:rgba(255,255,255,0.4);padding:40px 20px;">Загрузка...</div>
+      </div>
+      <div style="margin-top:24px;">
+        <button class="btn-main" onclick="closeModalById('modal-all-transactions')">Закрыть</button>
+      </div>
     </div>
   </div>
 </div>
