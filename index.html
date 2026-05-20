@@ -541,14 +541,14 @@
     </div>
     <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Walle</div>
     <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;">Всё под контролем</div>
-    <div class="hero-card" style="width:100%;max-width:360px;cursor:pointer;" onclick="openModal('modal-change-time')" onmousedown="this.style.opacity='0.85'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.85'" ontouchend="this.style.opacity='1'">
+    <div class="hero-card" style="width:100%;max-width:360px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div>
           <div style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;margin-bottom:8px;">Следующий вынос</div>
           <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Завтра</div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="font-size:14px;color:rgba(255,255,255,0.6);" id="status-time">07:00</div>
-            <div style="font-size:11px;color:rgba(42,232,129,0.8);background:rgba(42,232,129,0.1);border:1px solid rgba(42,232,129,0.2);border-radius:6px;padding:2px 7px;font-weight:600;">изменить</div>
+            <div onclick="openModal('modal-change-time')" style="font-size:11px;color:rgba(42,232,129,0.8);background:rgba(42,232,129,0.1);border:1px solid rgba(42,232,129,0.2);border-radius:6px;padding:2px 7px;font-weight:600;cursor:pointer;">изменить</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
