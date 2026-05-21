@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walle · Панель управления</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #010510; --surface: rgba(15,23,42,0.55); --border: rgba(255,255,255,0.08);
+      --green: #34d399; --blue: #60a5fa; --gold: #fbbf24; --red: #f87171;
+      --text: #f0f6ff; --text-2: #94a3b8; --text-3: #475569;
+      --radius-lg: 18px; --radius-md: 14px; --radius-sm: 10px;
+      --sidebar-w: 240px;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased;
+    }
+    .sidebar {
+      width: var(--sidebar-w); min-height: 100vh;
+      background: rgba(8,14,30,0.8); border-right: 1px solid var(--border);
+      padding: 20px 0; flex-shrink: 0;
+      backdrop-filter: blur(10px); position: sticky; top: 0;
+    }
+    .sidebar-logo {
+      padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px;
+    }
+    .sidebar-logo .logo-text {
+      font-size: 26px; font-weight: 700; letter-spacing: 2px;
+      color: #fff;
+      text-shadow: 0 0 4px rgba(52,211,153,0.9), 0 0 8px rgba(52,211,153,0.6);
+      text-align: center;
+      border-radius: 8px;
+      padding: 6px 0;
+    }
+    .sidebar-subtitle { font-size: 10px; color: var(--text-3); text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; cursor: pointer;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      transition: all 0.15s; margin: 2px 8px; border-radius: var(--radius-sm);
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+    .nav-item.active { background: rgba(52,211,153,0.08); color: var(--green); }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .main { flex: 1; padding: 24px 28px; overflow-y: auto; max-height: 100vh; }
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: var(--text-3); margin-bottom: 22px; }
+    .stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+    .stat-card { flex: 1; min-width: 130px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; backdrop-filter: blur(10px); }
+    .stat-card .num { font-size: 28px; font-weight: 800; }
+    .stat-card .label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .num.green { color: var(--green); } .num.blue { color: var(--blue); } .num.gold { color: var(--gold); } .num.red { color: var(--red); }
+    .section { margin-bottom: 22px; }
+    .section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; backdrop-filter: blur(10px); }
+    th, td { padding: 9px 12px; text-align: left; font-size: 12px; }
+    th { background: rgba(255,255,255,0.02); color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; font-size: 9px; }
+    td { border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-2); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+    .badge.active { background: rgba(52,211,153,0.12); color: var(--green); }
+    .badge.frozen { background: rgba(251,191,36,0.12); color: var(--gold); }
+    .badge.cancelled { background: rgba(248,113,113,0.12); color: var(--red); }
+    .btn { padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text-2); cursor: pointer; font-size: 10px; font-weight: 500; font-family: 'Inter', sans-serif; margin-right: 3px; transition: all 0.15s; }
+    .btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+    .btn.freeze { color: var(--gold); border-color: rgba(251,191,36,0.25); }
+    .btn.cancel { color: var(--red); border-color: rgba(248,113,113,0.25); }
+    .btn.activate { color: var(--green); border-color: rgba(52,211,153,0.25); }
+    .btn.export { color: var(--green); border-color: rgba(52,211,153,0.25); padding: 5px 14px; font-size: 11px; }
+    .btn.add { color: var(--blue); border-color: rgba(96,165,250,0.25); padding: 5px 14px; font-size: 11px; }
+    .summary-line { display: flex; justify-content: space-between; padding: 7px 12px; font-size: 12px; }
+    .summary-line.total { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.08); font-weight: 700; }
+    .amount-plus { color: var(--green); } .amount-minus { color: var(--red); }
+    .period-selector { display: flex; gap: 6px; margin-bottom: 16px; }
+    .period-btn { padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text-3); cursor: pointer; font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; }
+    .period-btn.active { background: rgba(52,211,153,0.1); border-color: var(--green); color: var(--green); }
+    .search-input { width: 100%; max-width: 320px; padding: 9px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #f0f6ff; font-size: 13px; font-family: 'Inter', sans-serif; outline: none; margin-bottom: 14px; }
+    .search-input:focus { border-color: var(--blue); }
+    .search-input::placeholder { color: var(--text-3); }
+    .chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 20px 10px; backdrop-filter: blur(10px); margin-bottom: 20px; }
+    .chart-container svg { width: 100%; height: 160px; }
+    .loading { color: var(--text-3); padding: 20px; text-align: center; }
+    .expense-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 14px; }
+    .expense-form input, .expense-form select { padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #f0f6ff; font-size: 12px; font-family: 'Inter', sans-serif; outline: none; }
+    .expense-form input:focus, .expense-form select:focus { border-color: var(--blue); }
+    .expense-form input { width: 100px; }
+    .expense-form select { width: 130px; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); display: inline-block; margin-left: 6px; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">WALLE</div>
+    <div class="sidebar-subtitle">Панель управления</div>
+  </div>
+  <nav>
+    <div class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard', this)">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="11" y="1" width="6" height="6" rx="1"/><rect x="1" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>Главная
+    </div>
+    <div class="nav-item" data-page="users" onclick="switchPage('users', this)">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="3"/><path d="M1 14c0-2.8 2.2-5 5-5s5 2.2 5 5"/><circle cx="13" cy="6" r="2"/><path d="M10 13c0-1.4 1.1-2.5 2.5-2.5S15 11.6 15 13"/></svg>Пользователи
+    </div>
+    <div class="nav-item" data-page="subscriptions" onclick="switchPage('subscriptions', this)">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14"/><path d="M7 3v4M11 3v4"/></svg>Подписки
+    </div>
+    <div class="nav-item" data-page="finance" onclick="switchPage('finance', this)">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="16" height="14" rx="2"/><line x1="4" y1="6" x2="14" y2="6"/><line x1="4" y1="9" x2="14" y2="9"/><line x1="4" y1="12" x2="10" y2="12"/></svg>Финансы
+    </div>
+    <div class="nav-item" data-page="couriers" onclick="switchPage('couriers', this)">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="5" r="4"/><path d="M1 17c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>Курьеры
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+
+  <div class="page active" id="page-dashboard">
+    <h2>Главная</h2><div class="sub">Общая статистика на сегодня</div>
+    <div class="stats" id="dash-stats"></div>
+    <div class="section"><div class="section-title">Последние регистрации <span class="notif-dot" id="new-user-dot" style="display:none;"></span></div>
+      <table><thead><tr><th>Имя</th><th>Телефон</th><th>Дата</th></tr></thead><tbody id="dash-recent-users"><tr><td colspan="3" class="loading">Загрузка...</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="page" id="page-users">
+    <h2>Пользователи</h2><div class="sub">Все зарегистрированные пользователи</div>
+    <input type="text" class="search-input" id="user-search" placeholder="Поиск по имени или телефону..." oninput="filterUsers()">
+    <table><thead><tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Telegram ID</th><th>Дата</th></tr></thead><tbody id="users-table"><tr><td colspan="5" class="loading">Загрузка...</td></tr></tbody></table>
+  </div>
+
+  <div class="page" id="page-subscriptions">
+    <h2>Подписки</h2><div class="sub">Управление активными подписками</div>
+    <table><thead><tr><th>ID</th><th>Пользователь</th><th>Тариф</th><th>Статус</th><th>Цена</th><th>Действия</th></tr></thead><tbody id="subs-table"><tr><td colspan="6" class="loading">Загрузка...</td></tr></tbody></table>
+  </div>
+
+  <div class="page" id="page-finance">
+    <h2>Финансы</h2><div class="sub">Бухгалтерия и отчётность</div>
+    <div class="period-selector">
+      <button class="period-btn active" onclick="setFinancePeriod('month', this)">Месяц</button>
+      <button class="period-btn" onclick="setFinancePeriod('day', this)">День</button>
+      <button class="period-btn" onclick="setFinancePeriod('year', this)">Год</button>
+    </div>
+    <div class="stats" id="finance-stats"></div>
+    <div class="section"><div class="section-title">График выручки</div><div class="chart-container"><svg id="revenue-chart"></svg></div></div>
+    <div class="section"><div class="section-title">Расходы<button class="btn add" onclick="toggleExpenseForm()">+ Добавить расход</button><button class="btn export" onclick="exportCSV()">📥 Экспорт в CSV</button></div>
+      <div class="expense-form" id="expense-form" style="display:none;"><select id="exp-category"><option value="salary">Зарплата курьеру</option><option value="bags">Мусорные пакеты</option><option value="transport">Транспорт</option><option value="advertising">Реклама</option><option value="other">Другое</option></select><input type="number" id="exp-amount" placeholder="Сумма" min="1"><button class="btn add" onclick="addExpense()">Сохранить</button></div>
+      <table><thead><tr><th>Дата</th><th>Категория</th><th>Сумма</th><th></th></tr></thead><tbody id="expenses-table"><tr><td colspan="4" class="loading">Нет расходов</td></tr></tbody></table>
+    </div>
+    <div class="section"><div class="section-title">Сводка</div><div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); backdrop-filter:blur(10px);" id="finance-summary"></div></div>
+  </div>
+
+  <div class="page" id="page-couriers">
+    <h2>Курьеры</h2><div class="sub">Управление курьерами и зонами</div>
+    <div class="stats" id="courier-stats"></div>
+    <div class="section"><div class="section-title">Список курьеров</div>
+      <table><thead><tr><th>Имя</th><th>Телефон</th><th>Зона</th><th>Статус</th><th>Заказов сегодня</th><th>Действия</th></tr></thead><tbody id="couriers-table"><tr><td colspan="6" class="loading">Загрузка...</td></tr></tbody></table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  var API = 'https://walle-backend-1.onrender.com'; var ADMIN_ID = 82306327; var allSubs = []; var allUsers = []; var financePeriod = 'month';
+  var expenses = JSON.parse(localStorage.getItem('walle_expenses') || '[]');
+
+  function switchPage(page, el) {
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    el.classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('page-' + page).classList.add('active');
+    localStorage.setItem('walle_page', page);
+    if (page === 'dashboard') loadDashboard();
+    if (page === 'users') loadUsers();
+    if (page === 'subscriptions') loadSubscriptions();
+    if (page === 'finance') loadFinance();
+    if (page === 'couriers') loadCouriers();
+  }
+
+  function formatDate(d) { if(!d) return '—'; var p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+  function formatMoney(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
+  function categoryLabel(c) { return {salary:'Зарплата',bags:'Пакеты',transport:'Транспорт',advertising:'Реклама',other:'Другое'}[c]||c; }
+
+  function loadDashboard() {
+    fetch(API + '/api/admin/users?telegram_id=' + ADMIN_ID).then(function(r){ return r.json(); }).then(function(users) {
+      fetch(API + '/api/admin/subscriptions?telegram_id=' + ADMIN_ID).then(function(r){ return r.json(); }).then(function(subs) {
+        allSubs = subs; var active = subs.filter(function(s){ return s.status === 'active'; });
+        var revenue = active.reduce(function(sum,s){ return sum+parseFloat(s.price_monthly); }, 0);
+        document.getElementById('dash-stats').innerHTML =
+          '<div class="stat-card"><div class="num green">'+active.length+'</div><div class="label">Активных подписок</div></div>' +
+          '<div class="stat-card"><div class="num gold">'+formatMoney(revenue)+'</div><div class="label">Выручка / мес</div></div>' +
+          '<div class="stat-card"><div class="num blue">'+users.length+'</div><div class="label">Пользователей</div></div>' +
+          '<div class="stat-card"><div class="num green">2</div><div class="label">Курьеров на смене</div></div>';
+        var html = '';
+        users.slice(0, 5).forEach(function(u) { html += '<tr><td>'+u.first_name+'</td><td>'+(u.phone||'—')+'</td><td>'+formatDate(u.created_at)+'</td></tr>'; });
+        document.getElementById('dash-recent-users').innerHTML = html || '<tr><td colspan="3" class="loading">Нет данных</td></tr>';
+      });
+    });
+  }
+
+  function loadUsers() {
+    fetch(API + '/api/admin/users?telegram_id=' + ADMIN_ID).then(function(r){ return r.json(); }).then(function(users) {
+      allUsers = users; renderUsers(users);
+    });
+  }
+
+  function renderUsers(users) { var html = ''; users.forEach(function(u) { html += '<tr><td>'+u.id+'</td><td>'+u.first_name+'</td><td>'+(u.phone||'—')+'</td><td>'+u.telegram_id+'</td><td>'+formatDate(u.created_at)+'</td></tr>'; }); document.getElementById('users-table').innerHTML = html || '<tr><td colspan="5" class="loading">Нет данных</td></tr>'; }
+  function filterUsers() { var query = document.getElementById('user-search').value.toLowerCase(); var filtered = allUsers.filter(function(u) { return (u.first_name&&u.first_name.toLowerCase().includes(query))||(u.phone&&u.phone.includes(query)); }); renderUsers(filtered); }
+
+  function loadSubscriptions() {
+    fetch(API + '/api/admin/subscriptions?telegram_id=' + ADMIN_ID).then(function(r){ return r.json(); }).then(function(subs) {
+      allSubs = subs; var html = '';
+      subs.forEach(function(s) { html += '<tr><td>'+s.id+'</td><td>ID:'+s.user_id+'</td><td>'+(s.tariff==='care'?'Забота':'Лайт')+'</td><td><span class="badge '+s.status+'">'+s.status+'</span></td><td>'+s.price_monthly+' ₽</td><td>'; if(s.status==='active') { html += '<button class="btn freeze" onclick="actionSub('+s.id+',\'freeze\')">Заморозить</button><button class="btn cancel" onclick="actionSub('+s.id+',\'cancel\')">Отменить</button>'; } else if(s.status==='frozen') { html += '<button class="btn activate" onclick="actionSub('+s.id+',\'activate\')">Активировать</button><button class="btn cancel" onclick="actionSub('+s.id+',\'cancel\')">Отменить</button>'; } html += '</td></tr>'; });
+      document.getElementById('subs-table').innerHTML = html || '<tr><td colspan="6" class="loading">Нет данных</td></tr>';
+    });
+  }
+
+  function actionSub(id, action) { fetch(API + '/api/admin/subscriptions/' + id + '/' + action + '?telegram_id=' + ADMIN_ID, { method: 'POST' }).then(function() { loadSubscriptions(); }); }
+
+  function setFinancePeriod(p, btn) { financePeriod = p; document.querySelectorAll('#page-finance .period-btn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); loadFinance(); }
+  function toggleExpenseForm() { var f = document.getElementById('expense-form'); f.style.display = f.style.display === 'none' ? 'flex' : 'none'; }
+  function addExpense() { var cat = document.getElementById('exp-category').value; var amount = parseInt(document.getElementById('exp-amount').value); if(!amount||amount<=0) return alert('Введите сумму'); expenses.push({ date: new Date().toISOString().slice(0,10), category: cat, amount: amount }); localStorage.setItem('walle_expenses', JSON.stringify(expenses)); document.getElementById('exp-amount').value = ''; loadFinance(); }
+  function deleteExpense(index) { expenses.splice(index, 1); localStorage.setItem('walle_expenses', JSON.stringify(expenses)); loadFinance(); }
+
+  function drawChart(revenue) { var svg = document.getElementById('revenue-chart'); var W = svg.clientWidth || 600, H = 160; var pad = { top: 20, right: 20, bottom: 30, left: 50 }; var w = W - pad.left - pad.right, h = H - pad.top - pad.bottom; var months = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']; var values = []; for(var i=0;i<12;i++){ values.push(Math.round(revenue*(0.6+Math.random()*0.8))); } var max = Math.max.apply(null,values)||1; var points = values.map(function(v,i){ return {x:pad.left+(w/(values.length-1))*i, y:pad.top+h-(v/max)*h}; }); var pathD = points.map(function(p,i){ return (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1); }).join(' '); var areaD = pathD+' L'+(pad.left+w).toFixed(1)+','+(pad.top+h)+' L'+pad.left+','+(pad.top+h)+' Z'; var html = ''; for(var i=0;i<=4;i++){ var y=pad.top+(h/4)*i; html += '<line x1="'+pad.left+'" y1="'+y+'" x2="'+(pad.left+w)+'" y2="'+y+'" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><text x="'+(pad.left-8)+'" y="'+(y+4)+'" fill="#475569" font-size="9" text-anchor="end">'+formatMoney(max*(1-i/4))+'</text>'; } for(var i=0;i<12;i+=2){ html += '<text x="'+points[i].x+'" y="'+(H-6)+'" fill="#475569" font-size="9" text-anchor="middle">'+months[i]+'</text>'; } html += '<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399" stop-opacity="0.3"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/></linearGradient></defs>'; html += '<path d="'+areaD+'" fill="url(#areaGrad)"/><path d="'+pathD+'" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'; points.forEach(function(p){ html += '<circle cx="'+p.x+'" cy="'+p.y+'" r="3" fill="#34d399"/>'; }); svg.innerHTML = html; }
+
+  function exportCSV() { var rows = [['Дата','Описание','Тип','Сумма']]; allSubs.forEach(function(s){ rows.push(['Май 2026',(s.tariff==='care'?'Забота':'Лайт')+' · #'+s.user_id,s.status==='active'?'Поступление':'Возврат',(s.status==='active'?'+':'-')+s.price_monthly]); }); expenses.forEach(function(e){ rows.push([e.date,categoryLabel(e.category),'Расход','-'+e.amount]); }); var csv = rows.map(function(r){ return r.map(function(c){ return '"'+c+'"'; }).join(','); }).join('\n'); var blob = new Blob([csv],{type:'text/csv;charset=utf-8;'}); var link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'walle-finance-'+new Date().toISOString().slice(0,10)+'.csv'; link.click(); }
+
+  function loadFinance() {
+    fetch(API + '/api/admin/subscriptions?telegram_id=' + ADMIN_ID).then(function(r){ return r.json(); }).then(function(subs) {
+      allSubs = subs; var active = subs.filter(function(s){ return s.status==='active'; }); var cancelled = subs.filter(function(s){ return s.status==='cancelled'; });
+      var rev = active.reduce(function(sum,s){ return sum+parseFloat(s.price_monthly); }, 0);
+      var ref = cancelled.reduce(function(sum,s){ return sum+parseFloat(s.price_monthly); }, 0);
+      if(financePeriod==='day') { rev=Math.round(rev/30); ref=Math.round(ref/30); } if(financePeriod==='year') { rev*=12; ref*=12; }
+      var activeCount = active.length; var kassaPct = Math.round(rev*0.035); var kassaFixed = activeCount*10; var kassaTotal = kassaPct + kassaFixed;
+      var taxUsn = Math.round(rev*0.06); var insuranceMonthly = 4783; var extraInsurance = rev*12 > 300000 ? Math.round((rev*12 - 300000)*0.01 / 12) : 0; var insuranceTotal = insuranceMonthly + extraInsurance;
+      var totalExpenses = expenses.reduce(function(sum,e){ return sum+e.amount; }, 0);
+      var net = rev - ref - kassaTotal - taxUsn - insuranceTotal - totalExpenses;
+      document.getElementById('finance-stats').innerHTML = '<div class="stat-card"><div class="num green">'+formatMoney(rev)+'</div><div class="label">Выручка</div></div><div class="stat-card"><div class="num red">'+formatMoney(ref+kassaTotal+taxUsn+insuranceTotal+totalExpenses)+'</div><div class="label">Все расходы</div></div><div class="stat-card"><div class="num gold">'+formatMoney(taxUsn+insuranceTotal)+'</div><div class="label">Налоги и взносы</div></div><div class="stat-card"><div class="num blue">'+formatMoney(net)+'</div><div class="label">Чистая прибыль</div></div>';
+      document.getElementById('finance-summary').innerHTML = '<div class="summary-line"><span>Выручка</span><span class="amount-plus">'+formatMoney(rev)+'</span></div><div class="summary-line"><span>Возвраты</span><span class="amount-minus">−'+formatMoney(ref)+'</span></div><div class="summary-line"><span>Комиссия ЮKassa (3.5% + 10₽ × '+activeCount+')</span><span class="amount-minus">−'+formatMoney(kassaTotal)+'</span></div><div class="summary-line"><span>Налог УСН 6%</span><span class="amount-minus">−'+formatMoney(taxUsn)+'</span></div><div class="summary-line"><span>Страховые взносы ИП (4 783 ₽/мес)</span><span class="amount-minus">−'+formatMoney(insuranceTotal)+'</span></div><div class="summary-line"><span>Расходы</span><span class="amount-minus">−'+formatMoney(totalExpenses)+'</span></div><div class="summary-line total"><span>Чистая прибыль</span><span class="amount-plus">'+formatMoney(net)+'</span></div>';
+      drawChart(rev);
+      var expHtml = ''; expenses.forEach(function(e,i){ expHtml += '<tr><td>'+e.date+'</td><td>'+categoryLabel(e.category)+'</td><td class="amount-minus">−'+formatMoney(e.amount)+'</td><td><button class="btn cancel" onclick="deleteExpense('+i+')">Удалить</button></td></tr>'; });
+      document.getElementById('expenses-table').innerHTML = expHtml || '<tr><td colspan="4" class="loading">Нет расходов</td></tr>';
+    });
+  }
+
+  function loadCouriers() {
+    var couriers = [{name:"Алексей",phone:"+79001002030",zone:"Коммунарка",status:"active",orders:3},{name:"Михаил",phone:"+79001002031",zone:"Коммунарка",status:"offline",orders:0}];
+    document.getElementById('courier-stats').innerHTML = '<div class="stat-card"><div class="num green">'+couriers.filter(function(c){ return c.status==='active'; }).length+'</div><div class="label">На смене</div></div><div class="stat-card"><div class="num blue">'+couriers.length+'</div><div class="label">Всего курьеров</div></div>';
+    var html = ''; couriers.forEach(function(c){ html += '<tr><td>'+c.name+'</td><td>'+c.phone+'</td><td>'+c.zone+'</td><td><span class="badge '+(c.status==='active'?'active':'cancelled')+'">'+(c.status==='active'?'На смене':'Не на смене')+'</span></td><td>'+c.orders+'</td><td><button class="btn activate" onclick="alert(\'Чат с '+c.name+'\')">Чат</button></td></tr>'; });
+    document.getElementById('couriers-table').innerHTML = html;
+  }
+
+  var savedPage = localStorage.getItem('walle_page') || 'dashboard';
+  switchPage(savedPage, document.querySelector('.nav-item[data-page="' + savedPage + '"]'));
+</script>
+</body>
+</html>
