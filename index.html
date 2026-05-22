@@ -359,6 +359,7 @@
     .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
   @keyframes earthBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }</style>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -399,9 +400,7 @@
 
   <!-- ══ WELCOME ══ -->
   <div id="screen-welcome" class="screen active">
-    <div class="earth-container large" style="filter: drop-shadow(0 0 30px rgba(60,100,220,0.5)) drop-shadow(0 0 70px rgba(40,80,200,0.25)) drop-shadow(0 0 120px rgba(20,50,180,0.1));">
-      <div class="earth-sphere"><div class="earth-texture"></div></div>
-    </div>
+    <div class="earth-container large" id="earth-welcome" style="filter: drop-shadow(0 0 30px rgba(60,100,220,0.5)) drop-shadow(0 0 70px rgba(40,80,200,0.25)) drop-shadow(0 0 120px rgba(20,50,180,0.1)); overflow:hidden; border-radius:50%;"></div>
 
     <div class="brand-name">Walle</div>
     <div class="brand-sub" style="font-size:18px;font-weight:600;color:#fff;margin-bottom:2px;">Надоело выносить мусор?</div>
@@ -535,10 +534,7 @@
 
   <!-- ══ STATUS (для подписанных) ══ -->
   <div id="screen-status" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;min-height:100dvh;overflow-y:auto;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
-    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin-bottom:12px;box-shadow:0 0 30px rgba(0,0,0,0.9);filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));">
-      <div style="width:200%;height:100%;background:url(assets/images/earth.jpg) repeat-x;background-size:50% 100%;position:absolute;top:0;left:0;animation:earthRotate 25s linear infinite;filter:brightness(1.6) saturate(1.5);"></div>
-      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 50%,transparent 30%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,1) 100%);"></div>
-    </div>
+    <div id="earth-status" style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin-bottom:12px;filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));flex-shrink:0;"></div>
     <div style="font-size:24px;font-weight:800;margin-bottom:4px;">Walle</div>
     <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;">Всё под контролем</div>
     <div class="hero-card" style="width:100%;max-width:360px;">
@@ -593,10 +589,7 @@
 
   <!-- ══ BALANCE ══ -->
   <div id="screen-balance" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;min-height:100dvh;overflow-y:auto;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
-    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin:10px 0 12px;box-shadow:0 0 30px rgba(0,0,0,0.9);filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));">
-      <div style="width:200%;height:100%;background:url(assets/images/earth.jpg) repeat-x;background-size:50% 100%;position:absolute;top:0;left:0;animation:earthRotate 25s linear infinite;filter:brightness(1.6) saturate(1.5);"></div>
-      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 50%,transparent 30%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,1) 100%);"></div>
-    </div>
+    <div id="earth-balance" style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin:10px 0 12px;filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));flex-shrink:0;"></div>
     <div style="font-size:24px;font-weight:800;margin-bottom:12px;">Walle</div>
     <div style="width:100%;max-width:360px;pointer-events:auto;">
       <div style="background:rgba(30,35,55,0.85);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:24px;text-align:center;margin-bottom:16px;">
@@ -629,12 +622,7 @@
   </div>
   <div id="screen-profile" class="screen" style="position:absolute;top:0;left:0;right:0;padding:20px 20px 80px;overflow-y:scroll;-webkit-overflow-scrolling:touch;align-items:center;text-align:center;pointer-events:auto;z-index:15;">
     
-    <!-- Earth small -->
-    <!-- Earth small -->
-    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin:10px 0 12px;box-shadow:0 0 30px rgba(0,0,0,0.9);filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));">
-      <div style="width:200%;height:100%;background:url(assets/images/earth.jpg) repeat-x;background-size:50% 100%;position:absolute;top:0;left:0;animation:earthRotate 25s linear infinite;filter:brightness(1.6) saturate(1.5);"></div>
-      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 50%,transparent 30%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,1) 100%);"></div>
-    </div>
+    <div id="earth-profile" style="width:80px;height:80px;border-radius:50%;overflow:hidden;position:relative;margin:10px 0 12px;filter:drop-shadow(0 0 20px rgba(60,120,255,0.7)) drop-shadow(0 0 50px rgba(40,90,220,0.4));flex-shrink:0;"></div>
 
     <div style="font-size:24px;font-weight:800;margin-bottom:12px;">Walle</div>
     <!-- User info card -->
@@ -1686,3 +1674,85 @@ window.addEventListener("load", function(){
     </div>
   </div>
 </div>
+
+<script>
+(function() {
+  if (typeof THREE === 'undefined') return;
+
+  var loader = new THREE.TextureLoader();
+  var earthTexture = loader.load('assets/images/earth.jpg');
+
+  function createGlobe(containerId, size) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(size, size);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    var canvas = renderer.domElement;
+    canvas.style.display = 'block';
+    canvas.style.pointerEvents = 'none';
+    container.appendChild(canvas);
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.z = 2.5;
+
+    /* Earth — Phong shading gives natural day/night terminator */
+    var earthGeo = new THREE.SphereGeometry(1, 64, 32);
+    var earthMat = new THREE.MeshPhongMaterial({
+      map: earthTexture,
+      specular: new THREE.Color(0x222244),
+      shininess: 12
+    });
+    var earth = new THREE.Mesh(earthGeo, earthMat);
+    scene.add(earth);
+
+    /* Atmospheric rim glow — Fresnel approximation */
+    var glowGeo = new THREE.SphereGeometry(1.12, 32, 16);
+    var glowMat = new THREE.ShaderMaterial({
+      uniforms: { glowColor: { value: new THREE.Color(0x2255ee) } },
+      vertexShader: [
+        'varying float vI;',
+        'void main() {',
+        '  vec3 n = normalize(normalMatrix * normal);',
+        '  vI = pow(max(0.0, 1.0 - dot(n, vec3(0.0, 0.0, 1.0))), 3.5);',
+        '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform vec3 glowColor;',
+        'varying float vI;',
+        'void main() { gl_FragColor = vec4(glowColor, vI * 0.8); }'
+      ].join('\n'),
+      side: THREE.FrontSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      depthWrite: false
+    });
+    scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+    /* Sun — bright day side, dark night side */
+    var sun = new THREE.DirectionalLight(0xffffff, 1.4);
+    sun.position.set(5, 2, 5);
+    scene.add(sun);
+
+    /* Dim ambient for night hemisphere (subtle blue tint) */
+    scene.add(new THREE.AmbientLight(0x112244, 0.35));
+
+    var speed = size > 100 ? 0.0018 : 0.0025;
+    (function animate() {
+      requestAnimationFrame(animate);
+      earth.rotation.y += speed;
+      renderer.render(scene, camera);
+    })();
+  }
+
+  createGlobe('earth-welcome', 180);
+  createGlobe('earth-status',  80);
+  createGlobe('earth-balance', 80);
+  createGlobe('earth-profile', 80);
+})();
+</script>
