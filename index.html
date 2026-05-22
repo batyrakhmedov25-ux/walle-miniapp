@@ -1121,6 +1121,7 @@ function showScreen(name) {
     requestAnimationFrame(function(){ s.scrollTop=0; window.scrollTo(0,0); document.body.scrollTop=0; });
   }
   if(name==='done') launchSalute();
+  if(name==='address') ymapsSuggest('inp-street');
 }
 
 /* Tariff */
@@ -1134,6 +1135,7 @@ function openModal(id) {
   var m=document.getElementById(id);
   if(m) m.classList.add('open');
   if(id==='modal-all-transactions') loadAllTransactions();
+  if(id==='modal-addresses') ymapsSuggest('addr-street');
 }
 function closeModal(ov) { 
   ov.classList.remove('open');
@@ -1730,11 +1732,10 @@ function initStatusMap() {
   });
 }
 
-// Suggest для полей ввода адреса
-if (window.ymaps) {
+function ymapsSuggest(id) {
+  if (!window.ymaps) return;
   ymaps.ready(function() {
-    try { new ymaps.SuggestView('inp-street'); } catch(e) {}
-    try { new ymaps.SuggestView('addr-street'); } catch(e) {}
+    try { new ymaps.SuggestView(id); } catch(e) {}
   });
 }
 </script>
