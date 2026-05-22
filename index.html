@@ -1704,10 +1704,11 @@ window.addEventListener("load", function(){
     var earthGeo = new THREE.SphereGeometry(1, 64, 32);
     var earthMat = new THREE.MeshPhongMaterial({
       map: earthTexture,
-      specular: new THREE.Color(0x222244),
-      shininess: 12
+      specular: new THREE.Color(0x111111),
+      shininess: 8
     });
     var earth = new THREE.Mesh(earthGeo, earthMat);
+    earth.rotation.y = 2.3;
     scene.add(earth);
 
     /* Atmospheric rim glow — Fresnel approximation */
@@ -1745,7 +1746,7 @@ window.addEventListener("load", function(){
     var speed = size > 100 ? 0.0018 : 0.0025;
     (function animate() {
       requestAnimationFrame(animate);
-      earth.rotation.y += speed;
+      earth.rotation.y -= speed;
       renderer.render(scene, camera);
     })();
   }
