@@ -1735,12 +1735,12 @@ window.addEventListener("load", function(){
     scene.add(new THREE.Mesh(glowGeo, glowMat));
 
     /* Sun — bright day side, dark night side */
-    var sun = new THREE.DirectionalLight(0xffffff, 1.4);
+    var sun = new THREE.DirectionalLight(0xffffff, 0.6);
     sun.position.set(5, 2, 5);
     scene.add(sun);
 
     /* Dim ambient for night hemisphere (subtle blue tint) */
-    scene.add(new THREE.AmbientLight(0x112244, 0.8));
+    scene.add(new THREE.AmbientLight(0x112244, 0.4));
 
     var speed = size > 100 ? 0.0008 : 0.0012;
     (function animate() {
