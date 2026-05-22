@@ -1708,7 +1708,7 @@ window.addEventListener("load", function(){
       shininess: 8
     });
     var earth = new THREE.Mesh(earthGeo, earthMat);
-    earth.rotation.y = 2.3;
+    earth.rotation.y = 4.5;
     scene.add(earth);
 
     /* Atmospheric rim glow — Fresnel approximation */
@@ -1743,7 +1743,7 @@ window.addEventListener("load", function(){
     /* Dim ambient for night hemisphere (subtle blue tint) */
     scene.add(new THREE.AmbientLight(0x112244, 0.35));
 
-    var speed = size > 100 ? 0.0018 : 0.0025;
+    var speed = size > 100 ? 0.0008 : 0.0012;
     (function animate() {
       requestAnimationFrame(animate);
       earth.rotation.y -= speed;
