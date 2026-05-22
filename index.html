@@ -1739,6 +1739,10 @@ window.addEventListener("load", function(){
     sun.position.set(5, 2, 5);
     scene.add(sun);
 
+    var fillLight = new THREE.DirectionalLight(0x2d5a1b, 0.3);
+    fillLight.position.set(-3, 0, 2);
+    scene.add(fillLight);
+
     /* Dim ambient for night hemisphere (subtle blue tint) */
     scene.add(new THREE.AmbientLight(0x112244, 0.4));
 
